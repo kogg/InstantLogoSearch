@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
             return next(err);
         }
         res.render('index', { brands_by_letter: _.groupBy(brands, function(brand) {
-            return _.first(brand.effective_name).toUpperCase();
+            return _.first(brand.normalized_name).toUpperCase();
         }) });
     });
 });

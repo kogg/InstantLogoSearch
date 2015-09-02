@@ -12,9 +12,9 @@ var brands = [{ name: 'About.me' },
               { name: 'Behance' }];
 brands = _.chain(brands)
           .each(function(brand) {
-              brand.effective_name = brand.name.toLowerCase().replace(/[^a-z]+/g, '');
+              brand.normalized_name = brand.name.toLowerCase().replace(/[^a-z]+/g, '');
           })
-          .sortBy('effective_name')
+          .sortBy('normalized_name')
           .value();
 
 exports.all = function(callback) {

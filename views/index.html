@@ -23,7 +23,7 @@
 				</div>
 				<ul class="tile-container row">
 					{% for brand in brands_by_letter[letter] %}
-						<li class="col-3 {{ brand.effective_name | trie }}">
+						<li class="col-3 {{ brand.normalized_name | trie }}">
 							<div class="tile">
 								<div class="tile-logo">
 									<img src="">
