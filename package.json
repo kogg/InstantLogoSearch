@@ -14,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/cameronrohani/InstantLogoSearch/issues"
   },
-  "homepage": "https://github.com/cameronrohani/InstantLogoSearch#readme"
+  "homepage": "https://github.com/cameronrohani/InstantLogoSearch#readme",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
 }
