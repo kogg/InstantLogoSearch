@@ -1,5 +1,5 @@
 var express = require('express');
-var swig    = require('swig')
+var swig    = require('swig');
 
 var PORT = process.env.PORT || 5000;
 
