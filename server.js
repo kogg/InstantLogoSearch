@@ -13,9 +13,7 @@ app.set('views',       __dirname + '/views');
 app.set('view cache',  app.get('env') === 'production'); // http://expressjs.com/api.html#app.set
 swig.setDefaults({ cache: app.get('env') === 'production' ? 'memory' : false }); // http://paularmstrong.github.io/swig/docs/api/#CacheOptions
 
-app.get('/', function (req, res) {
-    res.render('index');
-});
+app.use(require('./controllers'));
 
 app.listen(PORT, function() {
     console.log('Application Started');
