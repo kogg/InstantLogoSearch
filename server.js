@@ -14,6 +14,7 @@ app.set('views',       __dirname + '/views');
 app.set('view cache',  app.get('env') === 'production'); // http://expressjs.com/api.html#app.set
 swig.setDefaults({ cache: app.get('env') === 'production' ? 'memory' : false }); // http://paularmstrong.github.io/swig/docs/api/#CacheOptions
 swig.setFilter('trie', function(string) {
+    string = string.toLowerCase().replace(/[^a-z]+/g, '');
     var classes = '';
     var current_class = 'trie-';
     var length = string.length;
