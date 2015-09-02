@@ -9,8 +9,8 @@ router.get('/', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        res.render('index', { grouped_brands: _.groupBy(brands, function(brand) {
-            return brand.name[0].toLowerCase();
+        res.render('index', { brands_by_letter: _.groupBy(brands, function(brand) {
+            return _.first(brand.name).toUpperCase();
         }) });
     });
 });

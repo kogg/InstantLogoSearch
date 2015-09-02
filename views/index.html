@@ -17,148 +17,26 @@
 	</div>
 	<div class="content row">
 		<div class="brand-tiles">
-			<div class="letter">
-				<h3>A</h3>
-			</div>
-			<ul class="tile-container row">
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>About.me</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Addvocate</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Adobe</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Aetna</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>About.me</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Addvocate</p>
-						</div>
-					</div>
-				</li>
-			</ul>
-			<div class="letter">
-				<h3>B</h3>
-			</div>
-			<ul class="tile-container row">
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>About.me</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Addvocate</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Adobe</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Aetna</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>About.me</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Addvocate</p>
-						</div>
-					</div>
-				</li>
-			</ul>
+			{% for letter in brands_by_letter | sort %}
+				<div class="letter">
+					<h3>{{ letter }}</h3>
+				</div>
+				<ul class="tile-container row">
+					{% for brand in brands_by_letter[letter] %}
+						<li class="col-3">
+							<div class="tile">
+								<div class="tile-logo">
+									<img src="">
+									image
+								</div>
+								<div class="tile-title">
+									<p>{{ brand.name }}</p>
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endfor %}
 		</div>
 		<div class="sidebar" id="sidebar">
 			<h3>Saved Logo's</h3>
