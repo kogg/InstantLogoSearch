@@ -105,35 +105,48 @@ body {
 }
 /*Brand tiles*/
 .brand-tiles {
-
+	width: 70%;
+	width: calc(100% - 300px);
+	float: left;
 }
 .letter {
-
+	padding: 30px 30px 0px 30px
 }
 .letter h3 {
-
+	color: #3150b4;
+	font-size: 24px;
 }
 .tile-container {
-
+	padding: 30px
+}
+.tile-container .col-3 {
+	padding: 0 20px 20px 0;
 }
 .tile {
-
+	border-radius: 3px;
+	overflow: hidden;
+	box-shadow:0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15)
 }
 .tile-logo {
-
+	height: 100px;
+	background:#fafafa;
+	padding: 16px;
 }
 .tile-logo img {
 
 }
 .tile-title {
-
+	padding: 16px;
 }
 .tile-title p {
-
+	color: #212121
 }
 /*sidebar*/
 .sidebar {
-
+	width: 30%;
+	padding: 30px;
+	width: 300px;
+	float: left;
 }
 .sidebar ul {
 
