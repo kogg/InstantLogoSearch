@@ -126,9 +126,14 @@ ul, li {
 	padding: 0 20px 20px 0;
 }
 .tile {
+	cursor: pointer;
 	border-radius: 3px;
 	overflow: hidden;
+	transition:all .1s ease-in-out;
 	box-shadow:0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15)
+}
+.tile:hover {
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 .tile-logo {
 	height: 100px;
@@ -150,6 +155,8 @@ ul, li {
 	padding: 30px;
 	width: 300px;
 	float: left;
+	border-left: 1px solid rgba(0,0,0,.1);
+	height: 100vh;
 }
 .sidebar h3 {
 	color: #717171;
