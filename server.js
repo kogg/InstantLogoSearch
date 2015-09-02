@@ -5,6 +5,8 @@ var PORT = process.env.PORT || 5000;
 
 var app = express();
 
+app.use(express.static(__dirname + '/public'));
+
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views',       __dirname + '/views');
