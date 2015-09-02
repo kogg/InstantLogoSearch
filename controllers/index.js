@@ -1,3 +1,4 @@
+var _       = require('underscore');
 var express = require('express');
 var Brand   = require('../models/brand');
 
@@ -8,7 +9,9 @@ router.get('/', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        res.render('index', { brands: brands });
+        res.render('index', { grouped_brands: _.groupBy(brands, function(brand) {
+            return brand.name[0].toLowerCase();
+        }) });
     });
 });
 
