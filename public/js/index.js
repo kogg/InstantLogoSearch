@@ -46,7 +46,7 @@ $(function() {
         $body.trigger('close');
     });
 
-    var active = null;
+    var active = $body.hasClass('one-result') && 'one-result';
 
     $body.on('load-content', '.brand', function(e, class_name) {
         if (active) {
