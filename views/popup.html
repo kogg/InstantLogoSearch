@@ -1,0 +1,61 @@
+<div class="row logos">
+	<div class="col-3">
+		<div class="logo-card">
+			<div class="logo-holder">
+				<img src="https://d2ed0w4q03gsmw.cloudfront.net/s3/assets/baf2144/images/assets/blue_on_white.svg">
+			</div>
+			<div class="card-ctas">
+				<p>200x300<span class="dl"></span><span class="save"></span></p>
+				<p>200x300<span class="dl"></span><span class="save"></span></p>
+				<p>200x300<span class="dl"></span><span class="save"></span></p>
+				<p>svg<span class="dl"></span><span class="save"></span></p>
+			</div>
+		</div>
+	</div>
+	<div class="col-3">
+		<div class="logo-card">
+			<div class="logo-holder">
+				<img src="https://d2ed0w4q03gsmw.cloudfront.net/s3/assets/baf2144/images/assets/white_on_blue.svg">
+			</div>
+			<div class="card-ctas">
+				<p>200x300</p>
+				<p>200x300</p>
+				<p>200x300</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-3">
+		<div class="logo-card">
+			<div class="logo-holder">
+				<img src="https://d2ed0w4q03gsmw.cloudfront.net/s3/assets/baf2144/images/assets/white_on_blue.svg">
+			</div>
+			<div class="card-ctas">
+				<p>200x300</p>
+				<p>200x300</p>
+				<p>200x300</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-3">
+		<div class="logo-card">
+			<div class="logo-holder">
+				<img src="https://d2ed0w4q03gsmw.cloudfront.net/s3/assets/baf2144/images/assets/blue_on_white.svg">
+			</div>
+			<div class="card-ctas">
+				<p>200x300</p>
+				<p>200x300</p>
+				<p>200x300</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="color-palette row" id="colors">
+	{% for color in brand.colors %}
+		<div class="col-3">
+			<div class="color-swatch-container select-on-click">
+				<div class="color-swatch" style="background:{{ color }}"></div>
+				<div class="color">{{ color }}</div>
+			</div>
+		</div>
+	{% endfor %}
+</div>
