@@ -1,8 +1,28 @@
+if (document.body.createTextRange) { // ms
+    $.fn.highlight = function() {
+        var range = document.body.createTextRange();
+        range.moveToElementText(this.get(0));
+        range.select();
+        return this;
+    };
+} else if (window.getSelection) { // moz, opera, webkit
+    $.fn.highlight = function() {
+        var selection = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(this.get(0));
+        selection.removeAllRanges();
+        selection.addRange(range);
+        return this;
+    };
+}
+
 $(function() {
     var $body         = $('body');
     var $filter_style = $('#filter-styles');
     var $popup        = $('#logo-popup');
     var $search_bar   = $('#search-bar');
+
+    var active    = $body.hasClass('one-result') && 'one-result';
     var searching = '';
 
     $search_bar.on('input', function(e) {
@@ -21,6 +41,7 @@ $(function() {
         }
         brands.first().trigger('load-content', ['one-result']);
     });
+    $search_bar.select();
 
     $('#search-form').on('submit', function(e) {
         e.preventDefault();
@@ -31,11 +52,18 @@ $(function() {
         $(this).parent().trigger('load-content', ['popup']);
     });
 
-    $popup.on('click', function(e) {
-        e.stopPropagation();
+    $body.on('click', '.select-on-click', function() {
+        $(this).highlight();
     });
 
-    $('#logo-popup-container').on('click', function() {
+    $('#logo-popup-container').on('click', function(e) {
+        if (active !== 'popup') {
+            return;
+        }
+        var target = $(e.target);
+        if ($popup.is(target) || $popup.has(target).length) {
+            return;
+        }
         $body.trigger('close');
     });
 
@@ -45,8 +73,6 @@ $(function() {
         }
         $body.trigger('close');
     });
-
-    var active = $body.hasClass('one-result') && 'one-result';
 
     $body.on('load-content', '.brand', function(e, class_name) {
         if (active) {
@@ -68,6 +94,4 @@ $(function() {
         $body.removeClass(active);
         active = null;
     });
-
-    $search_bar.select();
 });
