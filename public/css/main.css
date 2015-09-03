@@ -14,6 +14,11 @@ body {
 ul, li {
 	list-style: none;
 }
+h2 {
+	font-weight: 400;
+	font-size: 28px;
+	margin-bottom: 16px;
+}
 h3 {
 	color: #717171;
 	font-size: 24px;
@@ -44,7 +49,6 @@ h3 {
 .col-1 {width:8.333333333%}
 .col-2 {width:16.666666666%}
 .col-3 {width:25%}
-.zero-saved .col-3 {width: 20%}
 .col-4 {width:33.333333333%}
 .col-5 {width:41.666666666%}
 .col-6 {width:50%}
@@ -137,11 +141,6 @@ h3 {
 }
 /*Brand tiles*/
 .brand-tiles {
-	width: 70%;
-	width: calc(100% - 300px);
-	float: left;
-}
-.zero-saved .brand-tiles {
 	width: 100%;
 }
 .letter, .search-results {
@@ -169,11 +168,13 @@ h3 {
 .tile-container {
 	padding: 30px 10px 30px 30px;
 }
+.tile-container li {
+	width: 20%;
+	float: left;
+	padding: 0 20px 20px 0;
+}
 .filtering .tile-container {
 	display: none;
-}
-.tile-container .col-3 {
-	padding: 0 20px 20px 0;
 }
 .filtering .tile-container .col-3 {
 	display: none;
@@ -222,7 +223,7 @@ h3 {
   left: 0;
   display: none;
 }
-.popup .logo-popup{
+.popup .logo-popup {
 	display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-box-pack: center;
@@ -249,6 +250,12 @@ h3 {
   padding: 30px;
 }
 .logo-popup h3 {
+	margin-bottom: 20px;
+}
+.logo-popup p {
+	font-weight: 300;
+	line-height: 24px;
+	font-size: 18px;
 	margin-bottom: 20px;
 }
 .logo-popup .row + h3 {

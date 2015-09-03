@@ -18,7 +18,8 @@
 	</div>
 	<div class="logo-popup" id="logo-popup-container">
 		<div class="logo-popup-container z-3" id="logo-popup">
-			<h2>test 1234</h2>
+			<h2>About.me</h2>
+			<p>About.me makes it easy for people to learn about you and find your content. Create a free page in minutes with no coding required.</p>
 			<div class="row">
 				<div class="col-3">test</div>
 				<div class="col-3">test</div>
@@ -45,7 +46,7 @@
 			<h3>Style guideline</h3>
 		</div>
 	</div>
-	<div class="content row zero-saved">
+	<div class="content row">
 		<div class="container">
 			<div class="brand-tiles">
 				<div class="search-results">
@@ -57,7 +58,7 @@
 					</div>
 					<ul class="tile-container row group-{{ letter | lower }}">
 						{% for brand in brands_by_letter[letter] %}
-							<li class="col-3 {{ brand.normalized_name | trie }}" data-brand="{{ brand | json }}">
+							<li class="{{ brand.normalized_name | trie }}" data-brand="{{ brand | json }}">
 								<div class="tile">
 									<div class="tile-logo">
 										<img src="">
