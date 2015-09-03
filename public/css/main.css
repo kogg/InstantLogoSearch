@@ -300,8 +300,22 @@ h3 {
 	margin-top: 30px;
 }
 /*logos*/
+.logos {
+	padding: 16px 0 0px 16px;
+}
 .logos .col-3 {
 	margin-bottom: 20px;
+}
+.logos > .col-6 {
+	padding-right: 16px;
+	margin-bottom: 16px;
+}
+.card-ctas {
+	padding: 16px;
+}
+.logo-card {
+	box-shadow:0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15);
+	border-radius: 3px;
 }
 .logo-holder {
 	padding-right: 16px;
@@ -312,11 +326,16 @@ h3 {
 }
 /*Brand PopUP Colour palettes*/
 .color-palette {
-	margin-top: 20px;
-	padding: 16px 0px 16px 16px;
+	padding: 0px 0px 16px 16px;
 }
 .color-swatch-container {
 	box-shadow:0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15);
+	transition:all .1s ease-in-out;
+	cursor: pointer;
+	border-radius: 3px;
+}
+.color-swatch-container:hover {
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 .color-palette .col-3 {
 	padding-right: 16px;
@@ -334,10 +353,13 @@ h3 {
 }
 .color-swatch {
 	width: 100%;
-	height: 100px;
+	height: 60px;
 	line-height: 100px;
 	text-align: center;
 	border-radius: 3px 3px 0 0;
+}
+.one-result .color-swatch {
+	height: 100px
 }
 .color {
 	padding: 16px;
