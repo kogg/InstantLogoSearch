@@ -168,6 +168,9 @@ h3 {
 .tile-container {
 	padding: 30px 10px 30px 30px;
 }
+.one-result .tile-container {
+	display: none !important;
+}
 .tile-container li {
 	width: 20%;
 	float: left;
@@ -243,6 +246,14 @@ h3 {
   left: 0;
   display: none;
 }
+.one-result .logo-popup {
+	display: block;
+	position: relative;
+	background: transparent;
+	width: auto;
+	height: auto;
+	padding: 0 30px;
+}
 .popup .logo-popup {
 	display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -269,6 +280,12 @@ h3 {
   border-radius: 3px;
   padding: 30px;
 }
+.one-result .logo-popup-container {
+	box-shadow: 0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15);
+	max-width:1220px;
+	margin:30px auto;
+}
+
 .logo-popup h3 {
 	margin-bottom: 20px;
 }
