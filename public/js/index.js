@@ -68,4 +68,6 @@ $(function() {
         $body.removeClass(active);
         active = null;
     });
+
+    $search_bar.select();
 });
