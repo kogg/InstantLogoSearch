@@ -92,7 +92,10 @@ $(function() {
         var brand = $(this).data().brand;
         window.history.replaceState('', 'Instant Logo Search - ' + brand.name, '/' + brand.normalized_name);
         document.title = 'Instant Logo Search - ' + brand.name;
+
         $popup.detach();
+        // TODO Render the SWIG Templates client-side somehow http://paularmstrong.github.io/swig/docs/browser/
+
         $popup_colors = $popup_colors || $popup.find('#colors');
         $popup_colors.empty();
         var colors = '';
@@ -105,6 +108,7 @@ $(function() {
                        </div>';
         });
         $popup_colors.append(colors);
+
         $popup.appendTo($popup_container);
     });
 
