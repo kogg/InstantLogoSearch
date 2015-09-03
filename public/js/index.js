@@ -14,6 +14,10 @@ if (document.body.createTextRange) { // ms
         selection.addRange(range);
         return this;
     };
+} else {
+    $.fn.highlight = function() {
+        return this;
+    };
 }
 
 $(function() {
