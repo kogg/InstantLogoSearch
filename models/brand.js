@@ -1,6 +1,7 @@
 var _ = require('underscore');
 
 var brands = [{ name: '4ormat' },
+              { name: '4teen' },
               { name: '500px' },
               { name: 'About.me' },
               { name: 'Addvocate' },

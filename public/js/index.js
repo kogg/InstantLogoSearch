@@ -9,7 +9,7 @@ $(function() {
         searching = $search_bar.val().toLowerCase().replace(/[^a-z0-9]+/g, '');
         var filtering = !!searching.length;
         $body.toggleClass('filtering', filtering);
-        $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0] + '{display:block !important;}') : '');
+        $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0].replace(/[0-9]/, '0-9') + '{display:block !important;}') : '');
         if (!filtering) {
             $body.trigger('close');
             return;
