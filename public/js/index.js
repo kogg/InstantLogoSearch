@@ -20,19 +20,26 @@ $(function() {
         $(this).trigger('open-popup');
     });
 
-    $body.on('open-popup', function() {
-        $body.addClass('popup');
-    });
-
-    $body.on('close-popup', function() {
-        $body.removeClass('popup');
-    });
-
     $('#logo-popup').on('click', function(e) {
         e.stopPropagation();
     });
 
     $('#logo-popup-container').on('click', function() {
         $body.trigger('close-popup');
+    });
+
+    $body.on('keydown', function(e) {
+        if (e.which !== 27) {
+            return;
+        }
+        $body.trigger('close-popup');
+    });
+
+    $body.on('open-popup', function() {
+        $body.addClass('popup');
+    });
+
+    $body.on('close-popup', function() {
+        $body.removeClass('popup');
     });
 });
