@@ -1,9 +1,6 @@
 $(function() {
     var $window = $(window);
-    var $search_bar = $('#search-bar');
-    var $body, $filter_style, $header, $sidebar;
-    var $header_height;
-
+    var $header, $header_height, $sidebar;
     $window.on('scroll resize', function(e) {
         $header  = $header  || $('#header');
         $sidebar = $sidebar || $('#sidebar');
@@ -17,6 +14,8 @@ $(function() {
         e.preventDefault();
     });
 
+    var $search_bar = $('#search-bar');
+    var $body, $filter_style;
     $search_bar.on('input', function(e) {
         var val = $search_bar.val().toLowerCase().replace(/[^a-z]+/g, '');
         var filtering = !!(val && val.length);
