@@ -13,10 +13,14 @@ $(function() {
         $sidebar.toggleClass('sidebar-fixed', $window.scrollTop() > $header_height);
     });
 
+    $('#search-form').on('submit', function(e) {
+        e.preventDefault();
+    });
+
     $search_bar.on('input', function(e) {
         var val = $search_bar.val().toLowerCase().replace(/[^a-z]+/g, '');
-        $body = $body || $('body');
         var filtering = !!(val && val.length);
+        $body = $body || $('body');
         $body.toggleClass('filtering', filtering);
         $filter_style = $filter_style || $('<style></style>').appendTo('head');
         $filter_style.text(filtering ? ('.trie-' + val + '{display:block !important;}' + '.group-' + val[0] + '{display:block !important;}') : '');
