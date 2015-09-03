@@ -1,6 +1,9 @@
 var _ = require('underscore');
 
-var brands = [{ name: 'About.me' },
+var brands = [{ name: '4ormat' },
+              { name: '4teen' },
+              { name: '500px' },
+              { name: 'About.me' },
               { name: 'Addvocate' },
               { name: 'Adobe' },
               { name: 'Aetna' },
@@ -12,7 +15,7 @@ var brands = [{ name: 'About.me' },
               { name: 'Behance' }];
 brands = _.chain(brands)
           .each(function(brand) {
-              brand.normalized_name = brand.name.toLowerCase().replace(/[^a-z]+/g, '');
+              brand.normalized_name = brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '');
           })
           .sortBy('normalized_name')
           .value();
