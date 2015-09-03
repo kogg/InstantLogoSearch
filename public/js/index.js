@@ -1,6 +1,3 @@
-var POPUP      = 1;
-var ONE_RESULT = 2;
-
 $(function() {
     var $body         = $('body');
     var $filter_style = $('#filter-styles');
@@ -9,32 +6,28 @@ $(function() {
     var searching = '';
 
     $search_bar.on('input', function(e) {
+        $body.trigger('close');
         searching = $search_bar.val().toLowerCase().replace(/[^a-z]+/g, '');
         var filtering = !!searching.length;
         $body.toggleClass('filtering', filtering);
         $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0] + '{display:block !important;}') : '');
         if (!filtering) {
-            $body.removeClass('one-result');
             return;
         }
         var brands = $('.trie-' + searching);
-        var one_result = brands.length === 1;
-        $body.toggleClass('one-result', one_result);
-        if (!one_result) {
+        if (brands.length !== 1) {
             return;
         }
-        brands.first().trigger('load-content');
+        brands.first().trigger('load-content', ['one-result']);
     });
 
     $('#search-form').on('submit', function(e) {
         e.preventDefault();
-        $body.addClass('popup');
-        $((searching && searching.length ? '.trie-' + searching : '.brand') + ':first').trigger('load-content');
+        $((searching && searching.length ? '.trie-' + searching : '.brand') + ':first').trigger('load-content', ['popup']);
     });
 
     $body.on('click', '.tile', function() {
-        $body.addClass('popup');
-        $(this).parent().trigger('load-content');
+        $(this).parent().trigger('load-content', ['popup']);
     });
 
     $popup.on('click', function(e) {
@@ -42,17 +35,33 @@ $(function() {
     });
 
     $('#logo-popup-container').on('click', function() {
-        $body.removeClass('popup');
+        $body.trigger('close');
     });
 
     $body.on('keydown', function(e) {
         if (e.which !== 27) {
             return;
         }
-        $body.removeClass('popup');
+        $body.trigger('close');
     });
 
-    $body.on('load-content', '.brand', function() {
+    var active = null;
+    var loaded_brand;
+
+    $body.on('load-content', '.brand', function(e, class_name) {
+        if (active) {
+            return;
+        }
+        active = class_name;
+        $body.addClass(class_name);
         console.log('load-content', this, $(this).data());
+    });
+
+    $body.on('close', function() {
+        if (!active) {
+            return;
+        }
+        $body.removeClass(active);
+        active = null;
     });
 });
