@@ -10,7 +10,7 @@
 		<h1>Instant Logo Search</h1>
 		<div class="search z-1 row">
 			<form>
-				<input type="text" placeholder="Search 500+ Brands, Startups, & Companies"autofocus>
+				<input type="text" placeholder="Search 500+ Brands, Startups, & Companies" autofocus id="search-bar">
 				<button></button>
 			</form>
 		</div>
@@ -19,9 +19,9 @@
 		<div class="brand-tiles">
 			{% for letter in brands_by_letter | sort %}
 				<div class="letter">
-					<h3>{{ letter }}</h3>
+					<h3>{{ letter | upper }}</h3>
 				</div>
-				<ul class="tile-container row">
+				<ul class="tile-container row group-{{ letter | lower }}">
 					{% for brand in brands_by_letter[letter] %}
 						<li class="col-3 {{ brand.normalized_name | trie }}">
 							<div class="tile">
