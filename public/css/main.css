@@ -55,7 +55,11 @@ h3 {
 .col-11 {width:91.66666666%}
 .col-12 {width:100.000000000%}
 
-
+.content {
+	max-width: 1280px;
+	margin: auto;
+	position: relative;
+}
 /*Heading and Search*/
 .header {
 	background: #3150b4;
@@ -167,7 +171,7 @@ h3 {
 	display: none;
 }
 .sidebar-fixed {
-	position: fixed;
+	position: absolute;
 	right: 0;
 	top: 0;
   -webkit-transform: translatez(0);
