@@ -119,11 +119,20 @@ ul, li {
 	color: #717171;
 	font-size: 24px;
 }
+.filtering .letter {
+	display: none;
+}
 .tile-container {
 	padding: 30px 10px 30px 30px;
 }
+.filtering .tile-container {
+	display: none;
+}
 .tile-container .col-3 {
 	padding: 0 20px 20px 0;
+}
+.filtering .tile-container .col-3 {
+	display: none;
 }
 .tile {
 	cursor: pointer;

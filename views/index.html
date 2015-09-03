@@ -10,155 +10,33 @@
 		<h1>Instant Logo Search</h1>
 		<div class="search z-1 row">
 			<form>
-				<input type="text" placeholder="Search 500+ Brands, Startups, & Companies"autofocus>
+				<input type="text" placeholder="Search 500+ Brands, Startups, & Companies" autofocus id="search-bar">
 				<button></button>
 			</form>
 		</div>
 	</div>
 	<div class="content row">
 		<div class="brand-tiles">
-			<div class="letter">
-				<h3>A</h3>
-			</div>
-			<ul class="tile-container row">
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>About.me</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Addvocate</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Adobe</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Aetna</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>About.me</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Addvocate</p>
-						</div>
-					</div>
-				</li>
-			</ul>
-			<div class="letter">
-				<h3>B</h3>
-			</div>
-			<ul class="tile-container row">
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>About.me</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Addvocate</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Adobe</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Aetna</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>About.me</p>
-						</div>
-					</div>
-				</li>
-				<li class="col-3">
-					<div class="tile">
-						<div class="tile-logo">
-							<img src="">
-							image
-						</div>
-						<div class="tile-title">
-							<p>Addvocate</p>
-						</div>
-					</div>
-				</li>
-			</ul>
+			{% for letter in brands_by_letter | sort %}
+				<div class="letter">
+					<h3>{{ letter | upper }}</h3>
+				</div>
+				<ul class="tile-container row group-{{ letter | lower }}">
+					{% for brand in brands_by_letter[letter] %}
+						<li class="col-3 {{ brand.normalized_name | trie }}">
+							<div class="tile">
+								<div class="tile-logo">
+									<img src="">
+									image
+								</div>
+								<div class="tile-title">
+									<p>{{ brand.name }}</p>
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endfor %}
 		</div>
 		<div class="sidebar" id="sidebar">
 			<h3>Saved Logo's</h3>
