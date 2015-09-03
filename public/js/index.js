@@ -1,6 +1,7 @@
 $(function() {
-    var $body = $('body');
+    var $body       = $('body');
     var $search_bar = $('#search-bar');
+    var $popup      = $('#logo-popup');
     var searching = '';
 
     var $filter_style = $('#filter-styles');
@@ -32,7 +33,7 @@ $(function() {
         $(this).parent().trigger('load-content');
     });
 
-    $('#logo-popup').on('click', function(e) {
+    $popup.on('click', function(e) {
         e.stopPropagation();
     });
 
