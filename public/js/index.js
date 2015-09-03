@@ -21,10 +21,11 @@ if (document.body.createTextRange) { // ms
 }
 
 $(function() {
-    var $body         = $('body');
-    var $filter_style = $('#filter-styles');
-    var $popup        = $('#logo-popup');
-    var $search_bar   = $('#search-bar');
+    var $body            = $('body');
+    var $filter_style    = $('#filter-styles');
+    var $popup           = $('#logo-popup');
+    var $popup_container = $('#logo-popup-container');
+    var $search_bar      = $('#search-bar');
 
     var active    = $body.hasClass('one-result') && 'one-result';
     var searching = '';
@@ -60,7 +61,7 @@ $(function() {
         $(this).highlight('.color');
     });
 
-    $('#logo-popup-container').on('click', function(e) {
+    $popup_container.on('click', function(e) {
         if (active !== 'popup') {
             return;
         }
@@ -78,6 +79,7 @@ $(function() {
         $body.trigger('close');
     });
 
+    var $popup_colors;
     $body.on('load-content', '.brand', function(e, class_name) {
         if (active) {
             return;
@@ -87,6 +89,20 @@ $(function() {
         var brand = $(this).data().brand;
         window.history.replaceState('', 'Instant Logo Search - ' + brand.name, '/' + brand.normalized_name);
         document.title = 'Instant Logo Search - ' + brand.name;
+        $popup.detach();
+        $popup_colors = $popup_colors || $popup.find('#colors');
+        $popup_colors.empty();
+        var colors = '';
+        (brand.colors || []).forEach(function(color) {
+            colors += '<div class="col-3">\
+                           <div class="color-swatch-container select-on-click">\
+                               <div class="color-swatch" style="background:' + color + '"></div>\
+                               <div class="color">' + color + '</div>\
+                           </div>\
+                       </div>';
+        });
+        $popup_colors.append(colors);
+        $popup.appendTo($popup_container);
     });
 
     $body.on('close', function() {

@@ -106,32 +106,16 @@
 							</div>
 						</div>
 					</div>
-				</div>				
-				<div class="color-palette row">
-					<div class="col-3">
-						<div class="color-swatch-container select-on-click">
-							<div class="color-swatch" style="background:#044a75"></div>
-							<div class="color">#044a75</div>
+				</div>
+				<div class="color-palette row" id="colors">
+					{% for color in brand.colors %}
+						<div class="col-3">
+							<div class="color-swatch-container select-on-click">
+								<div class="color-swatch" style="background:{{ color }}"></div>
+								<div class="color">{{ color }}</div>
+							</div>
 						</div>
-					</div>
-					<div class="col-3">
-						<div class="color-swatch-container select-on-click">
-							<div class="color-swatch" style="background:#1f3136"></div>
-							<div class="color">#1f3136</div>
-						</div>
-					</div>
-					<div class="col-3">
-						<div class="color-swatch-container select-on-click">
-							<div class="color-swatch" style="background:#9bb7c8"></div>
-							<div class="color">#9bb7c8</div>
-						</div>
-					</div>
-					<div class="col-3">
-						<div class="color-swatch-container select-on-click">
-							<div class="color-swatch" style="background:#cddbe3"></div>
-							<div class="color">#cddbe3</div>
-						</div>
-					</div>
+					{% endfor %}
 				</div>
 			</div>
 		</div>
