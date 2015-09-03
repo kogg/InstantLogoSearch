@@ -3,7 +3,10 @@ $(function() {
     var $filter_style = $('#filter-styles');
     var $popup        = $('#logo-popup');
     var $search_bar   = $('#search-bar');
+
+    var active    = $body.hasClass('one-result') && 'one-result';
     var searching = '';
+
 
     $search_bar.on('input', function(e) {
         searching = $search_bar.val().toLowerCase().replace(/[^a-z0-9]+/g, '');
@@ -33,6 +36,9 @@ $(function() {
     });
 
     $('#logo-popup-container').on('click', function(e) {
+        if (active !== 'popup') {
+            return;
+        }
         var target = $(e.target);
         if ($popup.is(target) || $popup.has(target).length) {
             return;
@@ -46,8 +52,6 @@ $(function() {
         }
         $body.trigger('close');
     });
-
-    var active = $body.hasClass('one-result') && 'one-result';
 
     $body.on('load-content', '.brand', function(e, class_name) {
         if (active) {
