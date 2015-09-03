@@ -173,6 +173,26 @@ h3 {
 	float: left;
 	padding: 0 20px 20px 0;
 }
+@media only screen and (max-width: 1100px) {
+	.tile-container li {
+		width: 25%
+	}
+}
+@media only screen and (max-width: 860px) {
+	.tile-container li {
+		width: 33.33333333%
+	}
+}
+@media only screen and (max-width: 660px) {
+	.tile-container li {
+		width: 50%
+	}
+}
+@media only screen and (max-width: 420px) {
+	.tile-container li {
+		width: 100%
+	}
+}
 .filtering .tile-container {
 	display: none;
 }
