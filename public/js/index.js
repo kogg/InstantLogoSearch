@@ -1,17 +1,6 @@
 $(function() {
     var $body = $('body');
 
-    var $window = $(window);
-    var $header, $header_height, $sidebar;
-    $window.on('scroll resize', function(e) {
-        $header  = $header  || $('#header');
-        $sidebar = $sidebar || $('#sidebar');
-        if (!$header_height || e.type === 'resize') {
-            $header_height = $header.outerHeight(true);
-        }
-        $sidebar.toggleClass('sidebar-fixed', $window.scrollTop() > $header_height);
-    });
-
     $('#search-form').on('submit', function(e) {
         e.preventDefault();
         $('.col-3:visible:first .tile').trigger('open-popup');
