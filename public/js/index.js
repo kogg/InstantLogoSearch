@@ -1,19 +1,21 @@
 $(function() {
     var $body = $('body');
+    var $search_bar = $('#search-bar');
+    var searching = '';
+
+    var $filter_style;
+    $search_bar.on('input', function(e) {
+        searching = $search_bar.val().toLowerCase().replace(/[^a-z]+/g, '');
+        var filtering = !!(searching && searching.length);
+        $body.toggleClass('filtering', filtering);
+        $body.toggleClass('one-result', filtering && ($('.trie-' + searching).length === 1));
+        $filter_style = $filter_style || $('<style></style>').appendTo('head');
+        $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0] + '{display:block !important;}') : '');
+    });
 
     $('#search-form').on('submit', function(e) {
         e.preventDefault();
-        $('.col-3:visible:first .tile').trigger('open-popup');
-    });
-
-    var $search_bar = $('#search-bar');
-    var $filter_style;
-    $search_bar.on('input', function(e) {
-        var val = $search_bar.val().toLowerCase().replace(/[^a-z]+/g, '');
-        var filtering = !!(val && val.length);
-        $body.toggleClass('filtering', filtering);
-        $filter_style = $filter_style || $('<style></style>').appendTo('head');
-        $filter_style.text(filtering ? ('.trie-' + val + '{display:block !important;}' + '.group-' + val[0] + '{display:block !important;}') : '');
+        $((searching && searching.length ? '.trie-' + searching : '[data-brand]') + ':first .tile').trigger('open-popup');
     });
 
     $body.on('click', '.tile', function() {
