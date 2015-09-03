@@ -7,7 +7,6 @@ $(function() {
     var active    = $body.hasClass('one-result') && 'one-result';
     var searching = '';
 
-
     $search_bar.on('input', function(e) {
         searching = $search_bar.val().toLowerCase().replace(/[^a-z0-9]+/g, '');
         var filtering = !!searching.length;
