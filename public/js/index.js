@@ -6,7 +6,7 @@ $(function() {
     var searching = '';
 
     $search_bar.on('input', function(e) {
-        searching = $search_bar.val().toLowerCase().replace(/[^a-z]+/g, '');
+        searching = $search_bar.val().toLowerCase().replace(/[^a-z0-9]+/g, '');
         var filtering = !!searching.length;
         $body.toggleClass('filtering', filtering);
         $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0] + '{display:block !important;}') : '');
