@@ -1,13 +1,16 @@
+var POPUP      = 1;
+var ONE_RESULT = 2;
+
 $(function() {
-    var $body       = $('body');
-    var $search_bar = $('#search-bar');
-    var $popup      = $('#logo-popup');
+    var $body         = $('body');
+    var $filter_style = $('#filter-styles');
+    var $popup        = $('#logo-popup');
+    var $search_bar   = $('#search-bar');
     var searching = '';
 
-    var $filter_style = $('#filter-styles');
     $search_bar.on('input', function(e) {
         searching = $search_bar.val().toLowerCase().replace(/[^a-z]+/g, '');
-        var filtering = !!(searching && searching.length);
+        var filtering = !!searching.length;
         $body.toggleClass('filtering', filtering);
         $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0] + '{display:block !important;}') : '');
         if (!filtering) {
@@ -15,8 +18,9 @@ $(function() {
             return;
         }
         var brands = $('.trie-' + searching);
-        $body.toggleClass('one-result', brands.length === 1);
-        if (brands.length !== 1) {
+        var one_result = brands.length === 1;
+        $body.toggleClass('one-result', one_result);
+        if (!one_result) {
             return;
         }
         brands.first().trigger('load-content');
