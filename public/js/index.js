@@ -24,7 +24,7 @@ $(function() {
     $('#search-form').on('submit', function(e) {
         e.preventDefault();
         $body.addClass('popup');
-        $((searching && searching.length ? '.trie-' + searching : '[data-brand]') + ':first').trigger('load-content');
+        $((searching && searching.length ? '.trie-' + searching : '.brand') + ':first').trigger('load-content');
     });
 
     $body.on('click', '.tile', function() {
@@ -47,7 +47,7 @@ $(function() {
         $body.removeClass('popup');
     });
 
-    $body.on('load-content', '[data-brand]', function() {
+    $body.on('load-content', '.brand', function() {
         console.log('load-content', this, $(this).data());
     });
 });

@@ -196,7 +196,7 @@ h3 {
 .filtering .tile-container {
 	display: none;
 }
-.filtering .tile-container .col-3 {
+.filtering .tile-container .brand {
 	display: none;
 }
 .tile {

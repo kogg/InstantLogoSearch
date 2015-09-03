@@ -58,7 +58,7 @@
 					</div>
 					<ul class="tile-container row group-{{ letter | lower }}">
 						{% for brand in brands_by_letter[letter] %}
-							<li class="{{ brand.normalized_name | trie }}" data-brand="{{ brand | json }}">
+							<li class="brand {{ brand.normalized_name | trie }}" data-brand="{{ brand | json }}">
 								<div class="tile">
 									<div class="tile-logo">
 										<img src="">
