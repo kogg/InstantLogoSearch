@@ -56,20 +56,40 @@ h3 {
 .col-12 {width:100.000000000%}
 
 .content {
-	max-width: 1280px;
-	margin: auto;
 	position: relative;
+}
+.container {
+	max-width: 1280px;
+	width: 100%;
+	overflow: auto;
+	margin: auto;
+}
+.header .container {
+	padding: 0 30px;
 }
 /*Heading and Search*/
 .header {
-	background: #3150b4;
-	padding: 100px 30px 40px 30px;
+	background: #009bfe;
+	position: relative;
+	padding: 100px 0px 40px 0px;
+}
+.header:after {
+	content: "";
+	position: absolute;
+	bottom: -140px;
+	height: 140px;
+	width: 100%;
+	background: #009bfe;
+	z-index: 0
 }
 .header h1 {
 	color: #fff;
   font-size: 56px;
-  font-weight: 300;
   margin-bottom: 30px;
+  font-weight: 300;
+}
+.header h1 span {
+	color: #19537d
 }
 .search {
 	width: 100%;
@@ -124,8 +144,23 @@ h3 {
 .zero-saved .brand-tiles {
 	width: 100%;
 }
-.letter {
-	padding: 30px 30px 0px 30px
+.letter, .search-results {
+	padding: 0px 30px
+}
+.search-results + .letter {
+	padding-top: 0;
+}
+.search-results + .letter h3 {
+	color: #fff
+}
+.search-results {
+	display: none;
+}
+.search-results h3 {
+	color: white;
+}
+.filtering .search-results {
+	display: block;
 }
 .filtering .letter {
 	display: none;
@@ -165,49 +200,14 @@ h3 {
 	padding: 16px;
 }
 .tile-title p {
-	color: #212121
+	color: #212121;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /*sidebar*/
-.sidebar {
-	width: 30%;
-	padding: 30px;
-	width: 300px;
-	float: left;
-	border-left: 1px solid rgba(0,0,0,.1);
-	height: 100vh;
-}
-.zero-saved .sidebar {
-	display: none;
-}
-.sidebar-fixed {
-	position: absolute;
-	right: 0;
-	top: 0;
-  -webkit-transform: translatez(0);
-  -moz-transform: translatez(0);
-  -ms-transform: translatez(0);
-  -o-transform: translatez(0);
-  transform: translatez(0);
-}
-.sidebar h3 {
-	padding-bottom: 30px;
-}
-.sidebar ul {
 
-}
-.sidebar p span {
-	color: #717171;
-	font-weight: 300;
-}
-.sidebar li {
-	margin-bottom: 8px;
-}
-.sidebar li + span, .sidebar span + .download {
-	display: none;
-}
-.download {
 
-}
 /*Brand page/popup*/
 .popup {
 	overflow: hidden;

@@ -2,10 +2,11 @@
 <head>
 	<title>Instant Logo Search</title>
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
-	<link rel="stylesheet" type="text/css" href="/css/brandcolors.css">
-	<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' type='text/css'>
+	<!--
+	<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
+-->
 </head>
-<body class="popup">
+<body>
 	<div class="logo-popup">
 		<span class="logo-popup-container z-3">
 			<h3>Logos</h3>
@@ -20,48 +21,45 @@
 		</span>
 	</div>
 	<div class="header" id="header">
-		<h1>Instant Logo Search</h1>
-		<div class="search z-1 row">
-			<form>
-				<input type="text" placeholder="Search 500+ Brands, Startups, & Companies" autofocus id="search-bar">
-				<button></button>
-			</form>
+		<div class="container">
+			<h1>Instant Logo Search</h1>
+			<div class="search z-1 row">
+				<form>
+					<input type="text" placeholder="Search 500+ Brands, Startups, & Companies" autofocus id="search-bar">
+					<button></button>
+				</form>
+			</div>
 		</div>
 	</div>
-	<div class="content row">
-		<div class="brand-tiles">
-			{% for letter in brands_by_letter | sort %}
-				<div class="letter">
-					<h3>{{ letter | upper }}</h3>
-				</div>
-				<ul class="tile-container row group-{{ letter | lower }}">
-					{% for brand in brands_by_letter[letter] %}
-						<li class="col-3 {{ brand.normalized_name | trie }}">
-							<div class="tile">
-								<div class="tile-logo">
-									<img src="">
-									image
+	<div class="content row zero-saved">
+		<div class="container">
+			<div class="brand-tiles">
+					<div class="search-results">
+						<h3>Search Results</h3>
+					</div>
+				{% for letter in brands_by_letter | sort %}
+					<div class="letter">
+						<h3>{{ letter | upper }}</h3>
+					</div>
+					<ul class="tile-container row group-{{ letter | lower }}">
+						{% for brand in brands_by_letter[letter] %}
+							<li class="col-3 {{ brand.normalized_name | trie }}">
+								<div class="tile">
+									<div class="tile-logo">
+										<img src="">
+										image
+									</div>
+									<div class="tile-title">
+										<p>{{ brand.name }}</p>
+									</div>
 								</div>
-								<div class="tile-title">
-									<p>{{ brand.name }}</p>
-								</div>
-							</div>
-						</li>
-					{% endfor %}
-				</ul>
-			{% endfor %}
-		</div>
-		<div class="sidebar" id="sidebar">
-			<h3>Saved Logo's</h3>
-			<ul>
-				<li>
-					<p>Facebook <span>Circle 300x300</span></p>
-				</li>
-				<li>
-					<p>American Airlines <span>Full 200x200</span></p>
-				</li>
-				<div class="download">Download</div>
-			</ul>
+							</li>
+						{% endfor %}
+					</ul>
+				{% endfor %}
+			</div>
+			<div class="">
+			</div>
 		</div>
 	</div>
 
