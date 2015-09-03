@@ -73,6 +73,9 @@ $(function() {
     });
 
     $body.on('keydown', function(e) {
+        if (active !== 'popup') {
+            return;
+        }
         if (e.which !== 27) {
             return;
         }
