@@ -1,3 +1,21 @@
+if (document.body.createTextRange) { // ms
+    $.fn.highlight = function() {
+        var range = document.body.createTextRange();
+        range.moveToElementText(this.get(0));
+        range.select();
+        return this;
+    };
+} else if (window.getSelection) { // moz, opera, webkit
+    $.fn.highlight = function() {
+        var selection = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(this.get(0));
+        selection.removeAllRanges();
+        selection.addRange(range);
+        return this;
+    };
+}
+
 $(function() {
     var $body         = $('body');
     var $filter_style = $('#filter-styles');
@@ -32,6 +50,10 @@ $(function() {
 
     $body.on('click', '.tile', function() {
         $(this).parent().trigger('load-content', ['popup']);
+    });
+
+    $body.on('click', '.select-on-click', function() {
+        $(this).highlight();
     });
 
     $('#logo-popup-container').on('click', function(e) {
