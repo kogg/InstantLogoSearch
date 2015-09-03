@@ -6,16 +6,17 @@ $(function() {
     var searching = '';
 
     $search_bar.on('input', function(e) {
-        $body.trigger('close');
         searching = $search_bar.val().toLowerCase().replace(/[^a-z]+/g, '');
         var filtering = !!searching.length;
         $body.toggleClass('filtering', filtering);
         $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0] + '{display:block !important;}') : '');
         if (!filtering) {
+            $body.trigger('close');
             return;
         }
         var brands = $('.trie-' + searching);
         if (brands.length !== 1) {
+            $body.trigger('close');
             return;
         }
         brands.first().trigger('load-content', ['one-result']);
@@ -46,7 +47,6 @@ $(function() {
     });
 
     var active = null;
-    var loaded_brand;
 
     $body.on('load-content', '.brand', function(e, class_name) {
         if (active) {
@@ -54,13 +54,17 @@ $(function() {
         }
         active = class_name;
         $body.addClass(class_name);
-        console.log('load-content', this, $(this).data());
+        var brand = $(this).data().brand;
+        window.history.replaceState('', 'Instant Logo Search - ' + brand.name, '/' + brand.normalized_name);
+        document.title = 'Instant Logo Search - ' + brand.name;
     });
 
     $body.on('close', function() {
         if (!active) {
             return;
         }
+        window.history.replaceState('', 'Instant Logo Search', '/');
+        document.title = 'Instant Logo Search';
         $body.removeClass(active);
         active = null;
     });
