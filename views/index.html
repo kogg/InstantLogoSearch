@@ -6,6 +6,19 @@
 	<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' type='text/css'>
 </head>
 <body>
+	<div class="logo-popup">
+		<span class="logo-popup-container z-3">
+			<h3>Logos</h3>
+			<div class="row">
+				<div class="col-3">test</div>
+				<div class="col-3">test</div>
+				<div class="col-3">test</div>
+				<div class="col-3">test</div>
+			</div>
+			<h3>Brand Colors</h3>
+			<h3>Style guideline</h3>
+		</span>
+	</div>
 	<div class="header" id="header">
 		<h1>Instant Logo Search</h1>
 		<div class="search z-1 row">
@@ -15,7 +28,7 @@
 			</form>
 		</div>
 	</div>
-	<div class="content row">
+	<div class="content row zero-saved">
 		<div class="brand-tiles">
 			{% for letter in brands_by_letter | sort %}
 				<div class="letter">
@@ -41,10 +54,14 @@
 		<div class="sidebar" id="sidebar">
 			<h3>Saved Logo's</h3>
 			<ul>
-				<li>Brand one</li>
-				<li>Brand two</li>
+				<li>
+					<p>Facebook <span>Circle 300x300</span></p>
+				</li>
+				<li>
+					<p>American Airlines <span>Full 200x200</span></p>
+				</li>
+				<div class="download">Download</div>
 			</ul>
-			<div class="download">Download</div>
 		</div>
 	</div>
 
