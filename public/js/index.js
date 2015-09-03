@@ -21,6 +21,7 @@ $(function() {
         }
         brands.first().trigger('load-content', ['one-result']);
     });
+    $search_bar.select();
 
     $('#search-form').on('submit', function(e) {
         e.preventDefault();
@@ -31,11 +32,11 @@ $(function() {
         $(this).parent().trigger('load-content', ['popup']);
     });
 
-    $popup.on('click', function(e) {
-        e.stopPropagation();
-    });
-
-    $('#logo-popup-container').on('click', function() {
+    $('#logo-popup-container').on('click', function(e) {
+        var target = $(e.target);
+        if ($popup.is(target) || $popup.has(target).length) {
+            return;
+        }
         $body.trigger('close');
     });
 
@@ -68,6 +69,4 @@ $(function() {
         $body.removeClass(active);
         active = null;
     });
-
-    $search_bar.select();
 });
