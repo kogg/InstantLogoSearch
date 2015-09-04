@@ -107,6 +107,9 @@ h3 {
 	font-weight: 300;
 	width: 100%;
 	color: #717171;
+	position: relative;
+	z-index: 2;
+	background: transparent;
 	white-space: nowrap;
 	overflow: hidden;
 	-ms-text-overflow: ellipsis;
@@ -131,6 +134,17 @@ h3 {
 }
 .search button:hover {
 	opacity: .5;
+}
+.fake-placeholder {
+	position: absolute;
+	top: 12px;
+	left: 16px;
+	font-size: 22px;
+	font-weight: 300;
+	width: 100%;
+	color: #717171;
+	z-index: 0;
+	pointer-events:none;
 }
 /*Brand tiles*/
 .brand-tiles {
