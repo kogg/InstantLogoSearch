@@ -7,6 +7,7 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules'));
+app.use(express.static(__dirname + '/generated'));
 
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');

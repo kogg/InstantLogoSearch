@@ -94,21 +94,7 @@ $(function() {
         document.title = 'Instant Logo Search - ' + brand.name;
 
         $popup.detach();
-        // TODO Render the SWIG Templates client-side somehow http://paularmstrong.github.io/swig/docs/browser/
-
-        $popup_colors = $popup_colors || $popup.find('#colors');
-        $popup_colors.empty();
-        var colors = '';
-        (brand.colors || []).forEach(function(color) {
-            colors += '<div class="col-3">\
-                           <div class="color-swatch-container select-on-click">\
-                               <div class="color-swatch" style="background:' + color + '"></div>\
-                               <div class="color">' + color + '</div>\
-                           </div>\
-                       </div>';
-        });
-        $popup_colors.append(colors);
-
+        $popup.html(swig.run(popup_tmpl, { brand: brand }));
         $popup.appendTo($popup_container);
     });
 
