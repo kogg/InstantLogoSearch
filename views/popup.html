@@ -1,27 +1,29 @@
-<div class="row logos">
-	<h2>{{ brand.name}}</h2>
-	{% for logo in brand.logos %}
-		<div class="col-3">
-			<div class="logo-card">
-				<div class="logo-holder">
-					<img src="{{ logo.files[0].url }}">
-				</div>
-				<div class="card-ctas">
-					{% for file in logo.files %}
-						<p>{{ file.name }}<span class="save"></span><a class="dl" href="{{ file.url }}" download></a></p>
-					{% endfor %}
+{% if brand %}
+	<div class="row logos">
+		<h2>{{ brand.name}}</h2>
+		{% for logo in brand.logos %}
+			<div class="col-3">
+				<div class="logo-card">
+					<div class="logo-holder">
+						<img src="{{ logo.files[0].url }}">
+					</div>
+					<div class="card-ctas">
+						{% for file in logo.files %}
+							<p>{{ file.name }}<span class="save"></span><a class="dl" href="{{ file.url }}" download></a></p>
+						{% endfor %}
+					</div>
 				</div>
 			</div>
-		</div>
-	{% endfor %}
-</div>
-<div class="color-palette row" id="colors">
-	{% for color in brand.colors %}
-		<div class="col-3">
-			<div class="color-swatch-container select-on-click">
-				<div class="color-swatch" style="background:{{ color }}"></div>
-				<div class="color">{{ color }}</div>
+		{% endfor %}
+	</div>
+	<div class="color-palette row" id="colors">
+		{% for color in brand.colors %}
+			<div class="col-3">
+				<div class="color-swatch-container select-on-click">
+					<div class="color-swatch" style="background:{{ color }}"></div>
+					<div class="color">{{ color }}</div>
+				</div>
 			</div>
-		</div>
-	{% endfor %}
-</div>
+		{% endfor %}
+	</div>
+{% endif %}
