@@ -185,6 +185,10 @@ $(function() {
             }
             $body.trigger('close');
         });
+
+        $body.on('click', '.select-on-click', function() {
+            $(this).find('.color').highlight();
+        });
     }());
 
     $('#title-link').on('click', function(e) {
@@ -192,10 +196,6 @@ $(function() {
         $search_bar
             .val('')
             .trigger('input');
-    });
-
-    $body.on('click', '.select-on-click', function() {
-        $(this).find('.color').highlight();
     });
 
     $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
