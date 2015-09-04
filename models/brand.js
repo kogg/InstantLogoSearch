@@ -15,8 +15,8 @@ var brands = [{ name: '4ormat' },
               { name: 'Behance' }];
 brands = _.chain(brands)
           .each(function(brand) {
-              brand.colors = brand.colors || _.times(4, function() { return '#' + _.sample('0123456789abcdef', 6).join(''); });
-              brand.normalized_name = brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '');
+              _.defaults(brand, { colors:          _.times(4, function() { return '#' + _.sample('0123456789abcdef', 6).join(''); }),
+                                  normalized_name: brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '') });
           })
           .sortBy('normalized_name')
           .value();

@@ -242,7 +242,7 @@ h3 {
 
 
 /*Brand page/popup*/
-.popup {
+.popup, .prevent-scroll {
 	overflow: hidden;
 }
 .logo-popup {
