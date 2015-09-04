@@ -55,7 +55,7 @@ $(function() {
             return;
         }
         var brand_obj = $('.trie-' + searching + ':first');
-        if (active !== 'popup') {
+        if (active && active !== 'popup') {
             $search_bar
                 .val(brand_obj.data().brand.name)
                 .trigger('input');
