@@ -21,11 +21,12 @@ if (document.body.createTextRange) { // ms
 }
 
 $(function() {
-    var $body            = $('body');
-    var $filter_style    = $('#filter-styles');
-    var $popup           = $('#logo-popup');
-    var $popup_container = $('#logo-popup-container');
-    var $search_bar      = $('#search-bar');
+    var $body             = $('body');
+    var $fake_placeholder = $('#fake-placeholder');
+    var $filter_style     = $('#filter-styles');
+    var $popup            = $('#logo-popup');
+    var $popup_container  = $('#logo-popup-container');
+    var $search_bar       = $('#search-bar');
 
     var active    = $body.hasClass('one-result') && 'one-result';
     var searching = '';
@@ -53,7 +54,14 @@ $(function() {
         if (!searching || !searching.length) {
             return;
         }
-        $('.trie-' + searching + ':first').trigger('load-content', ['popup']);
+        var brand_obj = $('.trie-' + searching + ':first');
+        if (active && active !== 'popup') {
+            $search_bar
+                .val(brand_obj.data().brand.name)
+                .trigger('input');
+            return;
+        }
+        brand_obj.trigger('load-content', ['popup']);
     });
 
     $body.on('click', '.tile', function() {
@@ -85,14 +93,19 @@ $(function() {
         $body.trigger('close');
     });
 
-    var $popup_colors;
     $body.on('load-content', '.brand', function(e, class_name) {
+        var brand;
+        if (class_name === 'one-result') {
+            brand = $(this).data().brand;
+            $fake_placeholder.text($search_bar.val() + ((searching.length - brand.normalized_name.length) ? brand.normalized_name.substr(searching.length - brand.normalized_name.length) : ''));
+            $fake_placeholder.html($fake_placeholder.text().replace(/ /g, '&nbsp;'));
+        }
         if (active) {
             return;
         }
         active = class_name;
-        $body.addClass(class_name);
-        var brand = $(this).data().brand;
+        $body.addClass(active);
+        brand = $(this).data().brand;
         window.history.replaceState('', 'Instant Logo Search - ' + brand.name, '/' + brand.normalized_name);
         document.title = 'Instant Logo Search - ' + brand.name;
 
@@ -105,6 +118,7 @@ $(function() {
         if (!active) {
             return;
         }
+        $fake_placeholder.text('');
         window.history.replaceState('', 'Instant Logo Search', '/');
         document.title = 'Instant Logo Search';
         $body.removeClass(active);
