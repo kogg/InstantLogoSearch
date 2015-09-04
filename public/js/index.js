@@ -72,6 +72,10 @@ $(function() {
         $(this).highlight('.color');
     });
 
+    $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
+        $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
+    });
+
     $popup_container.on('click', function(e) {
         if (active !== 'popup') {
             return;
