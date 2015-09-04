@@ -1,17 +1,17 @@
 var ESC = 27;
 
 if (document.body.createTextRange) { // ms
-    $.fn.highlight = function(elem) {
+    $.fn.highlight = function() {
         var range = document.body.createTextRange();
-        range.moveToElementText((elem ? this.find(elem) : this).get(0));
+        range.moveToElementText(this.get(0));
         range.select();
         return this;
     };
 } else if (window.getSelection) { // moz, opera, webkit
-    $.fn.highlight = function(elem) {
+    $.fn.highlight = function() {
         var selection = window.getSelection();
         var range = document.createRange();
-        range.selectNodeContents((elem ? this.find(elem) : this).get(0));
+        range.selectNodeContents(this.get(0));
         selection.removeAllRanges();
         selection.addRange(range);
         return this;
@@ -162,7 +162,7 @@ $(function() {
     });
 
     $body.on('click', '.select-on-click', function() {
-        $(this).highlight('.color');
+        $(this).find('.color').highlight();
     });
 
     $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
