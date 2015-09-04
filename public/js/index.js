@@ -1,4 +1,7 @@
-var ESC = 27;
+var DOWN = 40;
+var ESC  = 27;
+var TAB  = 9;
+var UP   = 38;
 
 if (document.body.createTextRange) { // ms
     $.fn.highlight = function() {
@@ -40,16 +43,6 @@ $(function() {
             var filtering = !!searching.length;
             $body.toggleClass('filtering', filtering);
             $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0].replace(/[0-9]/, '0-9') + '{display:block !important;}') : '');
-            if (!filtering) {
-                $body.trigger('close');
-                return;
-            }
-            var brands = $('.trie-' + searching);
-            if (brands.length !== 1) {
-                $body.trigger('close');
-                return;
-            }
-            brands.first().trigger('load-content', ['one-result']);
         })
 
         $body.on('click', '.tile', function() {
@@ -62,37 +55,77 @@ $(function() {
      */
     (function() {
         var $fake_placeholder;
+        var filtered_tiles;
+        var selection;
+
+        function change_selection(new_selection) {
+            if (selection && selection.length) {
+                selection.children('.tile').removeClass('selected-tile');
+            }
+            selection = new_selection;
+            $fake_placeholder = $fake_placeholder || $('#fake-placeholder');
+            if (selection && selection.length) {
+                var brand = selection.data().brand;
+                $fake_placeholder.text($search_bar.val() + ((searching.length - brand.normalized_name.length) ? brand.normalized_name.substr(searching.length - brand.normalized_name.length) : ''));
+                $fake_placeholder.html($fake_placeholder.text().replace(/ /g, '&nbsp;'));
+                selection.children('.tile').addClass('selected-tile');
+            } else {
+                $fake_placeholder.text('');
+            }
+        }
+
+        $search_bar.on('input', function(e) {
+            filtered_tiles = $('.trie-' + searching);
+            change_selection(filtered_tiles.first());
+            if (filtered_tiles.length !== 1) {
+                $body.trigger('close');
+                return;
+            }
+            selection.trigger('load-content', ['one-result']);
+        });
+
+        $search_bar.on('keydown', function(e) {
+            var forward;
+            switch (e.which) {
+                case UP:
+                    forward = true;
+                    break;
+                case DOWN:
+                    forward = false;
+                    break;
+                case TAB:
+                    forward = !e.shiftKey;
+                    break;
+                default:
+                    return;
+            }
+            e.preventDefault();
+            if (!selection || !selection.length) {
+                return;
+            }
+            var next_selection;
+            if (forward) {
+                next_selection = selection.next('.trie-' + searching);
+                if ((!next_selection || !next_selection.length) && filtered_tiles && filtered_tiles.length) {
+                    next_selection = filtered_tiles.first();
+                }
+            } else {
+                next_selection = selection.prev('.trie-' + searching);
+                if ((!next_selection || !next_selection.length) && filtered_tiles && filtered_tiles.length) {
+                    next_selection = filtered_tiles.last();
+                }
+            }
+            change_selection(next_selection);
+        });
 
         $('#search-form').on('submit', function(e) {
             e.preventDefault();
-            if (!searching || !searching.length) {
+            if (!selection || !selection.length) {
                 return;
             }
-            var brand_obj = $('.trie-' + searching + ':first');
-            if (active && active !== 'popup') {
-                return $search_bar
-                    .val(brand_obj.data().brand.name)
-                    .trigger('input');
-            }
-            brand_obj.trigger('load-content', ['popup']);
-        });
-
-        $body.on('load-content', '.brand', function(e, class_name) {
-            if (class_name !== 'one-result') {
-                return;
-            }
-            var brand = $(this).data().brand;
-            $fake_placeholder = $fake_placeholder || $('#fake-placeholder');
-            $fake_placeholder.text($search_bar.val() + ((searching.length - brand.normalized_name.length) ? brand.normalized_name.substr(searching.length - brand.normalized_name.length) : ''));
-            $fake_placeholder.html($fake_placeholder.text().replace(/ /g, '&nbsp;'));
-        });
-
-        $body.on('close', function() {
-            if (!active) {
-                return;
-            }
-            $fake_placeholder = $fake_placeholder || $('#fake-placeholder');
-            $fake_placeholder.text('');
+            $search_bar
+                .val(selection.data().brand.name)
+                .trigger('input');
         });
 
         $search_bar.select();
