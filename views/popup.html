@@ -1,10 +1,10 @@
 {% if brand %}
 	<div class="row logos">
-		<h2>{{ brand.name}}</h2>
+		<h3>{{ brand.name}} <div class="close"></div><div class="styleguide"></div></h3>
 		{% for logo in brand.logos %}
 			<div class="col-3">
 				<div class="logo-card">
-					<div class="logo-holder">
+					<div class="tile-logo">
 						<img src="{{ logo.files[0].url }}">
 					</div>
 					<div class="card-ctas">
