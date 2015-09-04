@@ -1,3 +1,5 @@
+var ESC = 27;
+
 if (document.body.createTextRange) { // ms
     $.fn.highlight = function(elem) {
         var range = document.body.createTextRange();
@@ -145,7 +147,7 @@ $(function() {
             if (active !== 'popup') {
                 return;
             }
-            if (e.which !== 27) {
+            if (e.which !== ESC) {
                 return;
             }
             $body.trigger('close');
