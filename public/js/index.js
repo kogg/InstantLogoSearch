@@ -45,7 +45,8 @@ $(function() {
             $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0].replace(/[0-9]/, '0-9') + '{display:block !important;}') : '');
         })
 
-        $body.on('click', '.tile', function() {
+        $body.on('click', '.tile', function(e) {
+            e.preventDefault();
             $(this).parent().trigger('load-content', ['popup']);
         });
     }());
@@ -57,22 +58,6 @@ $(function() {
         var $fake_placeholder;
         var filtered_tiles;
         var selection;
-
-        function change_selection(new_selection) {
-            if (selection && selection.length) {
-                selection.children('.tile').removeClass('selected-tile');
-            }
-            selection = new_selection;
-            $fake_placeholder = $fake_placeholder || $('#fake-placeholder');
-            if (selection && selection.length) {
-                var brand = selection.data().brand;
-                $fake_placeholder.text($search_bar.val() + ((searching.length - brand.normalized_name.length) ? brand.normalized_name.substr(searching.length - brand.normalized_name.length) : ''));
-                $fake_placeholder.html($fake_placeholder.text().replace(/ /g, '&nbsp;'));
-                selection.children('.tile').addClass('selected-tile');
-            } else {
-                $fake_placeholder.text('');
-            }
-        }
 
         $search_bar.on('input', function(e) {
             filtered_tiles = $('.trie-' + searching);
@@ -128,7 +113,25 @@ $(function() {
                 .trigger('input');
         });
 
-        $search_bar.select();
+        $search_bar
+            .val($search_bar.data('value'))
+            .select();
+
+        function change_selection(new_selection) {
+            if (selection && selection.length) {
+                selection.children('.tile').removeClass('selected-tile');
+            }
+            selection = new_selection;
+            $fake_placeholder = $fake_placeholder || $('#fake-placeholder');
+            if (selection && selection.length) {
+                var brand = selection.data().brand;
+                $fake_placeholder.text($search_bar.val() + ((searching.length - brand.normalized_name.length) ? brand.normalized_name.substr(searching.length - brand.normalized_name.length) : ''));
+                $fake_placeholder.html($fake_placeholder.text().replace(/ /g, '&nbsp;'));
+                selection.children('.tile').addClass('selected-tile');
+            } else {
+                $fake_placeholder.text('');
+            }
+        }
     }());
 
     /*

@@ -11,7 +11,7 @@
 			<h1><a href="/" id="title-link">Instant Logo Search</a></h1>
 			<div class="search z-1 row">
 				<form id="search-form">
-					<input type="text" placeholder="Search 500+ Brands, Startups, & Companies" autofocus id="search-bar" value="{{ brand.name }}">
+					<input type="text" placeholder="Search 500+ Brands, Startups, & Companies" autofocus id="search-bar"{% if brand %} data-value="{{ brand.name }}"{% endif %}>
 					<div class="fake-placeholder" id="fake-placeholder"></div>
 					<button></button>
 				</form>
@@ -31,14 +31,14 @@
 					<ul class="tile-container row group-{{ letter | lower }}">
 						{% for brand in brands_by_letter[letter] %}
 							<li class="brand {{ brand.normalized_name | trie }}" data-brand="{{ brand | json }}">
-								<div class="tile">
+								<a href="/{{ brand.normalized_name }}" class="tile">
 									<div class="tile-logo">
 										<img src="">
 									</div>
 									<div class="tile-title">
 										<p>{{ brand.name }}</p>
 									</div>
-								</div>
+								</a>
 							</li>
 						{% endfor %}
 					</ul>
