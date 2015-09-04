@@ -390,6 +390,7 @@ h3 {
 	padding: 4px 16px;
 	border-radius: 3px;
 	cursor: default;
+	position: relative;
 }
 .card-ctas p:hover {
 	background: #f5f5f5
@@ -486,16 +487,16 @@ h3 {
 .collection-download:hover {
 	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
-.collection-popup {
-	width: 340px;
+.collection-popup {	
+	min-width: 200px;
 	background: #fff;
 	position: relative;
-	right: 270px;
+	right: -60px;
 	bottom: 0px;
 	margin-top: -10px;
-	-webkit-transform: translatey(-100%);
-	-moz-transform: translatey(-100%);
-	transform: translatey(-100%);
+	-webkit-transform: translate3d(-100%, -100%, 0);
+	-moz-transform: translate3d(-100%, -100%, 0);
+	transform: translate3d(-100%, -100%, 0);
 	border-radius: 4px;
 	display: none;
 	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
@@ -503,6 +504,7 @@ h3 {
 .collection-popup .card-ctas {
 	overflow-y: scroll;
 	min-height: auto;
+	width: 100%;
 	max-height: 186px;
 }
 .collection-popup .card-ctas .dl {
@@ -525,18 +527,17 @@ h3 {
 	display: block;
 }
 .collection:hover .collection-popup {
-	display: block;
+	display: inline-block;
 }
 .minified {
-	display: block;
+	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
 	-webkit-text-overflow: ellipsis;
 	-ms-text-overflow: ellipsis;
 	-o-text-overflow: ellipsis;
 	text-overflow: ellipsis;
-	width: calc(100% - 42px);
-	float: left;
+	margin-right: 50px
 }
 .delete {
 	background-image: url('/images/close-icon.png');
@@ -544,6 +545,9 @@ h3 {
 	background-size: 46%;
 	background-repeat: no-repeat;
 	display: block;
+	position: absolute;
+	top: 4px;
+	right: 16px;
 }
 
 
