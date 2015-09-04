@@ -84,6 +84,25 @@ h3 {
   font-size: 56px;
   margin-bottom: 30px;
   font-weight: 300;
+  position: relative;
+  display: inline-block;
+}
+.header h1:after {
+	content: "";
+	position: absolute;
+	bottom: -6px;
+	height: 2px;
+	width: 0;
+	background: #3b4456;
+	left: 0;
+	transition:all .2s ease-in-out;
+}
+.header h1:hover:after {
+	width: 100%;
+}
+.header h1 a {
+	color: #3b4456;
+	text-decoration: none;
 }
 .header h1 span {
 	color: #19537d
