@@ -49,8 +49,11 @@ $(function() {
     $search_bar.select();
 
     $('#search-form').on('submit', function(e) {
+        if (!searching || !searching.length) {
+            return;
+        }
         e.preventDefault();
-        $((searching && searching.length ? '.trie-' + searching : '.brand') + ':first').trigger('load-content', ['popup']);
+        $('.trie-' + searching + ':first').trigger('load-content', ['popup']);
     });
 
     $body.on('click', '.tile', function() {
