@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "description": "The fastest way to find logos from hundreds of brands, startups, and companies.",
   "scripts": {
-    "prestart":       "npm run generate_popup",
+    "prestart": "npm run generate_popup",
+    "watch_popup": "watch 'npm run generate_popup' views",
     "generate_popup": "mkdir -p generated/js && swig compile views/popup.html -m --wrap-start=\"var popup_tmpl = \" >> generated/js/popup.js",
-    "test":           "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
     "jquery": "^2.1.4",
     "swig": "^1.4.2",
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "watch": "^0.16.0"
   }
 }
