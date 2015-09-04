@@ -152,6 +152,13 @@ $(function() {
         });
     }());
 
+    $('#title-link').on('click', function(e) {
+        e.preventDefault();
+        $search_bar
+            .val('')
+            .trigger('input');
+    });
+
     $body.on('click', '.select-on-click', function() {
         $(this).highlight('.color');
     });
