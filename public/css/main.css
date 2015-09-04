@@ -487,10 +487,10 @@ h3 {
 	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 .collection-popup {
-	width: 240px;
+	width: 340px;
 	background: #fff;
 	position: relative;
-	right: 170px;
+	right: 270px;
 	bottom: 0px;
 	margin-top: -10px;
 	-webkit-transform: translatey(-100%);
@@ -512,6 +512,7 @@ h3 {
 	padding: 16px;
 	border-bottom: 1px solid rgba(0,0,0,.1);
 	background: #3B4456;
+	border-radius: 3px 3px 0 0;
 	color: white
 }
 .collection-popup:after {
