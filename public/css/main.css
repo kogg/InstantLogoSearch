@@ -334,7 +334,7 @@ h3 {
 .card-ctas {
 	min-height: 160px;
 }
-.check, .save, .dl, .delete {
+.trash, .check, .save, .dl, .delete {
 	float: right;
 	width: 30px;
 	height: 30px;
@@ -344,11 +344,20 @@ h3 {
 	opacity: .5;
 	display: none;
 	position: relative;
+	cursor: pointer;
+}
+.trash {
+	display: block;
+	opacity: 1;
+	background-image: url('/images/close-icon.png');
+	background-position: center;
+	background-size: 46%;
+	background-repeat: no-repeat;
 }
 .check:after, .save:after, .dl:after {
 	display: none;
 }
-.check:hover:after, .save:hover:after, .dl:hover:after {
+.trash:after,.check:hover:after, .save:hover:after, .dl:hover:after {
 	position: absolute;
 	top: -20px;
 	background: black;
@@ -365,6 +374,12 @@ h3 {
 	pointer-events:none;
 	font-size: 13px;
 	white-space: nowrap;
+}
+.trash:hover:after {
+	content: "Delete Collection";
+}
+.trash:hover {
+	box-shadow:0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15);
 }
 .save:after {
 	content: "Save To Collection";
@@ -524,17 +539,17 @@ h3 {
 	overflow-y: scroll;
 	min-height: auto;
 	width: 100%;
-	max-height: 186px;
+	max-height: 286px;
 }
 .collection-popup .card-ctas .dl {
 
 }
 .collection-popup-header {
-	padding: 16px;
+	padding: 12px 16px;
 	border-bottom: 1px solid rgba(0,0,0,.1);
-	background: #3B4456;
+	background: #F5F5F5;
 	border-radius: 3px 3px 0 0;
-	color: white
+	line-height: 30px;
 }
 .collection-popup:after {
 	content: "";
