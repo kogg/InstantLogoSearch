@@ -54,7 +54,14 @@ $(function() {
         if (!searching || !searching.length) {
             return;
         }
-        $('.trie-' + searching + ':first').trigger('load-content', ['popup']);
+        var brand_obj = $('.trie-' + searching + ':first');
+        if (active !== 'popup') {
+            $search_bar
+                .val(brand_obj.data().brand.name)
+                .trigger('input');
+            return;
+        }
+        brand_obj.trigger('load-content', ['popup']);
     });
 
     $body.on('click', '.tile', function() {
