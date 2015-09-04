@@ -1,54 +1,19 @@
 <div class="row logos">
-	<h2>about.me</h2>
-	<div class="col-3">
-		<div class="logo-card">
-			<div class="logo-holder">
-				<img src="https://d2ed0w4q03gsmw.cloudfront.net/s3/assets/baf2144/images/assets/blue_on_white.svg">
-			</div>
-			<div class="card-ctas">
-				<p>200x300<span class="save"></span><span class="dl"></span></p>
-				<p>200x300<span class="save"></span><span class="dl"></span></p>
-				<p>200x300<span class="check"></span><span class="dl"></span></p>
-				<p>svg<span class="save"></span><span class="dl"></span></p>
-			</div>
-		</div>
-	</div>
-	<div class="col-3">
-		<div class="logo-card">
-			<div class="logo-holder">
-				<img src="https://d2ed0w4q03gsmw.cloudfront.net/s3/assets/baf2144/images/assets/white_on_blue.svg">
-			</div>
-			<div class="card-ctas">
-				<p>200x300</p>
-				<p>200x300</p>
-				<p>200x300</p>
+	<h2>{{ brand.name}}</h2>
+	{% for logo in brand.logos %}
+		<div class="col-3">
+			<div class="logo-card">
+				<div class="logo-holder">
+					<img src="{{ logo.files[0].url }}">
+				</div>
+				<div class="card-ctas">
+					{% for file in logo.files %}
+						<p>{{ file.name }}<span class="save"></span><span class="dl"></span></p>
+					{% endfor %}
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="col-3">
-		<div class="logo-card">
-			<div class="logo-holder">
-				<img src="https://d2ed0w4q03gsmw.cloudfront.net/s3/assets/baf2144/images/assets/white_on_blue.svg">
-			</div>
-			<div class="card-ctas">
-				<p>200x300</p>
-				<p>200x300</p>
-				<p>200x300</p>
-			</div>
-		</div>
-	</div>
-	<div class="col-3">
-		<div class="logo-card">
-			<div class="logo-holder">
-				<img src="https://d2ed0w4q03gsmw.cloudfront.net/s3/assets/baf2144/images/assets/blue_on_white.svg">
-			</div>
-			<div class="card-ctas">
-				<p>200x300</p>
-				<p>200x300</p>
-				<p>200x300</p>
-			</div>
-		</div>
-	</div>
+	{% endfor %}
 </div>
 <div class="color-palette row" id="colors">
 	{% for color in brand.colors %}
