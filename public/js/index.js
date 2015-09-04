@@ -103,6 +103,7 @@ $(function() {
             change_selection(next_selection);
         });
 
+        var $search_results;
         $('#search-form').on('submit', function(e) {
             e.preventDefault();
             if (!selection || !selection.length) {
@@ -110,7 +111,10 @@ $(function() {
             }
             $search_bar
                 .val(selection.data().brand.name)
-                .trigger('input');
+                .trigger('input')
+                .select();
+            $search_results = $search_results || $('#search-results');
+            $body.scrollTop($search_results.offset().top);
         });
 
         $search_bar
