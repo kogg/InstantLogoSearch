@@ -29,6 +29,35 @@ $(function() {
     var searching = '';
 
     /*
+     * Tiles
+     */
+    (function() {
+        var $filter_style;
+
+        $search_bar.on('input', function(e) {
+            searching = $search_bar.val().toLowerCase().replace(/[^a-z0-9]+/g, '');
+            $filter_style = $filter_style || $('#filter-styles');
+            var filtering = !!searching.length;
+            $body.toggleClass('filtering', filtering);
+            $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0].replace(/[0-9]/, '0-9') + '{display:block !important;}') : '');
+            if (!filtering) {
+                $body.trigger('close');
+                return;
+            }
+            var brands = $('.trie-' + searching);
+            if (brands.length !== 1) {
+                $body.trigger('close');
+                return;
+            }
+            brands.first().trigger('load-content', ['one-result']);
+        })
+
+        $body.on('click', '.tile', function() {
+            $(this).parent().trigger('load-content', ['popup']);
+        });
+    }());
+
+    /*
      * Form
      */
     (function() {
@@ -67,35 +96,6 @@ $(function() {
         });
 
         $search_bar.select();
-    }());
-
-    /*
-     * Tiles
-     */
-    (function() {
-        var $filter_style;
-
-        $search_bar.on('input', function(e) {
-            searching = $search_bar.val().toLowerCase().replace(/[^a-z0-9]+/g, '');
-            $filter_style = $filter_style || $('#filter-styles');
-            var filtering = !!searching.length;
-            $body.toggleClass('filtering', filtering);
-            $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0].replace(/[0-9]/, '0-9') + '{display:block !important;}') : '');
-            if (!filtering) {
-                $body.trigger('close');
-                return;
-            }
-            var brands = $('.trie-' + searching);
-            if (brands.length !== 1) {
-                $body.trigger('close');
-                return;
-            }
-            brands.first().trigger('load-content', ['one-result']);
-        })
-
-        $body.on('click', '.tile', function() {
-            $(this).parent().trigger('load-content', ['popup']);
-        });
     }());
 
     /*
