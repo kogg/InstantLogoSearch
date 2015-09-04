@@ -87,19 +87,6 @@ h3 {
   position: relative;
   display: inline-block;
 }
-.header h1:after {
-	content: "";
-	position: absolute;
-	bottom: -6px;
-	height: 2px;
-	width: 0;
-	background: #3b4456;
-	left: 0;
-	transition:all .2s ease-in-out;
-}
-.header h1:hover:after {
-	width: 100%;
-}
 .header h1 a {
 	color: #3b4456;
 	text-decoration: none;
@@ -241,11 +228,26 @@ h3 {
 }
 .tile-logo {
 	height: 100px;
+	overflow: hidden;
 	background:#fafafa;
 	padding: 16px;
+	display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-pack: center;
+  -moz-box-align: center;
+  display: box;
+  box-orient: vertical;
+  box-pack: center;
+  box-align: center;
 }
 .tile-logo img {
-
+	max-height: 100%;
+	max-width: 100%;
+	display: block;
 }
 .tile-title {
 	padding: 16px;
@@ -304,27 +306,20 @@ h3 {
   display: block;
   margin: 10px 0;
   box-shadow: 0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15);
-  padding: 5px 10px;
   margin:80px 0;
   border-radius: 3px;
-  padding: 14px;
 }
 .one-result .logo-popup-container {
 	box-shadow: 0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15);
 	max-width:1220px;
 	margin:30px auto;
 }
-
 .logo-popup h3 {
-	margin-bottom: 20px;
-}
-
-.logo-popup .row + h3 {
-	margin-top: 30px;
+	margin-bottom: 16px;
 }
 /*logos*/
 .logos {
-	padding: 16px 0 0px 16px;
+	padding: 32px 16px 0px 32px;
 }
 .logos .col-3 {
 	margin-bottom: 16px;
@@ -382,7 +377,7 @@ h3 {
 	box-shadow:0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15);
 }
 .save:after {
-	content: "Save To Collection";
+	content: "Add To Collection";
 }
 .dl:after {
 	content: "Click To Download"
@@ -441,18 +436,18 @@ h3 {
 }
 .logo-card {
 	border-radius: 3px;
+	border: 1px solid rgba(0,0,0,0.1);
 	background: white;
 	transition:all .1s ease-in-out;
 }
 .logo-card:hover {
-}
-.logo-holder {
+	box-shadow:0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15);
 }
 .logo-holder img {
 }
 /*Brand PopUP Colour palettes*/
 .color-palette {
-	padding: 0px 0px 16px 16px;
+	padding: 0px 16px 32px 32px;
 }
 .color-swatch-container {
 	border: 1px solid rgba(0,0,0,.1);
