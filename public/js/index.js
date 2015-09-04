@@ -49,10 +49,10 @@ $(function() {
     $search_bar.select();
 
     $('#search-form').on('submit', function(e) {
+        e.preventDefault();
         if (!searching || !searching.length) {
             return;
         }
-        e.preventDefault();
         $('.trie-' + searching + ':first').trigger('load-content', ['popup']);
     });
 
