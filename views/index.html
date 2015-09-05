@@ -34,7 +34,7 @@
 							<li class="brand {{ brand.normalized_name | trie }}" id="brand-{{ brand.normalized_name }}" data-brand="{{ brand | json }}">
 								<a href="/{{ brand.normalized_name }}" class="tile">
 									<div class="tile-logo">
-										<img src="">
+										<img src="{{ brand.logos[0].files[0].url }}">
 									</div>
 									<div class="tile-title">
 										<p>{{ brand.name }}</p>
