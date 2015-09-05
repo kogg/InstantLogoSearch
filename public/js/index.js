@@ -236,10 +236,6 @@ $(function() {
         $body.on('click', '.select-on-click', function() {
             $(this).find('.color').highlight();
         });
-
-        $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
-            $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
-        });
     }());
 
     /*
@@ -275,6 +271,9 @@ $(function() {
             }
             $collection = $collection || $('#collection');
             $collection.css('display', collection.length ? '' : 'none');
+            if (!collection.length) {
+                $body.removeClass('prevent-scroll');
+            }
             var file_dom = $('#file-' + name_string);
             if (file_dom.length) {
                 file_dom
@@ -320,6 +319,10 @@ $(function() {
 
         $('#clear-collection').on('click', function() {
             $('.delete').click();
+        });
+
+        $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
+            $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
         });
     }());
 
