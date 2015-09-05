@@ -12,7 +12,9 @@ var brands = [{ name: '4ormat' },
               { name: 'Bandcamp' },
               { name: 'Barnes & Noble' },
               { name: 'Bebo' },
-              { name: 'Behance' }];
+              { name: 'Behance' },
+              { name: 'Shayan', logos: [{ name: 'Default',   files: [{ name: 'SVG', url: 'https://s3-us-west-2.amazonaws.com/instantlogosearch.com/Shayan-Default-SVG.svg' }] },
+                                        { name: 'Variation', files: [{ name: 'SVG', url: 'https://s3-us-west-2.amazonaws.com/instantlogosearch.com/Shayan-Variation-SVG.svg' }] }] }];
 brands = _.chain(brands)
           .each(function(brand) {
               _.defaults(brand, { colors:          _.times(4, function() { return '#' + _.sample('0123456789abcdef', 6).join(''); }),
