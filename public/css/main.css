@@ -716,16 +716,28 @@ h3 {
 		margin-bottom: 8px;
 	}
 	.trash, .check, .save, .dl, .delete {
-		width: 24px;
-		height: 24px;
+		width: 28px;
+		height: 28px;
+		margin-left: 4px;
+	}
+	a.dl {
+		margin-left: 0;
 	}
 	.card-ctas p {
 		font-size: 14px;
 		padding:4px 8px;
-		line-height: 24px;
+		line-height: 28px;
 	}
 }
-
+@media only screen and (max-width: 390px) {
+	.trash, .check, .save, .dl, .delete {
+		width: 25px;
+		height: 25px;
+	}
+	.card-ctas p {
+		line-height: 25px;
+	}
+}
 
 
 
