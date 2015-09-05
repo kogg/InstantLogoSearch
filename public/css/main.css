@@ -206,9 +206,7 @@ h3 {
 	}
 }
 @media only screen and (max-width: 420px) {
-	.tile-container li {
-		width: 100%
-	}
+
 }
 .filtering .tile-container {
 	display: none;
@@ -644,7 +642,7 @@ h3 {
 		width: 100%
 	}
 	.color-palette .col-3, .logos .col-3 {
-		width: 100%
+		width: 50%
 	}
 	.collection {
 		bottom: 14px;
@@ -701,4 +699,33 @@ h3 {
 		display: block;
 	}
 }
+
+@media only screen and (max-width: 390px) {
+	.card-ctas {
+		padding: 0;
+		min-height: 136px
+	}
+	.color {
+		font-size: 14px;
+		padding: 8px;
+	}
+	.tile-title {
+		padding: 8px;
+	}
+	.color-swatch-container {
+		margin-bottom: 8px;
+	}
+	.trash, .check, .save, .dl, .delete {
+		width: 24px;
+		height: 24px;
+	}
+	.card-ctas p {
+		font-size: 14px;
+		padding:4px 8px;
+		line-height: 24px;
+	}
+}
+
+
+
 
