@@ -336,6 +336,7 @@ h3 {
 
 .card-ctas {
 	min-height: 160px;
+	padding: 0 4px;
 }
 .trash, .check, .save, .dl, .delete {
 	float: right;
@@ -376,6 +377,7 @@ h3 {
 	transform: translatex(-50%);
 	pointer-events:none;
 	font-size: 13px;
+	font-weight: 400;
 	white-space: nowrap;
 }
 .trash:hover:after {
@@ -422,15 +424,16 @@ h3 {
 	background-repeat: no-repeat;
 }
 .card-ctas p {
-	color:#212121;
+	color:#424242;
 	line-height: 30px;
-	padding: 4px 16px;
+	padding: 4px 12px;
 	border-radius: 3px;
 	cursor: default;
+	font-weight: 400;
 	position: relative;
 }
 .card-ctas p:hover {
-	background: #f5f5f5
+	background: #edf7fe
 }
 .card-ctas p:hover .save, .card-ctas p:hover .dl {
 	background-color: white;
@@ -579,6 +582,7 @@ h3 {
 	margin-right: 50px
 }
 .delete {
+	background-color: white;
 	background-image: url('/images/close-icon.png');
 	background-position: center;
 	background-size: 46%;
@@ -586,7 +590,10 @@ h3 {
 	display: block;
 	position: absolute;
 	top: 4px;
-	right: 16px;
+	right: 12px;
+}
+.card-ctas p:hover .delete {
+	opacity: 1;
 }
 /*general media queries*/
 @media only screen and (max-width: 820px) {
