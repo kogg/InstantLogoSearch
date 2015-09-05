@@ -264,6 +264,10 @@ $(function() {
         $body.on('click', '.check,.delete', function() {
             $body.trigger('remove-from-collection', $(this).data('filePath'));
         });
+
+        $('#clear-collection').on('click', function() {
+            $('.delete').click();
+        });
     }());
 
     $('#title-link').on('click', function(e) {
