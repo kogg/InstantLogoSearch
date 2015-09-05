@@ -1,8 +1,6 @@
-var DOWN = 40;
 var ESC  = 27;
 var SPACE = 32;
 var TAB  = 9;
-var UP   = 38;
 
 if (document.body.createTextRange) { // ms
     $.fn.highlight = function() {
@@ -58,11 +56,10 @@ $(function() {
      * Tiles
      */
     (function() {
-        var $filter_style;
+        var $filter_style = $('#filter-styles');
 
         $search_bar.on('input', function(e) {
             searching = $search_bar.val().toLowerCase().replace(/[^a-z0-9]+/g, '');
-            $filter_style = $filter_style || $('#filter-styles');
             var filtering = !!searching.length;
             $body.toggleClass('filtering', filtering);
             $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0].replace(/[0-9]/, '0-9') + '{display:block !important;}') : '');
@@ -72,6 +69,8 @@ $(function() {
             e.preventDefault();
             $(this).parent().trigger('load-content', ['popup']);
         });
+
+        $filter_style.text('');
     }());
 
     /*
@@ -93,26 +92,15 @@ $(function() {
         });
 
         $search_bar.on('keydown', function(e) {
-            var forward;
-            switch (e.which) {
-                case UP:
-                    forward = true;
-                    break;
-                case DOWN:
-                    forward = false;
-                    break;
-                case TAB:
-                    forward = !e.shiftKey;
-                    break;
-                default:
-                    return;
+            if (e.which !== TAB) {
+                return;
             }
             e.preventDefault();
             if (!selection || !selection.length) {
                 return;
             }
             var next_selection;
-            if (forward) {
+            if (!e.shiftKey) {
                 next_selection = selection.next('.trie-' + searching);
                 if ((!next_selection || !next_selection.length) && filtered_tiles && filtered_tiles.length) {
                     next_selection = filtered_tiles.first();
@@ -224,21 +212,20 @@ $(function() {
         });
 
         $body.on('keydown', function(e) {
-            if (active !== 'popup') {
-                return;
-            }
             if (e.which !== ESC) {
                 return;
             }
+            var old_active = active;
             $body.trigger('close');
+            if (old_active !== 'popup') {
+                $search_bar
+                    .val('')
+                    .trigger('input');
+            }
         });
 
         $body.on('click', '.select-on-click', function() {
             $(this).find('.color').highlight();
-        });
-
-        $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
-            $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
         });
     }());
 
@@ -249,6 +236,7 @@ $(function() {
     (function() {
         var $collection;
         var $collection_ctas;
+        var $collection_download;
         var collection = [];
         var storage = (window.localStorage || window.sessionStorage);
 
@@ -261,23 +249,34 @@ $(function() {
             file.in_collection = adding;
             $collection_ctas = $collection_ctas || $('#collection-ctas');
             if (adding) {
-                $collection_ctas.append('<p class="row collection-file" id="collection-file-' + name_string + '">\
-                                            <span class="minified">' +
-                                                [brand.name, logo.name, file.name].join(' ') +
-                                           '</span>\
-                                            <span class="delete" data-file-path="[&quot;' + brand.normalized_name + '&quot;,' + logo_index + ',' + file_index + ']' + '"></span>\
-                                         </p>');
+                var $collection_file = $('<p class="row collection-file" id="collection-file-' + name_string + '">' +
+                                            '<span class="minified">' +
+                                                 [brand.name, logo.name, file.name].join(' ') +
+                                            '</span>' +
+                                            '<span class="delete"></span>' +
+                                         '</p>');
+                $collection_file.find('.delete').data('filePath', [brand_normalized_name, logo_index, file_index]);
+                $collection_ctas.append($collection_file);
                 collection.push(file);
             } else {
-                var collection_file_dom = $collection_ctas.find('#collection-file-' + name_string)
-                collection.splice($('.collection-file').index(collection_file_dom), 1);
-                collection_file_dom.remove();
+                var $collection_file = $collection_ctas.find('#collection-file-' + name_string)
+                collection.splice($('.collection-file').index($collection_file), 1);
+                $collection_file.remove();
             }
             $collection = $collection || $('#collection');
             $collection.css('display', collection.length ? '' : 'none');
-            var file_dom = $('#file-' + name_string);
-            if (file_dom.length) {
-                file_dom
+            if (!collection.length) {
+                $body.removeClass('prevent-scroll');
+            }
+            $collection_download = $collection_download || $('#collection-download');
+            if (collection.length === 1) {
+                $collection_download.attr('href', file.url);
+            } else {
+                $collection_download.removeAttr('href');
+            }
+            var $file = $('#file-' + name_string);
+            if ($file.length) {
+                $file
                     .toggleClass('save', !adding)
                     .toggleClass('check', adding);
             }
@@ -320,6 +319,10 @@ $(function() {
 
         $('#clear-collection').on('click', function() {
             $('.delete').click();
+        });
+
+        $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
+            $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
         });
     }());
 
