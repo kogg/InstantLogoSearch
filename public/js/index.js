@@ -25,6 +25,28 @@ if (document.body.createTextRange) { // ms
         return this;
     };
 }
+if (!Array.prototype.findIndex) {
+  Array.prototype.findIndex = function(predicate) {
+    if (this === null) {
+      throw new TypeError('Array.prototype.findIndex called on null or undefined');
+    }
+    if (typeof predicate !== 'function') {
+      throw new TypeError('predicate must be a function');
+    }
+    var list = Object(this);
+    var length = list.length >>> 0;
+    var thisArg = arguments[1];
+    var value;
+
+    for (var i = 0; i < length; i++) {
+      value = list[i];
+      if (predicate.call(thisArg, value, i, list)) {
+        return i;
+      }
+    }
+    return -1;
+  };
+}
 
 $(function() {
     var $body = $('body');
@@ -170,7 +192,6 @@ $(function() {
             active = class_name;
             $body.addClass(active);
             var brand = $(this).data().brand;
-            console.log(brand);
             window.history.replaceState('', 'Instant Logo Search - ' + brand.name, '/' + brand.normalized_name);
             document.title = 'Instant Logo Search - ' + brand.name;
 
@@ -224,10 +245,12 @@ $(function() {
     /*
      * Collection
      */
+    var STORAGE_KEY = 'InstantLogoSearch.collection';
     (function() {
         var $collection;
         var $collection_ctas;
         var collection = [];
+        var storage = (window.localStorage || window.sessionStorage);
 
         $body.on('add-to-collection remove-from-collection', function(e, brand_normalized_name, logo_index, file_index) {
             var brand = $('#brand-' + brand_normalized_name).data().brand;
@@ -255,6 +278,33 @@ $(function() {
             $('#file-' + name_string)
                 .toggleClass('save', !adding)
                 .toggleClass('check', adding);
+            file.storage_key = file.storage_key || [brand.normalized_name, logo.name, file.name];
+            storage.setItem(STORAGE_KEY, JSON.stringify((collection || []).map(function(file) {
+                return file.storage_key;
+            })));
+        });
+
+        (JSON.parse(storage.getItem(STORAGE_KEY) || '[]') || []).forEach(function(file_storage_key) {
+            var brand = $('#brand-' + file_storage_key[0]).data().brand;
+            if (!brand) {
+                return;
+            }
+            var logo_index = (brand.logos || []).findIndex(function(logo) {
+                return logo.name === file_storage_key[1];
+            });
+            if (logo_index === -1) {
+                return;
+            }
+            var logo = brand.logos[logo_index];
+            var file_index = (logo.files || []).findIndex(function(file) {
+                return file.name === file_storage_key[2];
+            });
+            if (file_index === -1) {
+                return;
+            }
+            var file = logo.files[file_index];
+            file.storage_key = file.storage_key || file_storage_key;
+            $body.trigger('add-to-collection', [brand.normalized_name, logo_index, file_index]);
         });
 
         $body.on('click', '.save', function() {
