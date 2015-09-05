@@ -225,6 +225,9 @@ h3 {
 	display: block;
 	text-decoration: none;
 }
+.selected-tile {
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
 .tile:hover {
 	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
@@ -311,6 +314,7 @@ h3 {
   margin:80px 0;
   border-radius: 3px;
 }
+
 .one-result .logo-popup-container {
 	box-shadow: 0 1px 7px rgba(0, 0, 0, 0.06),0 1px 3px rgba(0, 0, 0, 0.15);
 	max-width:1220px;
@@ -449,13 +453,14 @@ h3 {
 }
 /*Brand PopUP Colour palettes*/
 .color-palette {
-	padding: 0px 16px 32px 32px;
+	padding: 0px 16px 16px 32px;
 }
 .color-swatch-container {
 	border: 1px solid rgba(0,0,0,.1);
 	transition:all .1s ease-in-out;
 	background: white;
 	cursor: pointer;
+	margin-bottom: 16px;
 	border-radius: 3px;
 }
 .color-swatch-container:hover {
@@ -580,6 +585,52 @@ h3 {
 	top: 4px;
 	right: 16px;
 }
-
-
+/*general media queries*/
+@media only screen and (max-width: 820px) {
+	.logo-popup-container {
+		width: 700px
+	}
+	.color-palette .col-3, .logos .col-3 {
+		width: 33.33333%
+	}
+	.header {
+		padding: 50px 0px 170px 0px
+	}
+	.header h1 {
+		font-size: 46px;
+	}
+}
+@media only screen and (max-width: 720px) {
+	.logo-popup-container {
+		margin:0 0;
+	}
+	.logo-popup-container {
+		width: 600px
+	}
+	.color-palette .col-3, .logos .col-3 {
+		width: 50%
+	}
+	.header {
+		padding: 40px 0px 170px 0px
+	}
+	.header h1 {
+		font-size: 34px;
+	}
+	.tile-container {
+		padding:30px 10px 30px 30px
+	}
+}
+@media only screen and (max-width: 720px) {
+	.logo-popup-container {
+		width: 100%
+	}	
+}
+@media only screen and (max-width: 450px) {
+	.logo-popup-container {
+		width: 100%
+	}
+	.color-palette .col-3, .logos .col-3 {
+		width: 100%
+	}
+}
 
