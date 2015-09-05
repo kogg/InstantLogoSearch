@@ -238,7 +238,12 @@ $(function() {
             file.in_collection = adding;
             $collection_ctas = $collection_ctas || $('#collection-ctas');
             if (adding) {
-                $collection_ctas.append('<p class="row collection-file" id="collection-file-' + name_string + '"><span class="minified">' + [brand.name, logo.name, file.name].join(' ') + '</span><span class="delete"></span></p>');
+                $collection_ctas.append('<p class="row collection-file" id="collection-file-' + name_string + '">\
+                                            <span class="minified">' +
+                                                [brand.name, logo.name, file.name].join(' ') +
+                                           '</span>\
+                                            <span class="delete" data-file-path="[&quot;' + brand.normalized_name + '&quot;,' + logo_index + ',' + file_index + ']' + '"></span>\
+                                         </p>');
                 collection.push(file);
             } else {
                 var file_dom = $collection_ctas.find('#collection-file-' + name_string)
@@ -256,7 +261,7 @@ $(function() {
             $body.trigger('add-to-collection', $(this).data('filePath'));
         });
 
-        $body.on('click', '.check', function() {
+        $body.on('click', '.check,.delete', function() {
             $body.trigger('remove-from-collection', $(this).data('filePath'));
         });
     }());
