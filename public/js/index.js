@@ -1,5 +1,6 @@
 var DOWN = 40;
 var ESC  = 27;
+var SPACE = 32;
 var TAB  = 9;
 var UP   = 38;
 
@@ -207,5 +208,15 @@ $(function() {
 
     $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
         $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
+    });
+
+    $body.on('keypress', function(e) {
+        if (e.charCode === SPACE) {
+            return;
+        }
+        if ($(e.target).is($search_bar)) {
+            return;
+        }
+        $search_bar.focus();
     });
 });
