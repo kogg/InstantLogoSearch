@@ -1,4 +1,5 @@
-var _    = require('underscore');
+var _ = require('underscore');
+
 var File = require('./file');
 
 var brands = [{ name: '4ormat' },
