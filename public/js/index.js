@@ -225,20 +225,39 @@ $(function() {
      * Collection
      */
     (function() {
+        var $collection;
+        var $collection_ctas;
+        var collection = [];
+
+        $body.on('add-to-collection remove-from-collection', function(e, brand_normalized_name, logo_index, file_index) {
+            var brand = $('#brand-' + brand_normalized_name).data().brand;
+            var logo  = brand.logos[logo_index];
+            var file  = logo.files[file_index];
+            var adding = e.type === 'add-to-collection';
+            var name_string = [brand_normalized_name, logo_index, file_index].join('-');
+            file.in_collection = adding;
+            $collection_ctas = $collection_ctas || $('#collection-ctas');
+            if (adding) {
+                $collection_ctas.append('<p class="row collection-file" id="collection-file-' + name_string + '"><span class="minified">' + [brand.name, logo.name, file.name].join(' ') + '</span><span class="delete"></span></p>');
+                collection.push(file);
+            } else {
+                var file_dom = $collection_ctas.find('#collection-file-' + name_string)
+                collection.splice($('.collection-file').index(file_dom), 1);
+                file_dom.remove();
+            }
+            $collection = $collection || $('#collection');
+            $collection.css('display', collection.length ? '' : 'none');
+            $('#file-' + name_string)
+                .toggleClass('save', !adding)
+                .toggleClass('check', adding);
+        });
+
         $body.on('click', '.save', function() {
             $body.trigger('add-to-collection', $(this).data('filePath'));
         });
 
         $body.on('click', '.check', function() {
             $body.trigger('remove-from-collection', $(this).data('filePath'));
-        });
-
-        $body.on('add-to-collection remove-from-collection', function(e, brand_normalized_name, logo_index, file_index) {
-            var brand = $('#brand-' + brand_normalized_name).data().brand;
-            brand.logos[logo_index].files[file_index].in_collection = e.type === 'add-to-collection';
-            $(['#file', brand_normalized_name, logo_index, file_index].join('-'))
-                .toggleClass('save', e.type === 'remove-from-collection')
-                .toggleClass('check', e.type === 'add-to-collection');
         });
     }());
 
