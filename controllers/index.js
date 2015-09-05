@@ -15,6 +15,10 @@ router.get('/', function(req, res, next) {
     });
 });
 
+router.get('/collection', function(req, res) {
+    res.send('boo');
+});
+
 router.get('/[A-Za-z0-9]+', function(req, res, next) {
     Brand.all(function(err, brands) {
         if (err) {
