@@ -269,15 +269,18 @@ $(function() {
                                          </p>');
                 collection.push(file);
             } else {
-                var file_dom = $collection_ctas.find('#collection-file-' + name_string)
-                collection.splice($('.collection-file').index(file_dom), 1);
-                file_dom.remove();
+                var collection_file_dom = $collection_ctas.find('#collection-file-' + name_string)
+                collection.splice($('.collection-file').index(collection_file_dom), 1);
+                collection_file_dom.remove();
             }
             $collection = $collection || $('#collection');
             $collection.css('display', collection.length ? '' : 'none');
-            $('#file-' + name_string)
-                .toggleClass('save', !adding)
-                .toggleClass('check', adding);
+            var file_dom = $('#file-' + name_string);
+            if (file_dom.length) {
+                file_dom
+                    .toggleClass('save', !adding)
+                    .toggleClass('check', adding);
+            }
             file.storage_key = file.storage_key || [brand.normalized_name, logo.name, file.name];
             storage.setItem(STORAGE_KEY, JSON.stringify((collection || []).map(function(file) {
                 return file.storage_key;
