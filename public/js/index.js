@@ -129,7 +129,6 @@ $(function() {
         });
 
         $search_bar.on('focusin focusout', function(e) {
-            console.log('hey', selection);
             if (!selection || !selection.length) {
                 return;
             }
