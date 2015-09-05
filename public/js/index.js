@@ -56,12 +56,13 @@ $(function() {
      * Tiles
      */
     (function() {
-        var $filter_style = $('#filter-styles');
+        var $filter_style;
 
         $search_bar.on('input', function(e) {
             searching = $search_bar.val().toLowerCase().replace(/[^a-z0-9]+/g, '');
             var filtering = !!searching.length;
             $body.toggleClass('filtering', filtering);
+            $filter_style = $filter_style || $('#filter-styles');
             $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0].replace(/[0-9]/, '0-9') + '{display:block !important;}') : '');
         })
 
@@ -69,8 +70,6 @@ $(function() {
             e.preventDefault();
             $(this).parent().trigger('load-content', ['popup']);
         });
-
-        $filter_style.text('');
     }());
 
     /*
