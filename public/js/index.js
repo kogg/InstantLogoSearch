@@ -227,10 +227,13 @@ $(function() {
             if (e.which !== ESC) {
                 return;
             }
+            var old_active = active;
             $body.trigger('close');
-            $search_bar
-                .val('')
-                .trigger('input');
+            if (old_active !== 'popup') {
+                $search_bar
+                    .val('')
+                    .trigger('input');
+            }
         });
 
         $body.on('click', '.select-on-click', function() {
