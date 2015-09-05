@@ -248,6 +248,7 @@ $(function() {
     (function() {
         var $collection;
         var $collection_ctas;
+        var $collection_download;
         var collection = [];
         var storage = (window.localStorage || window.sessionStorage);
 
@@ -276,6 +277,12 @@ $(function() {
             $collection.css('display', collection.length ? '' : 'none');
             if (!collection.length) {
                 $body.removeClass('prevent-scroll');
+            }
+            $collection_download = $collection_download || $('#collection-download');
+            if (collection.length === 1) {
+                $collection_download.attr('href', file.url);
+            } else {
+                $collection_download.removeAttr('href');
             }
             var file_dom = $('#file-' + name_string);
             if (file_dom.length) {
