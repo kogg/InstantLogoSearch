@@ -1,8 +1,6 @@
-var DOWN = 40;
 var ESC  = 27;
 var SPACE = 32;
 var TAB  = 9;
-var UP   = 38;
 
 if (document.body.createTextRange) { // ms
     $.fn.highlight = function() {
@@ -93,26 +91,15 @@ $(function() {
         });
 
         $search_bar.on('keydown', function(e) {
-            var forward;
-            switch (e.which) {
-                case UP:
-                    forward = true;
-                    break;
-                case DOWN:
-                    forward = false;
-                    break;
-                case TAB:
-                    forward = !e.shiftKey;
-                    break;
-                default:
-                    return;
+            if (e.which !== TAB) {
+                return;
             }
             e.preventDefault();
             if (!selection || !selection.length) {
                 return;
             }
             var next_selection;
-            if (forward) {
+            if (!e.shiftKey) {
                 next_selection = selection.next('.trie-' + searching);
                 if ((!next_selection || !next_selection.length) && filtered_tiles && filtered_tiles.length) {
                     next_selection = filtered_tiles.first();
