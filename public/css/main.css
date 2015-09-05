@@ -643,5 +643,30 @@ h3 {
 		bottom: 14px;
     right: 14px;
 	}
+	.header .container {
+		padding:0 12px 4px
+	}
+	.letter, .search-results {
+		padding: 0 12px;
+	}
+	.tile-container {
+		padding: 30px 0px 30px 12px
+	}
+	.tile-container li {
+		padding: 0 12px 20px 0
+	}
+	.search input, .fake-placeholder {
+		font-size: 18px;
+	}
+	.search {
+		padding: 12px
+	}
+	.header h1 {
+		font-size: 28;
+		margin-bottom: 10px;
+	}
+	.content {
+		margin-top: -160px;
+	}
 }
 
