@@ -118,6 +118,24 @@ $(function() {
             $body.scrollTop($search_results.offset().top);
         });
 
+        $body.on('keypress', function(e) {
+            if (e.charCode === SPACE) {
+                return;
+            }
+            if ($(e.target).is($search_bar)) {
+                return;
+            }
+            $search_bar.focus();
+        });
+
+        $search_bar.on('focusin focusout', function(e) {
+            console.log('hey', selection);
+            if (!selection || !selection.length) {
+                return;
+            }
+            selection.children('.tile').toggleClass('selected-tile', e.type === 'focusin');
+        });
+
         $search_bar
             .val($search_bar.data('value'))
             .select();
@@ -208,15 +226,5 @@ $(function() {
 
     $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
         $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
-    });
-
-    $body.on('keypress', function(e) {
-        if (e.charCode === SPACE) {
-            return;
-        }
-        if ($(e.target).is($search_bar)) {
-            return;
-        }
-        $search_bar.focus();
     });
 });
