@@ -277,6 +277,8 @@ h3 {
   width: 100%;
   height: 100%;
   position: fixed;
+  -webkit-overflow-scrolling: touch
+  -webkit-transform: translateZ(0);
   top: 0;
   left: 0;
   display: none;
@@ -501,6 +503,7 @@ h3 {
 	bottom: 40px;
 	right: 40px;
 	position: fixed;
+	-webkit-transform: translateZ(0);
 }
 .collection-download {
 	position: relative;
@@ -623,7 +626,11 @@ h3 {
 @media only screen and (max-width: 720px) {
 	.logo-popup-container {
 		width: 100%
-	}	
+	}
+	.collection {
+		bottom: 20px;
+    right: 20px;
+	}
 }
 @media only screen and (max-width: 450px) {
 	.logo-popup-container {
@@ -631,6 +638,10 @@ h3 {
 	}
 	.color-palette .col-3, .logos .col-3 {
 		width: 100%
+	}
+	.collection {
+		bottom: 14px;
+    right: 14px;
 	}
 }
 
