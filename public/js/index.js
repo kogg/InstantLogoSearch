@@ -265,14 +265,20 @@ $(function() {
             }
             $collection = $collection || $('#collection');
             $collection.css('display', collection.length ? '' : 'none');
-            if (!collection.length) {
-                $body.removeClass('prevent-scroll');
-            }
             $collection_download = $collection_download || $('#collection-download');
-            if (collection.length === 1) {
-                $collection_download.attr('href', file.url);
-            } else {
-                $collection_download.removeAttr('href');
+            switch (collection.length) {
+                case 0:
+                    $body.removeClass('prevent-scroll');
+                    $collection_download.removeAttr('href');
+                    break;
+                case 1:
+                    $collection_download.attr('href', file.url);
+                    break;
+                default:
+                    $collection_download.attr('href', '/collection?' + collection.map(function(file) {
+                        return 'ids[]=' + file.id;
+                    }).join('&'));
+                    break;
             }
             var $file = $('#file-' + name_string);
             if ($file.length) {
