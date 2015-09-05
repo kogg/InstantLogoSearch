@@ -25,6 +25,28 @@ if (document.body.createTextRange) { // ms
         return this;
     };
 }
+if (!Array.prototype.findIndex) {
+  Array.prototype.findIndex = function(predicate) {
+    if (this === null) {
+      throw new TypeError('Array.prototype.findIndex called on null or undefined');
+    }
+    if (typeof predicate !== 'function') {
+      throw new TypeError('predicate must be a function');
+    }
+    var list = Object(this);
+    var length = list.length >>> 0;
+    var thisArg = arguments[1];
+    var value;
+
+    for (var i = 0; i < length; i++) {
+      value = list[i];
+      if (predicate.call(thisArg, value, i, list)) {
+        return i;
+      }
+    }
+    return -1;
+  };
+}
 
 $(function() {
     var $body = $('body');
@@ -214,6 +236,88 @@ $(function() {
         $body.on('click', '.select-on-click', function() {
             $(this).find('.color').highlight();
         });
+
+        $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
+            $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
+        });
+    }());
+
+    /*
+     * Collection
+     */
+    var STORAGE_KEY = 'InstantLogoSearch.collection';
+    (function() {
+        var $collection;
+        var $collection_ctas;
+        var collection = [];
+        var storage = (window.localStorage || window.sessionStorage);
+
+        $body.on('add-to-collection remove-from-collection', function(e, brand_normalized_name, logo_index, file_index) {
+            var brand = $('#brand-' + brand_normalized_name).data().brand;
+            var logo  = brand.logos[logo_index];
+            var file  = logo.files[file_index];
+            var adding = e.type === 'add-to-collection';
+            var name_string = [brand_normalized_name, logo_index, file_index].join('-');
+            file.in_collection = adding;
+            $collection_ctas = $collection_ctas || $('#collection-ctas');
+            if (adding) {
+                $collection_ctas.append('<p class="row collection-file" id="collection-file-' + name_string + '">\
+                                            <span class="minified">' +
+                                                [brand.name, logo.name, file.name].join(' ') +
+                                           '</span>\
+                                            <span class="delete" data-file-path="[&quot;' + brand.normalized_name + '&quot;,' + logo_index + ',' + file_index + ']' + '"></span>\
+                                         </p>');
+                collection.push(file);
+            } else {
+                var file_dom = $collection_ctas.find('#collection-file-' + name_string)
+                collection.splice($('.collection-file').index(file_dom), 1);
+                file_dom.remove();
+            }
+            $collection = $collection || $('#collection');
+            $collection.css('display', collection.length ? '' : 'none');
+            $('#file-' + name_string)
+                .toggleClass('save', !adding)
+                .toggleClass('check', adding);
+            file.storage_key = file.storage_key || [brand.normalized_name, logo.name, file.name];
+            storage.setItem(STORAGE_KEY, JSON.stringify((collection || []).map(function(file) {
+                return file.storage_key;
+            })));
+        });
+
+        (JSON.parse(storage.getItem(STORAGE_KEY) || '[]') || []).forEach(function(file_storage_key) {
+            var brand = $('#brand-' + file_storage_key[0]).data().brand;
+            if (!brand) {
+                return;
+            }
+            var logo_index = (brand.logos || []).findIndex(function(logo) {
+                return logo.name === file_storage_key[1];
+            });
+            if (logo_index === -1) {
+                return;
+            }
+            var logo = brand.logos[logo_index];
+            var file_index = (logo.files || []).findIndex(function(file) {
+                return file.name === file_storage_key[2];
+            });
+            if (file_index === -1) {
+                return;
+            }
+            var file = logo.files[file_index];
+            file.storage_key = file.storage_key || file_storage_key;
+            $body.trigger('add-to-collection', [brand.normalized_name, logo_index, file_index]);
+        });
+
+        $body.on('click', '.save', function() {
+            $body.trigger('add-to-collection', $(this).data('filePath'));
+        });
+
+        $body.on('click', '.check,.delete', function() {
+            $body.trigger('remove-from-collection', $(this).data('filePath'));
+        });
+
+        $('#clear-collection').on('click', function() {
+            $('.delete').click();
+        });
     }());
 
     $('#title-link').on('click', function(e) {
@@ -221,9 +325,5 @@ $(function() {
         $search_bar
             .val('')
             .trigger('input');
-    });
-
-    $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
-        $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
     });
 });

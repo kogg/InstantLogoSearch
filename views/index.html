@@ -31,7 +31,7 @@
 					</div>
 					<ul class="tile-container row group-{{ letter | lower }}">
 						{% for brand in brands_by_letter[letter] %}
-							<li class="brand {{ brand.normalized_name | trie }}" data-brand="{{ brand | json }}">
+							<li class="brand {{ brand.normalized_name | trie }}" id="brand-{{ brand.normalized_name }}" data-brand="{{ brand | json }}">
 								<a href="/{{ brand.normalized_name }}" class="tile">
 									<div class="tile-logo">
 										<img src="">
@@ -52,19 +52,12 @@
 			{% include "./popup.html" %}
 		</div>
 	</div>
-	<div class="collection">
+	<div class="collection" id="collection" style="display: none;">
 		<div class="collection-popup isolate-scrolling">
-			<div class="collection-popup-header"><span>My Collection</span><div class="trash"></div></div>
-			<div class="card-ctas">
-				<p class="row"><span class="minified">Addvocate Default 300x300 </span><span class="delete"></span></p>
-				<p class="row"><span class="minified">Addvocate Default SVG</span><span class="delete"></span></p>
-				<p class="row"><span class="minified">Addvocate Circle Medium</span><span class="delete"></span></p>
-				<p class="row"><span class="minified">Addvocate White SVG</span><span class="delete"></span></p>
-				<p class="row"><span class="minified">Addvocate Large</span><span class="delete"></span></p>
-			</div>
+			<div class="collection-popup-header"><span>My Collection</span><div class="trash" id="clear-collection"></div></div>
+			<div class="card-ctas" id="collection-ctas"></div>
 		</div>
-		<div class="collection-download">
-		</div>
+		<div class="collection-download"></div>
 	</div>
 	<script src="/jquery/dist/jquery.min.js"></script>
 	<script src="/swig/dist/swig.min.js"></script>
