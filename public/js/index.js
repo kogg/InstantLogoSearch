@@ -224,13 +224,13 @@ $(function() {
         });
 
         $body.on('keydown', function(e) {
-            if (active !== 'popup') {
-                return;
-            }
             if (e.which !== ESC) {
                 return;
             }
             $body.trigger('close');
+            $search_bar
+                .val('')
+                .trigger('input');
         });
 
         $body.on('click', '.select-on-click', function() {
