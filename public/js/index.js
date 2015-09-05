@@ -170,6 +170,7 @@ $(function() {
             active = class_name;
             $body.addClass(active);
             var brand = $(this).data().brand;
+            console.log(brand);
             window.history.replaceState('', 'Instant Logo Search - ' + brand.name, '/' + brand.normalized_name);
             document.title = 'Instant Logo Search - ' + brand.name;
 
@@ -214,6 +215,31 @@ $(function() {
         $body.on('click', '.select-on-click', function() {
             $(this).find('.color').highlight();
         });
+
+        $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
+            $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
+        });
+    }());
+
+    /*
+     * Collection
+     */
+    (function() {
+        $body.on('click', '.save', function() {
+            $body.trigger('add-to-collection', $(this).data('filePath'));
+        });
+
+        $body.on('click', '.check', function() {
+            $body.trigger('remove-from-collection', $(this).data('filePath'));
+        });
+
+        $body.on('add-to-collection remove-from-collection', function(e, brand_normalized_name, logo_index, file_index) {
+            var brand = $('#brand-' + brand_normalized_name).data().brand;
+            brand.logos[logo_index].files[file_index].in_collection = e.type === 'add-to-collection';
+            $(['#file', brand_normalized_name, logo_index, file_index].join('-'))
+                .toggleClass('save', e.type === 'remove-from-collection')
+                .toggleClass('check', e.type === 'add-to-collection');
+        });
     }());
 
     $('#title-link').on('click', function(e) {
@@ -221,9 +247,5 @@ $(function() {
         $search_bar
             .val('')
             .trigger('input');
-    });
-
-    $body.on('mouseenter mouseleave', '.isolate-scrolling', function(e) {
-        $body.toggleClass('prevent-scroll', e.type === 'mouseenter');
     });
 });

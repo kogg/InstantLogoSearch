@@ -31,7 +31,7 @@
 					</div>
 					<ul class="tile-container row group-{{ letter | lower }}">
 						{% for brand in brands_by_letter[letter] %}
-							<li class="brand {{ brand.normalized_name | trie }}" data-brand="{{ brand | json }}">
+							<li class="brand {{ brand.normalized_name | trie }}" id="brand-{{ brand.normalized_name }}" data-brand="{{ brand | json }}">
 								<a href="/{{ brand.normalized_name }}" class="tile">
 									<div class="tile-logo">
 										<img src="">
