@@ -15,6 +15,14 @@ var brands = [{ name: '4ormat' },
               { name: 'Behance' },
               { name: 'Shayan' }];
 
+brands = _.chain(brands)
+          .map(function(brand) {
+              return _.defaults(brand, { colors:          _.times(4, function() { return '#' + _.sample('0123456789abcdef', 6).join(''); }),
+                                         normalized_name: brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '') });
+          })
+          .sortBy('normalized_name')
+          .value();
+
 exports.all = function(callback) {
     File.all(function(err, files) {
         if (err) {
@@ -22,19 +30,16 @@ exports.all = function(callback) {
         }
         callback(null, _.chain(brands)
                         .map(function(brand) {
-                            var normalized_name = brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '');
                             return _.chain(brand)
                                     .clone()
-                                    .defaults({ colors:          _.times(4, function() { return '#' + _.sample('0123456789abcdef', 6).join(''); }),
-                                                normalized_name: normalized_name,
-                                                logos:           _.chain(files)
-                                                                  .where({ brand_normalized_name: normalized_name })
-                                                                  .groupBy('logo_name')
-                                                                  .map(function(logo_files, logo_name) {
-                                                                      return { name:  logo_name,
-                                                                               files: _.map(logo_files, _.partial(_.omit, _, 'brand_normalized_name', 'logo_name')) };
-                                                                  })
-                                                                  .value() })
+                                    .defaults({ logos: _.chain(files)
+                                                        .where({ brand_normalized_name: brand.normalized_name })
+                                                        .groupBy('logo_name')
+                                                        .map(function(logo_files, logo_name) {
+                                                            return { name:  logo_name,
+                                                                     files: _.map(logo_files, _.partial(_.omit, _, 'brand_normalized_name', 'logo_name')) };
+                                                        })
+                                                        .value() })
                                     .value();
                         })
                         .sortBy('normalized_name')
