@@ -658,6 +658,28 @@ h3 {
 	.search input, .fake-placeholder {
 		font-size: 18px;
 	}
+	.fake-placeholder {
+		left: 12px;
+	}
+	.one-result .logo-popup {
+		padding: 0;
+	}
+	.one-result .logo-popup-container {
+		box-shadow: none;
+		border-radius: 0;
+	}
+	.logos {
+		padding:16px 0px 12px 12px
+	}
+	.logos .col-3 {
+		padding-right: 12px;
+	}
+	.color-palette {
+		padding:0px 0px 16px 12px
+	}
+	.color-palette .col-3 {
+		padding-right: 12px;
+	}
 	.search {
 		padding: 12px
 	}
@@ -667,6 +689,9 @@ h3 {
 	}
 	.content {
 		margin-top: -160px;
+	}
+	.logo-card .save, .logo-card .dl {
+		display: block;
 	}
 }
 
