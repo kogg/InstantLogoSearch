@@ -248,17 +248,19 @@ $(function() {
             file.in_collection = adding;
             $collection_ctas = $collection_ctas || $('#collection-ctas');
             if (adding) {
-                $collection_ctas.append('<p class="row collection-file" id="collection-file-' + name_string + '">' +
-                                           '<span class="minified">' +
-                                                [brand.name, logo.name, file.name].join(' ') +
-                                           '</span>' +
-                                           '<span class="delete" data-file-path="[&quot;' + brand.normalized_name + '&quot;,' + logo_index + ',' + file_index + ']' + '"></span>' +
-                                        '</p>');
+                var $collection_file = $('<p class="row collection-file" id="collection-file-' + name_string + '">' +
+                                            '<span class="minified">' +
+                                                 [brand.name, logo.name, file.name].join(' ') +
+                                            '</span>' +
+                                            '<span class="delete"></span>' +
+                                         '</p>');
+                $collection_file.find('.delete').data('filePath', [brand_normalized_name, logo_index, file_index]);
+                $collection_ctas.append($collection_file);
                 collection.push(file);
             } else {
-                var collection_file_dom = $collection_ctas.find('#collection-file-' + name_string)
-                collection.splice($('.collection-file').index(collection_file_dom), 1);
-                collection_file_dom.remove();
+                var $collection_file = $collection_ctas.find('#collection-file-' + name_string)
+                collection.splice($('.collection-file').index($collection_file), 1);
+                $collection_file.remove();
             }
             $collection = $collection || $('#collection');
             $collection.css('display', collection.length ? '' : 'none');
@@ -271,9 +273,9 @@ $(function() {
             } else {
                 $collection_download.removeAttr('href');
             }
-            var file_dom = $('#file-' + name_string);
-            if (file_dom.length) {
-                file_dom
+            var $file = $('#file-' + name_string);
+            if ($file.length) {
+                $file
                     .toggleClass('save', !adding)
                     .toggleClass('check', adding);
             }
