@@ -702,7 +702,6 @@ keyframes scaling {
 	.search input, .fake-placeholder {
 		font-size: 18px;
 		height: 24px;
-		line-height: normal;
 	}
 	.search button {
 		height: 24px;
