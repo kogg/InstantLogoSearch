@@ -56,12 +56,13 @@ $(function() {
      * Tiles
      */
     (function() {
-        var $filter_style = $('#filter-styles');
+        var $filter_style;
 
         $search_bar.on('input', function(e) {
             searching = $search_bar.val().toLowerCase().replace(/[^a-z0-9]+/g, '');
             var filtering = !!searching.length;
             $body.toggleClass('filtering', filtering);
+            $filter_style = $filter_style || $('#filter-styles');
             $filter_style.text(filtering ? ('.trie-' + searching + '{display:block !important;}' + '.group-' + searching[0].replace(/[0-9]/, '0-9') + '{display:block !important;}') : '');
         })
 
@@ -69,8 +70,6 @@ $(function() {
             e.preventDefault();
             $(this).parent().trigger('load-content', ['popup']);
         });
-
-        $filter_style.text('');
     }());
 
     /*
@@ -265,14 +264,20 @@ $(function() {
             }
             $collection = $collection || $('#collection');
             $collection.css('display', collection.length ? '' : 'none');
-            if (!collection.length) {
-                $body.removeClass('prevent-scroll');
-            }
             $collection_download = $collection_download || $('#collection-download');
-            if (collection.length === 1) {
-                $collection_download.attr('href', file.url);
-            } else {
-                $collection_download.removeAttr('href');
+            switch (collection.length) {
+                case 0:
+                    $body.removeClass('prevent-scroll');
+                    $collection_download.removeAttr('href');
+                    break;
+                case 1:
+                    $collection_download.attr('href', file.url);
+                    break;
+                default:
+                    $collection_download.attr('href', '/collection?' + collection.map(function(file) {
+                        return 'ids[]=' + file.id;
+                    }).join('&'));
+                    break;
             }
             var $file = $('#file-' + name_string);
             if ($file.length) {

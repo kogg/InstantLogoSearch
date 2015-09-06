@@ -19,8 +19,12 @@
   },
   "homepage": "https://github.com/cameronrohani/InstantLogoSearch#readme",
   "dependencies": {
+    "URIjs": "^1.16.0",
+    "archiver": "^0.15.0",
+    "async": "^1.4.2",
     "express": "^4.13.3",
     "jquery": "^2.1.4",
+    "request": "^2.61.0",
     "swig": "^1.4.2",
     "underscore": "^1.8.3"
   },
