@@ -1,3 +1,8 @@
+// zip.js
+navigator.saveBlob = navigator.saveBlob || navigator.msSaveBlob || navigator.mozSaveBlob || navigator.webkitSaveBlob;
+window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+zip.workerScriptsPath = "/zipjs/WebContent/";
+
 var ESC  = 27;
 var SPACE = 32;
 var TAB  = 9;
@@ -265,6 +270,11 @@ $(function() {
             $collection = $collection || $('#collection');
             $collection.css('display', collection.length ? '' : 'none');
             $collection_download = $collection_download || $('#collection-download');
+            $collection_download
+                .removeClass('loading')
+                .removeClass('error')
+                .removeClass('success')
+                .off('click', zip_and_download);
             switch (collection.length) {
                 case 0:
                     $body.removeClass('prevent-scroll');
@@ -274,9 +284,11 @@ $(function() {
                     $collection_download.attr('href', file.url);
                     break;
                 default:
-                    $collection_download.attr('href', '/collection?' + collection.map(function(file) {
-                        return 'ids[]=' + file.id;
-                    }).join('&'));
+                    $collection_download
+                        .attr('href', '/collection?' + collection.map(function(file) {
+                            return 'ids[]=' + file.id;
+                        }).join('&'))
+                        .one('click', zip_and_download);
                     break;
             }
             var $file = $('#file-' + name_string);
@@ -290,6 +302,51 @@ $(function() {
                 return file.storage_key;
             })));
         });
+
+        function zip_and_download(e) {
+            var $this = $(this);
+            e.preventDefault();
+            $this
+                .addClass('loading')
+                .removeClass('error')
+                .removeClass('success');
+            zip.createWriter(new zip.BlobWriter(),
+                function(writer) {
+                    var current_collection = collection.slice(0);
+                    function addFile(callback, i) {
+                        i = i || 0;
+                        if (i === current_collection.length) {
+                            return callback();
+                        }
+                        var file = current_collection[i];
+                        writer.add(file.url.substring(file.url.lastIndexOf('/') + 1), new zip.HttpReader(file.url), function() {
+                            addFile(callback, i + 1);
+                        });
+                    }
+                    addFile(function finish() {
+                        writer.close(function(blob) {
+                            if (typeof window.saveAs == "function") {
+                                window.saveAs(blob, $this.attr('download'));
+                            } else if (typeof navigator.saveBlob == "function") {
+                                navigator.saveBlob(blob, $this.attr('download'));
+                            } else {
+                                $this.attr('href', URL.createObjectURL(blob))
+                                $this[0].click();
+                            }
+                            $this
+                                .removeClass('loading')
+                                .removeClass('error')
+                                .addClass('success');
+                        });
+                    });
+                },
+                function() {
+                    $this
+                        .removeClass('loading')
+                        .addClass('error')
+                        .removeClass('success');
+                });
+        }
 
         (JSON.parse(storage.getItem(STORAGE_KEY) || '[]') || []).forEach(function(file_storage_key) {
             var brand = $('#brand-' + file_storage_key[0]).data().brand;
