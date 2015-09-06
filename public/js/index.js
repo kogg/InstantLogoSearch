@@ -313,32 +313,30 @@ $(function() {
             zip.createWriter(new zip.BlobWriter(),
                 function(writer) {
                     var current_collection = collection.slice(0);
-                    function addFile(callback, i) {
-                        i = i || 0;
-                        if (i === current_collection.length) {
-                            return callback();
-                        }
+                    var collection_length = current_collection.length;
+                    addFile(0);
+                    function addFile(i) {
                         var file = current_collection[i];
                         writer.add(file.url.substring(file.url.lastIndexOf('/') + 1), new zip.HttpReader(file.url), function() {
-                            addFile(callback, i + 1);
+                            if (i + 1 !== collection_length) {
+                                return addFile(i + 1);
+                            }
+                            writer.close(function(blob) {
+                                if (typeof window.saveAs == "function") {
+                                    window.saveAs(blob, $this.attr('download'));
+                                } else if (typeof navigator.saveBlob == "function") {
+                                    navigator.saveBlob(blob, $this.attr('download'));
+                                } else {
+                                    $this.attr('href', URL.createObjectURL(blob))
+                                    $this[0].click();
+                                }
+                                $this
+                                    .removeClass('loading')
+                                    .removeClass('error')
+                                    .addClass('success');
+                            });
                         });
                     }
-                    addFile(function finish() {
-                        writer.close(function(blob) {
-                            if (typeof window.saveAs == "function") {
-                                window.saveAs(blob, $this.attr('download'));
-                            } else if (typeof navigator.saveBlob == "function") {
-                                navigator.saveBlob(blob, $this.attr('download'));
-                            } else {
-                                $this.attr('href', URL.createObjectURL(blob))
-                                $this[0].click();
-                            }
-                            $this
-                                .removeClass('loading')
-                                .removeClass('error')
-                                .addClass('success');
-                        });
-                    });
                 },
                 function() {
                     $this
