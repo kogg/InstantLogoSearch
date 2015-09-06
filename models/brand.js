@@ -29,21 +29,18 @@ exports.all = function(callback) {
         if (err) {
             return callback(err);
         }
-        callback(null, _.chain(brands)
-                        .map(function(brand) {
-                            return _.chain(brand)
-                                    .clone()
-                                    .defaults({ logos: _.chain(files)
-                                                        .where({ brand_normalized_name: brand.normalized_name })
-                                                        .groupBy('logo_name')
-                                                        .map(function(logo_files, logo_name) {
-                                                            return { name:  logo_name,
-                                                                     files: _.map(logo_files, _.partial(_.omit, _, 'brand_normalized_name', 'logo_name')) };
-                                                        })
-                                                        .value() })
-                                    .value();
-                        })
-                        .sortBy('normalized_name')
-                        .value());
+        callback(null, _.map(brands, function(brand) {
+            return _.chain(brand)
+                    .clone()
+                    .defaults({ logos: _.chain(files)
+                                        .where({ brand_normalized_name: brand.normalized_name })
+                                        .groupBy('logo_name')
+                                        .map(function(logo_files, logo_name) {
+                                            return { name:  logo_name,
+                                                     files: _.map(logo_files, _.partial(_.omit, _, 'brand_normalized_name', 'logo_name')) };
+                                        })
+                                        .value() })
+                    .value();
+        }));
     });
 };
