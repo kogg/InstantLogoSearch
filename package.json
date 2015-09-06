@@ -5,7 +5,7 @@
   "scripts": {
     "prestart": "npm run generate_popup",
     "watch_popup": "watch 'npm run generate_popup' views",
-    "generate_popup": "mkdir -p generated/js && swig compile views/popup.html -m --wrap-start=\"var popup_tmpl = \" >> generated/js/popup.js",
+    "generate_popup": "mkdir -p generated/js && swig compile views/popup.html -m --wrap-start=\"var popup_tmpl = \" > generated/js/popup.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
