@@ -50,6 +50,35 @@ if (!Array.prototype.findIndex) {
     return -1;
   };
 }
+if ('function' !== typeof Array.prototype.reduceRight) {
+  Array.prototype.reduceRight = function(callback /*, initialValue*/) {
+    'use strict';
+    if (null === this || 'undefined' === typeof this) {
+      throw new TypeError('Array.prototype.reduce called on null or undefined' );
+    }
+    if ('function' !== typeof callback) {
+      throw new TypeError(callback + ' is not a function');
+    }
+    var t = Object(this), len = t.length >>> 0, k = len - 1, value;
+    if (arguments.length >= 2) {
+      value = arguments[1];
+    } else {
+      while (k >= 0 && !(k in t)) {
+        k--;
+      }
+      if (k < 0) {
+        throw new TypeError('Reduce of empty array with no initial value');
+      }
+      value = t[k--];
+    }
+    for (; k >= 0; k--) {
+      if (k in t) {
+        value = callback(value, t[k], k, t);
+      }
+    }
+    return value;
+  };
+}
 
 $(function() {
     var $body = $('body');
@@ -312,31 +341,27 @@ $(function() {
                 .removeClass('success');
             zip.createWriter(new zip.BlobWriter(),
                 function(writer) {
-                    var current_collection = collection.slice(0);
-                    var collection_length = current_collection.length;
-                    addFile(0);
-                    function addFile(i) {
-                        var file = current_collection[i];
-                        writer.add(file.url.substring(file.url.lastIndexOf('/') + 1), new zip.HttpReader(file.url), function() {
-                            if (i + 1 !== collection_length) {
-                                return addFile(i + 1);
+                    collection.reduceRight(function(callback, file) {
+                        var reader = new zip.HttpReader(file.url);
+                        return function() {
+                            writer.add(file.url.substring(file.url.lastIndexOf('/') + 1), reader, callback);
+                        };
+                    }, function() {
+                        writer.close(function(blob) {
+                            if (typeof window.saveAs == "function") {
+                                window.saveAs(blob, $this.attr('download'));
+                            } else if (typeof navigator.saveBlob == "function") {
+                                navigator.saveBlob(blob, $this.attr('download'));
+                            } else {
+                                $this.attr('href', URL.createObjectURL(blob))
+                                $this[0].click();
                             }
-                            writer.close(function(blob) {
-                                if (typeof window.saveAs == "function") {
-                                    window.saveAs(blob, $this.attr('download'));
-                                } else if (typeof navigator.saveBlob == "function") {
-                                    navigator.saveBlob(blob, $this.attr('download'));
-                                } else {
-                                    $this.attr('href', URL.createObjectURL(blob))
-                                    $this[0].click();
-                                }
-                                $this
-                                    .removeClass('loading')
-                                    .removeClass('error')
-                                    .addClass('success');
-                            });
+                            $this
+                                .removeClass('loading')
+                                .removeClass('error')
+                                .addClass('success');
                         });
-                    }
+                    })();
                 },
                 function() {
                     $this
