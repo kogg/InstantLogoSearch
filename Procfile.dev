@@ -1,1 +1,2 @@
-web: nodemon server.js
+web:      npm run nodemon
+watchify: npm run watchify

@@ -2,17 +2,22 @@
   "name": "base-express-saiichihashimoto",
   "version": "1.0.0",
   "description": "Base Express Setup for @saiichihashimoto's projects",
-  "main": "server.js",
   "scripts": {
-    "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi"
+    "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi",
+    "node": "node server.js",
+    "browserify": "mkdir -p dist/js && browserify client.js -o dist/js/main.js",
+    "nodemon": "nodemon server.js --ignore dist/",
+    "watchify": "mkdir -p dist/js && watchify client.js -w -o dist/js/main.js"
   },
   "author": "@saiichihashimoto",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^1.8.1"
+    "nodemon": "^1.8.1",
+    "watchify": "^3.6.1"
   },
   "dependencies": {
     "body-parser": "^1.14.2",
+    "browserify": "^12.0.1",
     "feathers": "^1.3.0"
   }
 }
