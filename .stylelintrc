@@ -1,0 +1,11 @@
+{
+	"rules": {
+		"color-hex-length": "long",
+		"function-url-quotes": "single",
+		"indentation": "tab",
+		"selector-pseudo-element-colon-notation": "single",
+		"string-quotes": "single",
+		"declaration-colon-newline-after": null,
+		"rule-properties-order": null
+	},
+}
