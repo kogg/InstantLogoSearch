@@ -7,7 +7,7 @@
     "node": "node server.js",
     "browserify": "mkdir -p dist/js && browserify client.js -o dist/js/main.js",
     "nodemon": "nodemon server.js --ignore dist/",
-    "watchify": "mkdir -p dist/js && watchify client.js -w -o dist/js/main.js",
+    "watchify": "mkdir -p dist/js && watchify client.js -v -o dist/js/main.js",
     "test": "npm run stylelint && npm run eslint",
     "eslint": "eslint . --ignore-path .gitignore",
     "stylelint": "stylelint **/*.css"
