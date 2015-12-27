@@ -1,10 +1,10 @@
 {
 	"rules": {
 		"color-hex-length": "long",
-		"function-url-quotes": "single",
+		"function-url-quotes": "double",
 		"indentation": "tab",
 		"selector-pseudo-element-colon-notation": "single",
-		"string-quotes": "single",
+		"string-quotes": "double",
 		"declaration-colon-newline-after": null,
 		"rule-properties-order": null
 	},
