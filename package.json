@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "Base Express Setup for @saiichihashimoto's projects",
   "main": "server.js",
+  "scripts": {
+    "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi"
+  },
   "author": "@saiichihashimoto",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.8.1"
+  }
 }
