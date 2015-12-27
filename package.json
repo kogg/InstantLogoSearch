@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^1.8.1"
+  },
+  "dependencies": {
+    "feathers": "^1.3.0"
   }
 }
