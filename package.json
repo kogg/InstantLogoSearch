@@ -1,0 +1,8 @@
+{
+  "name": "base-express-saiichihashimoto",
+  "version": "1.0.0",
+  "description": "Base Express Setup for @saiichihashimoto's projects",
+  "main": "server.js",
+  "author": "@saiichihashimoto",
+  "license": "ISC"
+}
