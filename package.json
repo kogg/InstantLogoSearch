@@ -7,11 +7,15 @@
     "node": "node server.js",
     "browserify": "mkdir -p dist/js && browserify client.js -o dist/js/main.js",
     "nodemon": "nodemon server.js --ignore dist/",
-    "watchify": "mkdir -p dist/js && watchify client.js -w -o dist/js/main.js"
+    "watchify": "mkdir -p dist/js && watchify client.js -w -o dist/js/main.js",
+    "test": "npm run eslint",
+    "eslint": "eslint . --ignore-path .gitignore"
   },
   "author": "@saiichihashimoto",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^1.10.3",
+    "eslint-config-xo": "^0.9.1",
     "nodemon": "^1.8.1",
     "watchify": "^3.6.1"
   },
