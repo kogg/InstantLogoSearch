@@ -12,7 +12,7 @@
     "postcss:watch": "npm run postcss -- -w",
     "test": "npm run stylelint && npm run eslint",
     "eslint": "eslint . --ignore-path .gitignore",
-    "stylelint": "stylelint **/*.css"
+    "stylelint": "stylelint '**/*.css' '!dist/**' '!node_modules/**'"
   },
   "author": "@saiichihashimoto",
   "license": "ISC",
@@ -30,13 +30,14 @@
     "body-parser": "^1.14.2",
     "browserify": "^12.0.1",
     "feathers": "^1.3.0",
-    "postcss-cli": "^2.3.2"
+    "postcss-cli": "^2.3.2",
+    "postcss-color-rgba-fallback": "^2.0.0",
+    "postcss-custom-media": "^5.0.0",
+    "postcss-import": "^7.1.3",
+    "postcss-nested": "^1.0.0",
+    "postcss-url": "^5.0.2"
   },
   "stylelint": {
-    "ignoreFiles": [
-      "dist/**",
-      "node_modules/**"
-    ],
     "extends": [
       "stylelint-config-suitcss",
       "./.stylelintrc"
