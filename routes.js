@@ -1,10 +1,10 @@
 var feathers = require('feathers');
 var path     = require('path');
 
-var app = require('./app');
+var express_app = require('./express-app');
 
-app.set('view engine', 'jade');
-app.set('views', path.join(__dirname, '/views'));
+express_app.set('view engine', 'jade');
+express_app.set('views', path.join(__dirname, '/views'));
 
 var router   = feathers.Router();
 var App      = require('./components/App');

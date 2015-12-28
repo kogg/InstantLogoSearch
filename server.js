@@ -1,7 +1,7 @@
-var app = require('./app');
+var express_app = require('./express-app');
 
-app.set('port', process.env.PORT || 5000);
+express_app.set('port', process.env.PORT || 5000);
 
-app.use('/', require('./routes'));
+express_app.use('/', require('./routes'));
 
-app.listen(app.get('port'));
+express_app.listen(express_app.get('port'));
