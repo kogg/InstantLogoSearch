@@ -1,8 +1,8 @@
 var ReactDOM = require('react-dom');
 
-// var state = JSON.parse(document.getElementById('react-state').innerHTML);
+var state = JSON.parse(document.getElementById('react-state').innerHTML);
 
 ReactDOM.render(
-	require('./app'),
+	require('./app')(state),
 	document.getElementById('react-app')
 );
