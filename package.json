@@ -7,7 +7,7 @@
     "node": "babel-node server.js",
     "jsify": "mkdir -p dist/js && browserify client.js --verbose --extension=.jsx | uglifyjs -c drop_console,warnings=false -o dist/js/main.js",
     "postcss": "mkdir -p dist/css && postcss -c postcss.js -o dist/css/main.css main.css",
-    "nodemon": "nodemon --exec babel-node --ignore dist/ -- server.js",
+    "nodemon": "nodemon --exec babel-node --ignore dist/ -e js,jsx -- server.js",
     "watchify": "mkdir -p dist/js && watchify client.js --verbose --extension=.jsx -o dist/js/main.js",
     "postcss:watch": "npm run postcss -- -w",
     "test": "npm run stylelint && npm run eslint",
