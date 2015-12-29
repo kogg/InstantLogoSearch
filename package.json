@@ -12,11 +12,13 @@
     "postcss:watch": "npm run postcss -- -w",
     "test": "npm run stylelint && npm run eslint",
     "eslint": "eslint . --ignore-path .gitignore",
-    "stylelint": "stylelint '**/*.css' '!dist/**' '!node_modules/**'"
+    "stylelint": "stylelint '**/*.css' '!dist/**' '!node_modules/**'",
+    "discify": "browserify client.js --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O"
   },
   "author": "@saiichihashimoto",
   "license": "ISC",
   "devDependencies": {
+    "disc": "^1.3.2",
     "eslint": "^1.10.3",
     "eslint-config-xo": "^0.9.1",
     "eslint-plugin-react": "^3.13.1",
