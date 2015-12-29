@@ -1,6 +1,14 @@
-var React = require('react');
-var App   = require('./components/App');
+var createStore = require('redux').createStore;
+var App         = require('./components/App');
+var Provider    = require('react-redux').Provider;
+var React       = require('react');
 
 module.exports = function(state) {
-	return <App message={state.message} />;
+	var store = createStore(function(state) { return state || {}; }, state);
+
+	return (
+		<Provider store={store}>
+			<App />
+		</Provider>
+	);
 };
