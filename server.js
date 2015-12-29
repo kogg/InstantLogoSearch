@@ -11,9 +11,9 @@ express_app.set('views', path.join(__dirname, '/views'));
 
 express_app.get('/', function(req, res) {
 	var state = { messages: [
-		'hi wasup',
-		'hey',
-		'get to work'
+		{ id: 0, text: 'hi wasup' },
+		{ id: 1, text: 'hey' },
+		{ id: 2, text: 'get to work' }
 	] };
 
 	res.render('main', {
