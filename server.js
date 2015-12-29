@@ -10,7 +10,12 @@ express_app.set('view engine', 'jade');
 express_app.set('views', path.join(__dirname, '/views'));
 
 express_app.get('/', function(req, res) {
-	var state = { message: 'some message' };
+	var state = { messages: [
+		'hi wasup',
+		'hey',
+		'get to work'
+	] };
+
 	res.render('main', {
 		markup: ReactDOM.renderToString(app(state)),
 		state:  state
