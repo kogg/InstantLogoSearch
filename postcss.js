@@ -16,6 +16,7 @@ module.exports = {
 	'use':            plugins,
 	'cssnano':        { autoprefixer: false },
 	'postcss-import': { glob: true },
-	'postcss-url':    { url:        'copy',
+	'postcss-url':    { url:        'inline',
+	                    fallback:   'copy',
 	                    assetsPath: 'assets' }
 };
