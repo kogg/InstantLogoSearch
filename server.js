@@ -2,38 +2,38 @@ var fs       = require('fs');
 var path     = require('path');
 var ReactDOM = require('react-dom/server');
 
-var express_app = require('./express-app');
-var app         = require('./app');
+var app    = require('./app');
+var webapp = require('./webapp');
 
-express_app.set('port', process.env.PORT || 5000);
+app.set('port', process.env.PORT || 5000);
 
-express_app.set('view engine', 'jade');
-express_app.set('views', path.join(__dirname, '/views'));
+app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, '/views'));
 
 // TODO Have legimitimate endpoints
-express_app.use('/api/messages', require('feathers-memory')());
+app.use('/api/messages', require('feathers-memory')());
 var i = 0;
 setInterval(function() {
-	express_app.service('api/messages').create({ text: 'this is message #' + i });
+	app.service('api/messages').create({ text: 'this is message #' + i });
 	i++;
 }, 1000);
 
-express_app.locals.cacheBuster = function(assetPath) {
+app.locals.cacheBuster = function(assetPath) {
 	return assetPath + '?' + fs.statSync(path.join(__dirname, 'dist', assetPath)).mtime.getTime().toString(16);
 };
 
-express_app.get('/', function(req, res, next) {
-	express_app.service('api/messages').find(function(err, messages) {
+app.get('/', function(req, res, next) {
+	app.service('api/messages').find(function(err, messages) {
 		if (err) {
 			return next(err);
 		}
 
 		var state = { messages: messages };
 		res.render('main', {
-			markup: ReactDOM.renderToString(app(state)),
+			markup: ReactDOM.renderToString(webapp(state)),
 			state:  state
 		});
 	});
 });
 
-express_app.listen(express_app.get('port'));
+app.listen(app.get('port'));

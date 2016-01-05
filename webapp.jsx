@@ -4,7 +4,9 @@ var Provider    = require('react-redux').Provider;
 var React       = require('react');
 
 module.exports = function(state) {
-	var store = createStore(function(state) { return state || {}; }, state);
+	var store = createStore(function(state) {
+		return state || {};
+	}, state);
 
 	return (
 		<Provider store={store}>
