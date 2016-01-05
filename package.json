@@ -17,7 +17,7 @@
     "fix": "npm run cssfmt && npm run eslint-fix",
     "eslint-fix": "( git diff --staged --name-only | grep \".jsx\\?$\" | xargs eslint --fix ) && ( git diff --staged --name-only | grep \".jsx\\?$\" | xargs git add )",
     "cssfmt": "( git diff --staged --name-only | grep \".s\\?css$\" | xargs -I '{}' -n 1 cssfmt {} ) && ( git diff --staged --name-only | grep \".s\\?css$\" | xargs git add )",
-    "test": "eslint . --ignore-path .gitignore",
+    "test": "eslint . --ignore-path .gitignore --ext .js,.jsx",
     "clean": "rm -rf dist",
     "discify": "browserify $npm_package_browser --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O"
   },
