@@ -3,10 +3,10 @@ html
 	head
 		title Base App
 		meta(charset="utf-8")
-		link(rel="stylesheet" type="text/css" href="css/main.css")
+		link(rel="stylesheet" type="text/css" href="#{cacheBuster('css/main.css')}")
 	body
 		#react-app
 			!= markup
 		script#react-state(type="text/json")
 			!= JSON.stringify(state)
-		script(type="text/javascript" src="js/main.js" async)
+		script(type="text/javascript" src="#{cacheBuster('js/main.js')}" async)

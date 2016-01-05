@@ -4,7 +4,8 @@ var plugins = [
 	'postcss-custom-media',
 	'autoprefixer',
 	'postcss-color-rgba-fallback',
-	'postcss-url'
+	'postcss-url',
+	'postcss-cachebuster'
 ];
 
 if (process.env.NODE_ENV === 'production') {
