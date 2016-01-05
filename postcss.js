@@ -3,6 +3,7 @@ var _ = require('underscore');
 module.exports = {
 	'use': _.union(
 		[
+			'stylelint',
 			'postcss-import',
 			'postcss-nested',
 			'postcss-custom-media',
@@ -21,5 +22,11 @@ module.exports = {
 		url:        'inline',
 		fallback:   'copy',
 		assetsPath: 'assets'
+	},
+	'stylelint': {
+		"extends": [
+			"stylelint-config-suitcss",
+			"./.stylelintrc"
+		]
 	}
 };
