@@ -24,9 +24,9 @@ module.exports = {
 		assetsPath: 'assets'
 	},
 	'stylelint': {
-		"extends": [
-			"stylelint-config-suitcss",
-			"./.stylelintrc"
+		extends: [
+			'stylelint-config-suitcss',
+			'./.stylelintrc'
 		]
 	}
 };
