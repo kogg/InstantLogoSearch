@@ -14,7 +14,7 @@
     "nodemon": "nodemon --exec babel-node --ignore dist/ -e js,jsx -- $npm_package_main",
     "watchify": "mkdir -p dist/js && watchify $npm_package_browser --verbose --extension=.jsx -o dist/js/main.js",
     "postcss:watch": "npm run postcss -- -w",
-    "fix": "npm run cssfmt && npm run eslint-fix && npm test",
+    "fix": "npm run cssfmt && npm run eslint-fix",
     "eslint-fix": "( git diff --staged --name-only | grep \".jsx\\?$\" | xargs eslint --fix ) && ( git diff --staged --name-only | grep \".jsx\\?$\" | xargs git add )",
     "cssfmt": "( git diff --staged --name-only | grep \".s\\?css$\" | xargs -I '{}' -n 1 cssfmt {} ) && ( git diff --staged --name-only | grep \".s\\?css$\" | xargs git add )",
     "test": "eslint . --ignore-path .gitignore",
