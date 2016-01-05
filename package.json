@@ -2,6 +2,8 @@
   "name": "base-express-saiichihashimoto",
   "version": "1.0.0",
   "description": "Base Express Setup for @saiichihashimoto's projects",
+  "author": "@saiichihashimoto",
+  "license": "ISC",
   "main": "server.js",
   "browser": "client.js",
   "scripts": {
@@ -12,14 +14,31 @@
     "nodemon": "nodemon --exec babel-node --ignore dist/ -e js,jsx -- $npm_package_main",
     "watchify": "mkdir -p dist/js && watchify $npm_package_browser --verbose --extension=.jsx -o dist/js/main.js",
     "postcss:watch": "npm run postcss -- -w",
-    "test": "npm run stylelint && npm run eslint",
-    "eslint": "eslint . --ignore-path .gitignore",
+    "pre-commit": "( git diff --staged --name-only | grep \".jsx\\?$\" | xargs npm run test -- --fix ) && ( git diff --staged --name-only | grep \".jsx\\?$\" | xargs git add )",
+    "test": "npm run stylelint && npm run eslint -- .",
+    "eslint": "eslint --ignore-path .gitignore",
     "stylelint": "stylelint '**/*.css' '!dist/**' '!node_modules/**'",
     "clean": "rm -rf dist",
     "discify": "browserify $npm_package_browser --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O"
   },
-  "author": "@saiichihashimoto",
-  "license": "ISC",
+  "browserify": {
+    "extension": [
+      "jsx"
+    ],
+    "transform": [
+      "babelify",
+      "uglifyify"
+    ]
+  },
+  "pre-commit": [
+    "pre-commit"
+  ],
+  "stylelint": {
+    "extends": [
+      "stylelint-config-suitcss",
+      "./.stylelintrc"
+    ]
+  },
   "devDependencies": {
     "disc": "^1.3.2",
     "eslint": "^1.10.3",
@@ -57,20 +76,5 @@
     "uglify-js": "^2.6.1",
     "uglifyify": "^3.0.1",
     "underscore": "^1.8.3"
-  },
-  "browserify": {
-    "extension": [
-      "jsx"
-    ],
-    "transform": [
-      "babelify",
-      "uglifyify"
-    ]
-  },
-  "stylelint": {
-    "extends": [
-      "stylelint-config-suitcss",
-      "./.stylelintrc"
-    ]
   }
 }
