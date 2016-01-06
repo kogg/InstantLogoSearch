@@ -9,4 +9,5 @@ html
 			!= markup
 		script#react-state(type="text/json")
 			!= JSON.stringify(state)
+		script(type="text/javascript" src="/socket.io/socket.io.js")
 		script(type="text/javascript" src="#{cacheBuster('js/main.js')}" async)

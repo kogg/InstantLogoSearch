@@ -1,7 +1,11 @@
+/* global io */
+var feathers = require('feathers-client');
 var ReactDOM = require('react-dom');
 
-var webapp = require('./webapp');
+var WebApp = require('./WebApp');
+
+var app = feathers().configure(feathers.socketio(io()));
 
 var state = JSON.parse(document.getElementById('react-state').innerHTML);
 
-ReactDOM.render(webapp(state), document.getElementById('react-app'));
+ReactDOM.render(WebApp(state, app), document.getElementById('react-app'));

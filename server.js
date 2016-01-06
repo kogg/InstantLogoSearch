@@ -1,7 +1,7 @@
 var ReactDOM = require('react-dom/server');
 
 var app    = require('./app');
-var webapp = require('./webapp');
+var WebApp = require('./WebApp');
 
 // TODO Have legitimate endpoints
 app.use('/api/messages', require('feathers-memory')());
@@ -19,7 +19,7 @@ app.get('/', function(req, res, next) {
 
 		var state = { messages: messages };
 		res.render('main', {
-			markup: ReactDOM.renderToString(webapp(state)),
+			markup: ReactDOM.renderToString(WebApp(state)),
 			state:  state
 		});
 	});
