@@ -12,14 +12,12 @@ setInterval(function() {
 }, 1000);
 
 app.get('/', function(req, res, next) {
-	app.service('api/messages').find(function(err, messages) {
+	WebApp(null, app, function(err, dom, state) {
 		if (err) {
 			return next(err);
 		}
-
-		var state = { messages: messages };
 		res.render('main', {
-			markup: ReactDOM.renderToString(WebApp(state)),
+			markup: ReactDOM.renderToString(dom),
 			state:  state
 		});
 	});

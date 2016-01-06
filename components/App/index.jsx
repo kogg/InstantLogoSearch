@@ -1,3 +1,4 @@
+var _       = require('underscore');
 var connect = require('react-redux').connect;
 var React   = require('react');
 
@@ -8,7 +9,7 @@ var Message = React.createClass({
 });
 
 module.exports = connect(function(state) {
-	return { messages: state.messages || [] };
+	return _.pick(state, 'messages');
 })(React.createClass({
 	render: function() {
 		return (

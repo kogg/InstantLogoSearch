@@ -4,9 +4,11 @@ var App         = require('./components/App');
 var Provider    = require('react-redux').Provider;
 var React       = require('react');
 
-module.exports = function(state, app) {
+module.exports = function(state, app, callback) {
 	var store = createStore(function(state, action) {
 		switch (_.result(action, 'type')) {
+			case 'LOADED_MESSAGES':
+				return _.defaults({ messages: _.result(action, 'payload') }, state);
 			case 'CREATED_MESSAGE':
 				return _.defaults({ messages: _.union(state.messages || [], [_.result(action, 'payload')]) }, state);
 			default:
@@ -14,18 +16,42 @@ module.exports = function(state, app) {
 		}
 	}, state);
 
-	if (app) {
-		app.service('api/messages').on('created', function(message) {
-			store.dispatch({
-				type:    'CREATED_MESSAGE',
-				payload: message
-			});
-		});
-	}
+	// TODO There needs to be some kind of mapper between feathers and reducers
+	var messages = app.service('api/messages');
 
-	return (
+	messages.on('created', function(message) {
+		store.dispatch({
+			type:    'CREATED_MESSAGE',
+			payload: message
+		});
+	});
+
+	var initial_loaded;
+	store.dispatch({ type: 'LOADING_MESSAGES' });
+	messages.find(function(err, messages) {
+		initial_loaded = true;
+		store.dispatch({
+			type:    'LOADED_MESSAGES',
+			payload: err || messages,
+			error:   Boolean(err)
+		});
+	});
+
+	var dom = (
 		<Provider store={store}>
 			<App />
 		</Provider>
 	);
+
+	if (callback) {
+		var unsubscribe = store.subscribe(function() {
+			if (!initial_loaded) {
+				return;
+			}
+			unsubscribe();
+			callback(null, dom, store.getState());
+		});
+	}
+
+	return dom;
 };
