@@ -1,11 +1,16 @@
 var _           = require('underscore');
 var createStore = require('redux').createStore;
-var App         = require('./components/App');
 var Provider    = require('react-redux').Provider;
 var React       = require('react');
 
+var App = require('./components/App');
+var DevTools;
+if (process.env.NODE_ENV !== 'production') {
+	DevTools = require('./components/DevTools');
+}
+
 module.exports = function(state, app, callback) {
-	var store = createStore(function(state, action) {
+	var store = (DevTools ? DevTools.instrument()(createStore) : createStore)(function(state, action) {
 		switch (_.result(action, 'type')) {
 			case 'LOADED_MESSAGES':
 				return _.defaults({ messages: _.result(action, 'payload') }, state);
@@ -15,6 +20,19 @@ module.exports = function(state, app, callback) {
 				return state || { messages: [] };
 		}
 	}, state);
+
+	var dom = DevTools ? (
+		<Provider store={store}>
+			<div>
+				<App />
+				<DevTools />
+			</div>
+		</Provider>
+	) : (
+		<Provider store={store}>
+			<App />
+		</Provider>
+	);
 
 	// TODO There needs to be some kind of mapper between feathers and reducers
 	var messages = app.service('api/messages');
@@ -36,12 +54,6 @@ module.exports = function(state, app, callback) {
 			error:   Boolean(err)
 		});
 	});
-
-	var dom = (
-		<Provider store={store}>
-			<App />
-		</Provider>
-	);
 
 	if (callback) {
 		var unsubscribe = store.subscribe(function() {
