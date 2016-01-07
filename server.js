@@ -1,3 +1,4 @@
+require('babel-register');
 var ReactDOM = require('react-dom/server');
 
 var app    = require('./app');

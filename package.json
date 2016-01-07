@@ -8,10 +8,10 @@
   "browser": "client.js",
   "scripts": {
     "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi",
-    "node": "babel-node $npm_package_main",
+    "node": "node $npm_package_main",
     "jsify": "mkdir -p dist/js && browserify $npm_package_browser --verbose --extension=.jsx | uglifyjs -c drop_console,warnings=false -o dist/js/main.js",
     "postcss": "mkdir -p dist/css && postcss -c postcss.js -o dist/css/main.css main.css",
-    "nodemon": "nodemon --exec babel-node --ignore dist/ -e js,jsx -- $npm_package_main",
+    "nodemon": "nodemon --exec node --ignore dist/ -e js,jsx -- $npm_package_main",
     "watchify": "mkdir -p dist/js && watchify $npm_package_browser --debug --verbose --extension=.jsx -o dist/js/main.js",
     "postcss:watch": "npm run postcss -- -w",
     "fix": "npm run cssfmt && npm run eslint-fix",
@@ -50,8 +50,8 @@
   },
   "dependencies": {
     "autoprefixer": "^6.2.2",
-    "babel-cli": "^6.3.17",
     "babel-preset-react": "^6.3.13",
+    "babel-register": "^6.3.13",
     "babelify": "^7.2.0",
     "body-parser": "^1.14.2",
     "browserify": "^12.0.1",
