@@ -1,1 +1,1 @@
-web: node server.js
+web: npm run jsify && npm run postcss && npm run node
