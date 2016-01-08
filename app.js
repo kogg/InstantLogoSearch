@@ -31,12 +31,17 @@ setInterval(function() {
 	i++;
 }, 1000);
 
-app.get('/', function(req, res) {
-	var store = Store();
+app.get('/', function(req, res, next) {
+	app.service('/api/messages').find(function(err, messages) {
+		if (err) {
+			return next(err);
+		}
+		var store = Store({ messages: messages });
 
-	res.render('main', {
-		markup: ReactDOM.renderToString(Root(store)),
-		state:  store.getState()
+		res.render('main', {
+			markup: ReactDOM.renderToString(Root(store)),
+			state:  store.getState()
+		});
 	});
 });
 
