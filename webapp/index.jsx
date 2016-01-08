@@ -3,10 +3,10 @@ var createStore = require('redux').createStore;
 var Provider    = require('react-redux').Provider;
 var React       = require('react');
 
-var App = require('../components/App');
+var App = require('./components/App');
 var DevTools;
 if (process.env.DEVTOOLS) {
-	DevTools = require('../components/DevTools');
+	DevTools = require('./components/DevTools');
 }
 
 module.exports = function(state, app, callback) {
