@@ -5,9 +5,8 @@ var memory     = require('feathers-memory');
 var path       = require('path');
 var ReactDOM   = require('react-dom/server');
 
-var actions = require('./actions');
-var Root    = require('./components/Root');
-var Store   = require('./store');
+var Root  = require('./components/Root');
+var Store = require('./store');
 
 var app = feathers();
 
@@ -24,8 +23,6 @@ app.set('views', path.join(__dirname, '/views'));
 app.locals.cacheBuster = function(assetPath) {
 	return assetPath + '?' + fs.statSync(path.join(__dirname, 'dist', assetPath)).mtime.getTime().toString(16);
 };
-
-actions.setup(app);
 
 app.use('/api/messages', memory());
 var i = 0;
