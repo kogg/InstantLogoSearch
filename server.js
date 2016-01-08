@@ -2,7 +2,7 @@ require('babel-register');
 var ReactDOM = require('react-dom/server');
 
 var app    = require('./app');
-var WebApp = require('./WebApp');
+var WebApp = require('./webapp');
 
 // TODO Have legitimate endpoints
 app.use('/api/messages', require('feathers-memory')());

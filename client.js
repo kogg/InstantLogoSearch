@@ -2,7 +2,7 @@
 var feathers = require('feathers-client');
 var ReactDOM = require('react-dom');
 
-var WebApp = require('./WebApp');
+var WebApp = require('./webapp');
 
 var app = feathers();
 app.configure(feathers.socketio(io()));
