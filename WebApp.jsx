@@ -5,7 +5,7 @@ var React       = require('react');
 
 var App = require('./components/App');
 var DevTools;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.DEVTOOLS) {
 	DevTools = require('./components/DevTools');
 }
 
