@@ -1,4 +1,8 @@
 {
+	"name": "boilerplate",
+	"description": "Boilerplate Setup for @saiichihashimoto's projects",
+	"repository": "https://github.com/saiichihashimoto/boilerplate",
+	"success_url": "/",
 	"addons": [
 		"papertrail"
 	]
