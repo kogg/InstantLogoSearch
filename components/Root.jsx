@@ -1,8 +1,8 @@
 var Provider = require('react-redux').Provider;
 var React    = require('react');
 
-var App      = require('./components/App');
-var DevTools = process.env.DEVTOOLS && require('./components/DevTools');
+var App      = require('./App');
+var DevTools = process.env.DEVTOOLS && require('./DevTools');
 
 module.exports = function(store) {
 	return DevTools ? (

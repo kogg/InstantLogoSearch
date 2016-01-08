@@ -1,8 +1,9 @@
 require('babel-register');
 var ReactDOM = require('react-dom/server');
 
-var app    = require('./app');
-var WebApp = require('./webapp');
+var app   = require('./app');
+var Root  = require('./components/Root');
+var Store = require('./store');
 
 // TODO Have legitimate endpoints
 app.use('/api/messages', require('feathers-memory')());
@@ -12,15 +13,12 @@ setInterval(function() {
 	i++;
 }, 1000);
 
-app.get('/', function(req, res, next) {
-	WebApp(null, app, function(err, dom, state) {
-		if (err) {
-			return next(err);
-		}
-		res.render('main', {
-			markup: ReactDOM.renderToString(dom),
-			state:  state
-		});
+app.get('/', function(req, res) {
+	var store = Store();
+
+	res.render('main', {
+		markup: ReactDOM.renderToString(Root(store)),
+		state:  store.getState()
 	});
 });
 

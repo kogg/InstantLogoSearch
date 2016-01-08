@@ -2,11 +2,12 @@
 var feathers = require('feathers-client');
 var ReactDOM = require('react-dom');
 
-var WebApp = require('./webapp');
+var Root  = require('./components/Root');
+var Store = require('./store');
 
 var app = feathers();
 app.configure(feathers.socketio(io()));
 
 var state = JSON.parse(document.getElementById('react-state').innerHTML);
 
-ReactDOM.render(WebApp(state, app), document.getElementById('react-app'));
+ReactDOM.render(Root(Store(state)), document.getElementById('react-app'));
