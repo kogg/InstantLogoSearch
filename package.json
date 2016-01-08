@@ -1,7 +1,8 @@
 {
-  "name": "base-express-saiichihashimoto",
+  "name": "boilerplate",
   "version": "1.0.0",
-  "description": "Base Express Setup for @saiichihashimoto's projects",
+  "description": "Boilerplate Setup for @saiichihashimoto's projects",
+  "repository": "saiichihashimoto/boilerplate",
   "author": "@saiichihashimoto",
   "license": "ISC",
   "main": "index.js",
