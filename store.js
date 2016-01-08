@@ -9,5 +9,9 @@ if (process.env.DEVTOOLS) {
 }
 
 module.exports = function(state) {
-	return createStore(combineReducers({}), state);
+	return createStore(combineReducers({
+		somevalue: function(state) {
+			return state || {};
+		}
+	}), state);
 };
