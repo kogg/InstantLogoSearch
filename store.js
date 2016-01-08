@@ -1,6 +1,9 @@
-var _           = require('underscore');
-var createStore = require('redux').createStore;
+var _               = require('underscore');
+var applyMiddleware = require('redux').applyMiddleware;
+var createStore     = require('redux').createStore;
+var thunkMiddlware  = require('redux-thunk');
 
+createStore = applyMiddleware(thunkMiddlware)(createStore);
 if (process.env.DEVTOOLS) {
 	createStore = require('./components/DevTools').instrument()(createStore);
 }
