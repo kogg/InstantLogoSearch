@@ -9,7 +9,14 @@ var Message = React.createClass({
 });
 
 module.exports = connect(function(state) {
-	return _.pick(state, 'messages');
+	return {
+		messages: _.chain(state)
+			.result('messages')
+			.result('items')
+			.values()
+			.sortBy('date')
+			.value()
+	};
 })(React.createClass({
 	render: function() {
 		return (
