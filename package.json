@@ -4,8 +4,8 @@
   "description": "Base Express Setup for @saiichihashimoto's projects",
   "author": "@saiichihashimoto",
   "license": "ISC",
-  "main": "server.js",
-  "browser": "client.js",
+  "main": "index.js",
+  "browser": "browser.js",
   "scripts": {
     "postinstall": "if [ \"$NODE_ENV\" = 'production' ]; then npm run jsify && npm run postcss; fi",
     "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi",
