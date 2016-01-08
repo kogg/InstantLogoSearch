@@ -1,6 +1,7 @@
-var _               = require('underscore');
 var applyMiddleware = require('redux').applyMiddleware;
+var combineReducers = require('redux').combineReducers;
 var createStore     = require('redux').createStore;
+var feathersRedux   = require('./feathers-redux');
 var thunkMiddlware  = require('redux-thunk');
 
 createStore = applyMiddleware(thunkMiddlware)(createStore);
@@ -9,14 +10,7 @@ if (process.env.DEVTOOLS) {
 }
 
 module.exports = function(state) {
-	return createStore(function(state, action) {
-		switch (_.result(action, 'type')) {
-			case 'LOADED_MESSAGES':
-				return _.defaults({ messages: _.result(action, 'payload') }, state);
-			case 'CREATED_MESSAGE':
-				return _.defaults({ messages: _.union(state.messages || [], [_.result(action, 'payload')]) }, state);
-			default:
-				return state || { messages: [] };
-		}
-	}, state);
+	return createStore(combineReducers({
+		messages: feathersRedux('message')
+	}), state);
 };

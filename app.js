@@ -1,6 +1,7 @@
 var bodyParser = require('body-parser');
 var feathers   = require('feathers');
 var fs         = require('fs');
+var memory     = require('feathers-memory');
 var path       = require('path');
 var ReactDOM   = require('react-dom/server');
 
@@ -26,7 +27,7 @@ app.locals.cacheBuster = function(assetPath) {
 
 actions.setup(app);
 
-app.use('/api/messages', require('feathers-memory')());
+app.use('/api/messages', memory());
 var i = 0;
 setInterval(function() {
 	app.service('/api/messages').create({ text: 'this is message #' + i, date: Date.now() });
