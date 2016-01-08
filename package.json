@@ -7,6 +7,7 @@
   "main": "server.js",
   "browser": "client.js",
   "scripts": {
+    "postinstall": "if [ \"$NODE_ENV\" = 'production' ]; then npm run jsify && npm run postcss; fi",
     "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi",
     "node": "node $npm_package_main",
     "jsify": "mkdir -p dist/js && browserify $npm_package_browser --verbose --extension=.jsx | uglifyjs -c drop_console,warnings=false -o dist/js/main.js",
