@@ -1,5 +1,6 @@
 var _               = require('underscore');
 var combineReducers = require('redux').combineReducers;
+var pluralize       = require('pluralize');
 
 var resourceReducer = function(resource, state) {
 	var RESOURCE = resource.toUpperCase();
@@ -85,16 +86,17 @@ var resourceReducer = function(resource, state) {
 };
 
 var resourcesReducer = function(resource, state) {
-	var RESOURCE = resource.toUpperCase();
+	var RESOURCE  = resource.toUpperCase();
+	var RESOURCES = pluralize(resource).toUpperCase();
 
 	var singleItemReducer = resourceReducer(resource, {});
 
 	return combineReducers({
 		loading: function(state, action) {
 			switch (action.type) {
-				case 'LOADING_' + RESOURCE + 'S':
+				case 'LOADING_' + RESOURCES:
 					return true;
-				case 'LOADED_' + RESOURCE + 'S':
+				case 'LOADED_' + RESOURCES:
 					return false;
 				default:
 					return state || false;
@@ -112,10 +114,10 @@ var resourcesReducer = function(resource, state) {
 		},
 		error: function(state, action) {
 			switch (action.type) {
-				case 'LOADING_' + RESOURCE + 'S':
+				case 'LOADING_' + RESOURCES:
 				case 'CREATING_' + RESOURCE:
 					return null;
-				case 'LOADED_' + RESOURCE + 'S':
+				case 'LOADED_' + RESOURCES:
 				case 'CREATED_' + RESOURCE:
 					return action.error ? action.payload : null;
 				default:
@@ -124,7 +126,7 @@ var resourcesReducer = function(resource, state) {
 		},
 		items: function(state, action) {
 			switch (action.type) {
-				case 'LOADED_' + RESOURCE + 'S':
+				case 'LOADED_' + RESOURCES:
 					return action.error ? state : _.indexBy(action.payload, 'id');
 				case 'REMOVED_' + RESOURCE:
 					state = _.clone(state);
