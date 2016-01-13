@@ -1,3 +1,4 @@
+var _          = require('underscore');
 var bodyParser = require('body-parser');
 var feathers   = require('feathers');
 var fs         = require('fs');
@@ -31,12 +32,24 @@ setInterval(function() {
 	i++;
 }, 1000);
 
-app.get('/', function(req, res) {
-	var store = Store();
+app.get('/', function(req, res, next) {
+	app.service('/api/messages').find(function(err, messages) {
+		if (err) {
+			return next(err);
+		}
+		var store = Store({ messages: {
+			items: _.chain(messages)
+				.indexBy('id')
+				.mapObject(function(message) {
+					return { data: message };
+				})
+				.value()
+		} });
 
-	res.render('main', {
-		markup: ReactDOM.renderToString(Root(store)),
-		state:  store.getState()
+		res.render('main', {
+			markup: ReactDOM.renderToString(Root(store)),
+			state:  store.getState()
+		});
 	});
 });
 
