@@ -6,6 +6,9 @@ var resourceReducer = function(resource, state) {
 
 	return combineReducers({
 		loading: function(state, action) {
+			if (!action.payload || !action.payload.id) {
+				return state || false;
+			}
 			switch (action.type) {
 				case 'LOADING_' + RESOURCE:
 					return true;
@@ -16,6 +19,9 @@ var resourceReducer = function(resource, state) {
 			}
 		},
 		updating: function(state, action) {
+			if (!action.payload || !action.payload.id) {
+				return state || false;
+			}
 			switch (action.type) {
 				case 'UDPATING_' + RESOURCE:
 				case 'PATCHING_' + RESOURCE:
@@ -28,6 +34,9 @@ var resourceReducer = function(resource, state) {
 			}
 		},
 		removing: function(state, action) {
+			if (!action.payload || !action.payload.id) {
+				return state || false;
+			}
 			switch (action.type) {
 				case 'REMOVING_' + RESOURCE:
 					return true;
@@ -38,6 +47,9 @@ var resourceReducer = function(resource, state) {
 			}
 		},
 		error: function(state, action) {
+			if (!action.payload || !action.payload.id) {
+				return state || null;
+			}
 			switch (action.type) {
 				case 'LOADING_' + RESOURCE:
 				case 'UDPATING_' + RESOURCE:
@@ -48,12 +60,15 @@ var resourceReducer = function(resource, state) {
 				case 'UDPATED_' + RESOURCE:
 				case 'PATCHED_' + RESOURCE:
 				case 'REMOVED_' + RESOURCE:
-					return action.error && action.payload;
+					return action.error ? action.payload : null;
 				default:
 					return state || null;
 			}
 		},
 		data: function(state, action) {
+			if (!action.payload || !action.payload.id) {
+				return state || null;
+			}
 			switch (action.type) {
 				case 'LOADED_' + RESOURCE:
 				case 'CREATED_' + RESOURCE:
@@ -102,7 +117,7 @@ var resourcesReducer = function(resource, state) {
 					return null;
 				case 'LOADED_' + RESOURCE + 'S':
 				case 'CREATED_' + RESOURCE:
-					return action.error && action.payload;
+					return action.error ? action.payload : null;
 				default:
 					return state || null;
 			}
@@ -114,18 +129,18 @@ var resourcesReducer = function(resource, state) {
 				case 'REMOVED_' + RESOURCE:
 					state = _.clone(state);
 					if (action.error) {
-						state[action.payload.id] = singleItemReducer(state[action.payload.id], action);
+						state[action.payload.id] = singleItemReducer(state[action.payload.id] || { id: action.payload.id }, action);
 					} else {
 						delete state[action.payload.id];
 					}
-					return state;
+					return state || {};
 				default:
 					if (!action.payload || !action.payload.id) {
 						return state || {};
 					}
 					state = _.clone(state);
 					state[action.payload.id] = singleItemReducer(state[action.payload.id], action);
-					return state;
+					return state || {};
 			}
 		}
 	}, state);

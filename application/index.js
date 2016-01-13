@@ -2,7 +2,6 @@ var _          = require('underscore');
 var bodyParser = require('body-parser');
 var feathers   = require('feathers');
 var fs         = require('fs');
-var memory     = require('feathers-memory');
 var path       = require('path');
 var ReactDOM   = require('react-dom/server');
 
@@ -24,13 +23,6 @@ app.set('views', path.join(__dirname, '../views'));
 app.locals.cacheBuster = function(assetPath) {
 	return assetPath + '?' + fs.statSync(path.join(__dirname, '../dist', assetPath)).mtime.getTime().toString(16);
 };
-
-app.use('/api/messages', memory());
-var i = 0;
-setInterval(function() {
-	app.service('/api/messages').create({ text: 'this is message #' + i, date: Date.now() });
-	i++;
-}, 1000);
 
 app.get('/', function(req, res, next) {
 	app.service('/api/messages').find(function(err, messages) {
