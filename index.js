@@ -1,5 +1,5 @@
 require('babel-register');
 
-var app = require('./app');
+var app = require('./application');
 
 app.listen(app.get('port'));

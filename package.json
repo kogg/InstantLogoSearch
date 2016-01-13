@@ -6,22 +6,25 @@
   "author": "@saiichihashimoto",
   "license": "ISC",
   "main": "index.js",
-  "browser": "browser.js",
+  "browser": {
+    "main": "browser.js",
+    "./application": "./application/browser"
+  },
   "scripts": {
     "postinstall": "if [ \"$NODE_ENV\" = 'production' ]; then npm run jsify && npm run postcss; fi",
     "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi",
     "node": "node $npm_package_main",
-    "jsify": "mkdir -p dist/js && browserify $npm_package_browser --verbose --extension=.jsx | uglifyjs -c drop_console,warnings=false -o dist/js/main.js",
+    "jsify": "mkdir -p dist/js && browserify $npm_package_browser_main --verbose --extension=.jsx | uglifyjs -c drop_console,warnings=false -o dist/js/main.js",
     "postcss": "mkdir -p dist/css && postcss -c postcss.js -o dist/css/main.css main.css",
     "nodemon": "nodemon --exec node --ignore dist/ -e js,jsx -- $npm_package_main",
-    "watchify": "mkdir -p dist/js && watchify $npm_package_browser --debug --verbose --extension=.jsx -o dist/js/main.js",
+    "watchify": "mkdir -p dist/js && watchify $npm_package_browser_main --debug --verbose --extension=.jsx -o dist/js/main.js",
     "postcss:watch": "npm run postcss -- -w",
     "fix": "npm run cssfmt && npm run eslint-fix",
     "eslint-fix": "( git diff --staged --name-only | grep \".jsx\\?$\" | xargs eslint --fix ) && ( git diff --staged --name-only | grep \".jsx\\?$\" | xargs git add )",
     "cssfmt": "( git diff --staged --name-only | grep \".s\\?css$\" | xargs -I '{}' -n 1 cssfmt {} ) && ( git diff --staged --name-only | grep \".s\\?css$\" | xargs git add )",
     "test": "eslint . --ignore-path .gitignore --ext .js,.jsx",
     "clean": "rm -rf dist",
-    "discify": "browserify $npm_package_browser --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O"
+    "discify": "browserify $npm_package_browser_main --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O"
   },
   "browserify": {
     "extension": [
@@ -75,6 +78,7 @@
     "react-dom": "^0.14.3",
     "react-redux": "^4.0.6",
     "redux": "^3.0.5",
+    "redux-actions": "^0.9.0",
     "redux-thunk": "^1.0.3",
     "socket.io": "^1.4.0",
     "uglify-js": "^2.6.1",
