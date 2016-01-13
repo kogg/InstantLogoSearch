@@ -1,7 +1,7 @@
+var _          = require('underscore');
 var bodyParser = require('body-parser');
 var feathers   = require('feathers');
 var fs         = require('fs');
-var memory     = require('feathers-memory');
 var path       = require('path');
 var ReactDOM   = require('react-dom/server');
 
@@ -24,19 +24,24 @@ app.locals.cacheBuster = function(assetPath) {
 	return assetPath + '?' + fs.statSync(path.join(__dirname, '../dist', assetPath)).mtime.getTime().toString(16);
 };
 
-app.use('/api/messages', memory());
-var i = 0;
-setInterval(function() {
-	app.service('/api/messages').create({ text: 'this is message #' + i, date: Date.now() });
-	i++;
-}, 1000);
+app.get('/', function(req, res, next) {
+	app.service('/api/messages').find(function(err, messages) {
+		if (err) {
+			return next(err);
+		}
+		var store = Store({ messages: {
+			items: _.chain(messages)
+				.indexBy('id')
+				.mapObject(function(message) {
+					return { data: message };
+				})
+				.value()
+		} });
 
-app.get('/', function(req, res) {
-	var store = Store();
-
-	res.render('main', {
-		markup: ReactDOM.renderToString(Root(store)),
-		state:  store.getState()
+		res.render('main', {
+			markup: ReactDOM.renderToString(Root(store)),
+			state:  store.getState()
+		});
 	});
 });
 
