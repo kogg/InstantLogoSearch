@@ -24,10 +24,10 @@ var resourceReducer = function(resource, state) {
 				return state || false;
 			}
 			switch (action.type) {
-				case 'UDPATING_' + RESOURCE:
+				case 'UPDATING_' + RESOURCE:
 				case 'PATCHING_' + RESOURCE:
 					return true;
-				case 'UDPATED_' + RESOURCE:
+				case 'UPDATED_' + RESOURCE:
 				case 'PATCHED_' + RESOURCE:
 					return false;
 				default:
@@ -53,12 +53,12 @@ var resourceReducer = function(resource, state) {
 			}
 			switch (action.type) {
 				case 'LOADING_' + RESOURCE:
-				case 'UDPATING_' + RESOURCE:
+				case 'UPDATING_' + RESOURCE:
 				case 'PATCHING_' + RESOURCE:
 				case 'REMOVING_' + RESOURCE:
 					return null;
 				case 'LOADED_' + RESOURCE:
-				case 'UDPATED_' + RESOURCE:
+				case 'UPDATED_' + RESOURCE:
 				case 'PATCHED_' + RESOURCE:
 				case 'REMOVED_' + RESOURCE:
 					return action.error ? action.payload : null;
@@ -73,7 +73,7 @@ var resourceReducer = function(resource, state) {
 			switch (action.type) {
 				case 'LOADED_' + RESOURCE:
 				case 'CREATED_' + RESOURCE:
-				case 'UDPATED_' + RESOURCE:
+				case 'UPDATED_' + RESOURCE:
 				case 'PATCHED_' + RESOURCE:
 					return action.error ? state : action.payload;
 				case 'REMOVED_' + RESOURCE:

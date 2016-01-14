@@ -87,7 +87,7 @@ module.exports = function(resource, app, options) {
 	actions['remove' + Resource] = function(id, params) {
 		return function(dispatch) {
 			dispatch(removingResource({ id: id }));
-			return app.service('/api/' + resources).remov(id, params, function(err, object) {
+			return app.service('/api/' + resources).remove(id, params, function(err, object) {
 				dispatch(removedResource(err ? _.extend(new Error(err.message), { id: id }) : object));
 			});
 		};
