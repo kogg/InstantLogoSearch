@@ -32,7 +32,7 @@
     ],
     "transform": [
       "babelify",
-      "envify",
+      ["envify", { "_": "purge" }],
       "uglifyify"
     ]
   },
