@@ -84,6 +84,10 @@ module.exports = function(resource, options) {
 		};
 	}
 
+	if (options && options.dispatch && options.initialLoad) {
+		options.dispatch(actions['load' + Resources]());
+	}
+
 	if (!options || !options.dispatch || !options.realtime) {
 		return _.noop;
 	}
