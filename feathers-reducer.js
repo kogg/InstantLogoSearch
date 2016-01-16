@@ -127,7 +127,12 @@ var resourcesReducer = function(resource, state) {
 		items: function(state, action) {
 			switch (action.type) {
 				case 'LOADED_' + RESOURCES:
-					return action.error ? state : _.indexBy(action.payload, 'id');
+					return action.error ? state : _.chain(action.payload)
+						.indexBy('id')
+						.mapObject(function(object) {
+							return { data: object };
+						})
+						.value();
 				case 'REMOVED_' + RESOURCE:
 					state = _.clone(state);
 					if (action.error) {
