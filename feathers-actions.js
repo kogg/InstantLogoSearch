@@ -93,15 +93,15 @@ module.exports = function(resource, options) {
 	var dispatchPatchedResource = _.compose(options.dispatch, patchedResource);
 	var dispatchRemovedResource = _.compose(options.dispatch, removedResource);
 
-	app.service('/api/messages').on('created', dispatchCreatedResource);
-	app.service('/api/messages').on('updated', dispatchUpdatedResource);
-	app.service('/api/messages').on('patched', dispatchPatchedResource);
-	app.service('/api/messages').on('removed', dispatchRemovedResource);
+	app.service('/api/' + resources).on('created', dispatchCreatedResource);
+	app.service('/api/' + resources).on('updated', dispatchUpdatedResource);
+	app.service('/api/' + resources).on('patched', dispatchPatchedResource);
+	app.service('/api/' + resources).on('removed', dispatchRemovedResource);
 
 	return function() {
-		app.service('/api/messages').off('created', dispatchCreatedResource);
-		app.service('/api/messages').off('updated', dispatchUpdatedResource);
-		app.service('/api/messages').off('patched', dispatchPatchedResource);
-		app.service('/api/messages').off('removed', dispatchRemovedResource);
+		app.service('/api/' + resources).off('created', dispatchCreatedResource);
+		app.service('/api/' + resources).off('updated', dispatchUpdatedResource);
+		app.service('/api/' + resources).off('patched', dispatchPatchedResource);
+		app.service('/api/' + resources).off('removed', dispatchRemovedResource);
 	};
 };
