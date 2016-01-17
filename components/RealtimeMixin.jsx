@@ -15,21 +15,21 @@ module.exports = {
 
 		feathersActions(resource, _.defaults({ dispatch: this.props.dispatch }, options));
 
-		var dispatchCreatedResource = _.compose(this.props.dispatch, actions['created' + Resource]);
-		var dispatchUpdatedResource = _.compose(this.props.dispatch, actions['updated' + Resource]);
-		var dispatchPatchedResource = _.compose(this.props.dispatch, actions['patched' + Resource]);
-		var dispatchRemovedResource = _.compose(this.props.dispatch, actions['removed' + Resource]);
+		var dispatches = _.chain(['created', 'updated', 'patched', 'removed'])
+			.indexBy(_.identity)
+			.mapObject(function(action) {
+				return _.compose(this.props.dispatch, actions[action + Resource]);
+			}.bind(this))
+			.value();
 
-		app.service('/api/' + resources).on('created', dispatchCreatedResource);
-		app.service('/api/' + resources).on('updated', dispatchUpdatedResource);
-		app.service('/api/' + resources).on('patched', dispatchPatchedResource);
-		app.service('/api/' + resources).on('removed', dispatchRemovedResource);
+		_.each(dispatches, function(dispatch, action) {
+			app.service('/api/' + resources).on(action, dispatch);
+		});
 
 		this.feathers_subscriptions.push(function() {
-			app.service('/api/' + resources).off('created', dispatchCreatedResource);
-			app.service('/api/' + resources).off('updated', dispatchUpdatedResource);
-			app.service('/api/' + resources).off('patched', dispatchPatchedResource);
-			app.service('/api/' + resources).off('removed', dispatchRemovedResource);
+			_.each(dispatches, function(dispatch, action) {
+				app.service('/api/' + resources).off(action, dispatch);
+			});
 		});
 	},
 	componentWillUnmount: function() {
