@@ -14,19 +14,18 @@ module.exports = function(resource, options) {
 	var RESOURCES = resources.toUpperCase();
 	var Resources = resources.charAt(0).toUpperCase() + resources.slice(1);
 
-	var createdResource  = createAction('CREATED_' + RESOURCE);
-	var updatedResource  = createAction('UPDATED_' + RESOURCE);
-	var patchedResource  = createAction('PATCHED_' + RESOURCE);
-	var removedResource  = createAction('REMOVED_' + RESOURCE);
-
 	if (!done_for[resource]) {
 		var loadingResources = createAction('LOADING_' + RESOURCES);
 		var loadedResources  = createAction('LOADED_' + RESOURCES);
 		var loadingResource  = createAction('LOADING_' + RESOURCE);
 		var loadedResource   = createAction('LOADED_' + RESOURCE);
+		var createdResource  = createAction('CREATED_' + RESOURCE);
 		var creatingResource = createAction('CREATING_' + RESOURCE);
+		var updatedResource  = createAction('UPDATED_' + RESOURCE);
 		var updatingResource = createAction('UPDATING_' + RESOURCE);
+		var patchedResource  = createAction('PATCHED_' + RESOURCE);
 		var patchingResource = createAction('PATCHING_' + RESOURCE);
+		var removedResource  = createAction('REMOVED_' + RESOURCE);
 		var removingResource = createAction('REMOVING_' + RESOURCE);
 
 		actions['load' + Resources] = function(params) {
@@ -47,7 +46,8 @@ module.exports = function(resource, options) {
 			};
 		};
 
-		actions['create' + Resource] = function(data, params) {
+		actions['created' + Resource] = createdResource;
+		actions['create' + Resource]  = function(data, params) {
 			return function(dispatch) {
 				dispatch(creatingResource());
 				return app.service('/api/' + resources).create(data, params, function(err, object) {
@@ -56,7 +56,8 @@ module.exports = function(resource, options) {
 			};
 		};
 
-		actions['update' + Resource] = function(id, data, params) {
+		actions['updated' + Resource] = updatedResource;
+		actions['update' + Resource]  = function(id, data, params) {
 			return function(dispatch) {
 				dispatch(updatingResource({ id: id }));
 				return app.service('/api/' + resources).update(id, data, params, function(err, object) {
@@ -65,7 +66,8 @@ module.exports = function(resource, options) {
 			};
 		};
 
-		actions['patch' + Resource] = function(id, data, params) {
+		actions['patched' + Resource] = patchedResource;
+		actions['patch' + Resource]   = function(id, data, params) {
 			return function(dispatch) {
 				dispatch(patchingResource({ id: id }));
 				return app.service('/api/' + resources).patch(id, data, params, function(err, object) {
@@ -74,7 +76,8 @@ module.exports = function(resource, options) {
 			};
 		};
 
-		actions['remove' + Resource] = function(id, params) {
+		actions['removed' + Resource] = removedResource;
+		actions['remove' + Resource]  = function(id, params) {
 			return function(dispatch) {
 				dispatch(removingResource({ id: id }));
 				return app.service('/api/' + resources).remove(id, params, function(err, object) {
@@ -87,25 +90,4 @@ module.exports = function(resource, options) {
 	if (options && options.dispatch && options.initialLoad) {
 		options.dispatch(actions['load' + Resources]());
 	}
-
-	if (!options || !options.dispatch || !options.realtime) {
-		return _.noop;
-	}
-
-	var dispatchCreatedResource = _.compose(options.dispatch, createdResource);
-	var dispatchUpdatedResource = _.compose(options.dispatch, updatedResource);
-	var dispatchPatchedResource = _.compose(options.dispatch, patchedResource);
-	var dispatchRemovedResource = _.compose(options.dispatch, removedResource);
-
-	app.service('/api/' + resources).on('created', dispatchCreatedResource);
-	app.service('/api/' + resources).on('updated', dispatchUpdatedResource);
-	app.service('/api/' + resources).on('patched', dispatchPatchedResource);
-	app.service('/api/' + resources).on('removed', dispatchRemovedResource);
-
-	return function() {
-		app.service('/api/' + resources).off('created', dispatchCreatedResource);
-		app.service('/api/' + resources).off('updated', dispatchUpdatedResource);
-		app.service('/api/' + resources).off('patched', dispatchPatchedResource);
-		app.service('/api/' + resources).off('removed', dispatchRemovedResource);
-	};
 };

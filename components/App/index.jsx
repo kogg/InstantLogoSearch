@@ -23,7 +23,7 @@ module.exports = connect(function(state) {
 })(React.createClass({
 	mixins:            [RealtimeMixin],
 	componentDidMount: function() {
-		this.subscribeToService('message', { realtime: true, initialLoad: true });
+		this.subscribeToService('message', { initialLoad: true });
 	},
 	render: function() {
 		return (
