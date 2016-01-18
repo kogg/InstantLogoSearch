@@ -24,10 +24,7 @@ module.exports = connect(function(state) {
 })(React.createClass({
 	mixins:             [RealtimeMixin, FeathersMixin],
 	componentWillMount: function() {
-		this.feathers('message', { client_load: true });
-	},
-	componentDidMount: function() {
-		this.subscribeToService('message');
+		this.feathers('message', { client_load: true, realtime: true });
 	},
 	render: function() {
 		return (

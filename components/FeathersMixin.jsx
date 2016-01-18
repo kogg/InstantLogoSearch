@@ -4,17 +4,23 @@ var pluralize = require('pluralize');
 var actions         = require('../actions');
 var feathersActions = require('../feathers-actions');
 
-var default_options = { client_load: false };
+var default_options = { client_load: false, realtime: false };
 
 module.exports = {
 	feathers: function(resource, options) {
 		feathersActions(resource);
 
-		_.extend(this, _.mapObject(default_options, function(value, name) {
-			return _.result(options, name, value) ? _.union(this[name], [resource]) : this[name];
-		}.bind(this)));
+		_.chain(options || {})
+			.defaults(default_options)
+			.each(function(value, name) {
+				if (!value) {
+					return;
+				}
+				this[name] = _.union(this[name], [resource]);
+			}.bind(this));
 	},
 	componentWillMount: function() {
+		// There's pretty much no reason for anything to be here, since feathers() can only be called AFTER this. Anything that would be here should go in there.
 	},
 	componentDidMount: function() {
 		_.each(this.client_load, function(resource) {
