@@ -6,14 +6,14 @@ var app             = require('../application');
 var feathersActions = require('../feathers-actions');
 
 module.exports = {
-	componentDidMount: function() {
+	componentWillMount: function() {
 		this.feathers_subscriptions = [];
 	},
-	subscribeToService: function(resource) {
+	subscribeToService: function(resource, options) {
 		var Resource  = resource.charAt(0).toUpperCase() + resource.slice(1);
 		var resources = pluralize(resource);
 
-		feathersActions(resource);
+		feathersActions(resource, _.defaults({ dispatch: this.props.dispatch }, options));
 
 		var dispatches = _.chain(['created', 'updated', 'patched', 'removed'])
 			.indexBy(_.identity)

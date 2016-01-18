@@ -2,7 +2,6 @@ var _       = require('underscore');
 var connect = require('react-redux').connect;
 var React   = require('react');
 
-var LoadMixin     = require('../LoadMixin');
 var RealtimeMixin = require('../RealtimeMixin');
 
 var Message = React.createClass({
@@ -22,10 +21,9 @@ module.exports = connect(function(state) {
 			.value()
 	};
 })(React.createClass({
-	mixins:            [RealtimeMixin, LoadMixin],
+	mixins:            [RealtimeMixin],
 	componentDidMount: function() {
-		this.loadFromService('message');
-		this.subscribeToService('message');
+		this.subscribeToService('message', { initialLoad: true });
 	},
 	render: function() {
 		return (
