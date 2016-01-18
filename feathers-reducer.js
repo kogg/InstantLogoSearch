@@ -2,14 +2,11 @@ var _               = require('underscore');
 var combineReducers = require('redux').combineReducers;
 var pluralize       = require('pluralize');
 
-var resourceReducer = function(resource, state) {
+var resourceReducer = function(resource) {
 	var RESOURCE = resource.toUpperCase();
 
 	return combineReducers({
 		loading: function(state, action) {
-			if (!action.payload || !action.payload.id) {
-				return state || false;
-			}
 			switch (action.type) {
 				case 'LOADING_' + RESOURCE:
 					return true;
@@ -20,9 +17,6 @@ var resourceReducer = function(resource, state) {
 			}
 		},
 		updating: function(state, action) {
-			if (!action.payload || !action.payload.id) {
-				return state || false;
-			}
 			switch (action.type) {
 				case 'UPDATING_' + RESOURCE:
 				case 'PATCHING_' + RESOURCE:
@@ -35,9 +29,6 @@ var resourceReducer = function(resource, state) {
 			}
 		},
 		removing: function(state, action) {
-			if (!action.payload || !action.payload.id) {
-				return state || false;
-			}
 			switch (action.type) {
 				case 'REMOVING_' + RESOURCE:
 					return true;
@@ -48,9 +39,6 @@ var resourceReducer = function(resource, state) {
 			}
 		},
 		error: function(state, action) {
-			if (!action.payload || !action.payload.id) {
-				return state || null;
-			}
 			switch (action.type) {
 				case 'LOADING_' + RESOURCE:
 				case 'UPDATING_' + RESOURCE:
@@ -67,9 +55,6 @@ var resourceReducer = function(resource, state) {
 			}
 		},
 		data: function(state, action) {
-			if (!action.payload || !action.payload.id) {
-				return state || null;
-			}
 			switch (action.type) {
 				case 'LOADED_' + RESOURCE:
 				case 'CREATED_' + RESOURCE:
@@ -82,10 +67,10 @@ var resourceReducer = function(resource, state) {
 					return state || {};
 			}
 		}
-	}, state);
+	});
 };
 
-var resourcesReducer = function(resource, state) {
+var resourcesReducer = function(resource) {
 	var RESOURCE  = resource.toUpperCase();
 	var RESOURCES = pluralize(resource).toUpperCase();
 
@@ -132,6 +117,7 @@ var resourcesReducer = function(resource, state) {
 						.mapObject(function(object) {
 							return { data: object };
 						})
+						.defaults(state)
 						.value();
 				case 'REMOVED_' + RESOURCE:
 					state = _.clone(state);
@@ -150,11 +136,7 @@ var resourcesReducer = function(resource, state) {
 					return state || {};
 			}
 		}
-	}, state);
+	});
 };
 
-module.exports = function(resource, options, state) {
-	return options.id ? resourceReducer(resource, state) : resourcesReducer(resource, state);
-};
-module.exports.resourceReducer  = resourceReducer;
-module.exports.resourcesReducer = resourcesReducer;
+module.exports = resourcesReducer;

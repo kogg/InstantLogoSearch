@@ -1,4 +1,3 @@
-var _               = require('underscore');
 var applyMiddleware = require('redux').applyMiddleware;
 var combineReducers = require('redux').combineReducers;
 var createStore     = require('redux').createStore;
@@ -13,6 +12,6 @@ createStore = applyMiddleware(thunkMiddlware)(createStore);
 
 module.exports = function(state) {
 	return createStore(combineReducers({
-		messages: feathersReducer('message', {}, _.result(state, 'messages'))
+		messages: feathersReducer('message')
 	}), state);
 };
