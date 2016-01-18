@@ -7,7 +7,7 @@ var feathersActions = require('../feathers-actions');
 
 module.exports = {
 	componentDidMount: function() {
-		this.feathers_subscriptions = [];
+		this.feathers_realtime_subscriptions = [];
 	},
 	subscribeToService: function(resource) {
 		var Resource  = resource.charAt(0).toUpperCase() + resource.slice(1);
@@ -26,13 +26,13 @@ module.exports = {
 			app.service('/api/' + resources).on(action, dispatch);
 		});
 
-		this.feathers_subscriptions.push(function() {
+		this.feathers_realtime_subscriptions.push(function() {
 			_.each(dispatches, function(dispatch, action) {
 				app.service('/api/' + resources).off(action, dispatch);
 			});
 		});
 	},
 	componentWillUnmount: function() {
-		this.feathers_subscriptions.forEach(_.partial);
+		this.feathers_realtime_subscriptions.forEach(_.partial);
 	}
 };
