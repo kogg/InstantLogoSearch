@@ -34,18 +34,13 @@ module.exports = {
 			var resources = pluralize(resource);
 
 			this.cleanups = _.chain(['created', 'updated', 'patched', 'removed'])
-				.indexBy(_.identity)
-				.mapObject(function(action) {
-					return _.compose(this.props.dispatch, actions[action + Resource]);
-				}.bind(this))
-				.each(function(dispatchAction, action) {
+				.map(function(action) {
+					var dispatchAction = _.compose(this.props.dispatch, actions[action + Resource]);
 					app.service('/api/' + resources).on(action, dispatchAction);
-				})
-				.map(function(dispatchAction, action) {
 					return function() {
 						app.service('/api/' + resources).off(action, dispatchAction);
 					};
-				})
+				}.bind(this))
 				.union(this.cleanups)
 				.value();
 		}.bind(this));
