@@ -1,15 +1,8 @@
 var _              = require('underscore');
 var connect        = require('react-redux').connect;
 var createSelector = require('reselect').createSelector;
+var FeathersMixin  = require('feathers-react-redux').FeathersMixin;
 var React          = require('react');
-
-var FeathersMixin = require('../FeathersMixin');
-
-var Message = React.createClass({
-	render: function() {
-		return <li>{this.props.message.text}</li>;
-	}
-});
 
 module.exports = connect(createSelector(
 	_.property('messages'),
@@ -31,7 +24,7 @@ module.exports = connect(createSelector(
 		return (
 			<ul>
 				{this.props.messages.map(function(message) {
-					return <Message key={message.id} message={message} />;
+					return <li key={message.id}>{message.text}</li>;
 				})}
 			</ul>
 		);
