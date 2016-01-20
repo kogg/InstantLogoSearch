@@ -3,7 +3,6 @@ var createAction = require('redux-actions').createAction;
 var pluralize    = require('pluralize');
 
 var actions = require('./actions');
-var app     = require('./application');
 
 var done_for = {};
 
@@ -29,6 +28,8 @@ module.exports = function(resource) {
 
 	actions['load' + Resources] = function(params) {
 		return function(dispatch) {
+			var app = require('./application');
+
 			dispatch(loadingResources());
 			return app.service('/api/' + resources).find(params, function(err, objects) {
 				dispatch(loadedResources(err ? new Error(err.message) : objects));
@@ -39,6 +40,8 @@ module.exports = function(resource) {
 	actions['created' + Resource] = createdResource;
 	actions['create' + Resource]  = function(data, params) {
 		return function(dispatch) {
+			var app = require('./application');
+
 			dispatch(creatingResource());
 			return app.service('/api/' + resources).create(data, params, function(err, object) {
 				dispatch(createdResource(err ? new Error(err.message) : object));
@@ -49,6 +52,8 @@ module.exports = function(resource) {
 	actions['updated' + Resource] = updatedResource;
 	actions['update' + Resource]  = function(id, data, params) {
 		return function(dispatch) {
+			var app = require('./application');
+
 			dispatch(updatingResource({ id: id }));
 			return app.service('/api/' + resources).update(id, data, params, function(err, object) {
 				dispatch(updatedResource(err ? _.extend(new Error(err.message), { id: id }) : object));
@@ -58,6 +63,8 @@ module.exports = function(resource) {
 
 	actions['patch' + Resource]   = function(id, data, params) {
 		return function(dispatch) {
+			var app = require('./application');
+
 			dispatch(updatingResource({ id: id }));
 			return app.service('/api/' + resources).patch(id, data, params, function(err, object) {
 				dispatch(updatedResource(err ? _.extend(new Error(err.message), { id: id }) : object));
@@ -68,6 +75,8 @@ module.exports = function(resource) {
 	actions['removed' + Resource] = removedResource;
 	actions['remove' + Resource]  = function(id, params) {
 		return function(dispatch) {
+			var app = require('./application');
+
 			dispatch(removingResource({ id: id }));
 			return app.service('/api/' + resources).remove(id, params, function(err, object) {
 				dispatch(removedResource(err ? _.extend(new Error(err.message), { id: id }) : object));

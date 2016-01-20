@@ -5,20 +5,33 @@ var actions         = require('../actions');
 var app             = require('../application');
 var feathersActions = require('../feathers-actions');
 
-var DEFAULT_OPTIONS = { client_load: false, realtime: false };
+var DEFAULT_OPTIONS = { server_load: true, client_load: false, realtime: false };
 
 module.exports = {
 	feathers: function(resource, options) {
 		feathersActions(resource);
 
-		_.chain(options || {})
+		options = _.chain(options || {})
 			.defaults(DEFAULT_OPTIONS)
 			.each(function(value, name) {
 				if (!value) {
 					return;
 				}
 				this[name] = _.union(this[name], [resource]);
-			}.bind(this));
+			}.bind(this))
+			.value();
+
+		if (!process.browser && options.server_load) {
+			var resources = pluralize(resource);
+			var Resources = resources.charAt(0).toUpperCase() + resources.slice(1);
+
+			this.props.dispatch({
+				type:    'SERVER_ACTION',
+				payload: {
+					type: 'load' + Resources
+				}
+			});
+		}
 	},
 	// There's pretty much no reason for anything to be in componentWillMount, since feathers() can only be called AFTER it. Anything that would be there should be in feathers().
 	componentDidMount: function() {
