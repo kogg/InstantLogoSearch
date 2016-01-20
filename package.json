@@ -16,7 +16,7 @@
     "node": "node $npm_package_main",
     "jsify": "mkdir -p dist/js && browserify $npm_package_browser_main --verbose --extension=.jsx | uglifyjs -c drop_console,warnings=false -o dist/js/main.js",
     "postcss": "mkdir -p dist/css && postcss -c postcss.js -o dist/css/main.css main.css",
-    "nodemon": "nodemon --exec node --ignore dist/ -e js,jsx -- $npm_package_main",
+    "nodemon": "nodemon --ignore dist/ -e js,jsx $npm_package_main",
     "watchify": "mkdir -p dist/js && watchify $npm_package_browser_main --debug --verbose --extension=.jsx -o dist/js/main.js",
     "postcss:watch": "npm run postcss -- -w",
     "fix": "npm run cssfmt && npm run eslint-fix",
