@@ -1,18 +1,17 @@
-var _               = require('underscore');
-var applyMiddleware = require('redux').applyMiddleware;
-var combineReducers = require('redux').combineReducers;
-var createStore     = require('redux').createStore;
-var thunkMiddlware  = require('redux-thunk');
-
-var feathersReducer = require('./feathers-reducer');
+var _                    = require('underscore');
+var applyMiddleware      = require('redux').applyMiddleware;
+var combineReducers      = require('redux').combineReducers;
+var createStore          = require('redux').createStore;
+var resourcesReducer     = require('feathers-react-redux').resourcesReducer;
+var serverActionsReducer = require('feathers-react-redux').serverActionsReducer;
+var thunkMiddlware       = require('redux-thunk');
 
 if (process.env.DEVTOOLS) {
 	createStore = require('./components/DevTools').instrument()(createStore);
 }
 createStore = applyMiddleware(thunkMiddlware)(createStore);
 
-module.exports = function(state) {
-	return createStore(combineReducers({
-		messages: feathersReducer('message', {}, _.result(state, 'messages'))
-	}), state);
-};
+module.exports = _.partial(createStore, combineReducers({
+	server_actions: serverActionsReducer,
+	messages:       resourcesReducer('message')
+}));

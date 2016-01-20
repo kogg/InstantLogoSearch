@@ -1,12 +1,14 @@
 var _          = require('underscore');
+var async      = require('async');
 var bodyParser = require('body-parser');
 var feathers   = require('feathers');
 var fs         = require('fs');
 var path       = require('path');
 var ReactDOM   = require('react-dom/server');
 
-var Root  = require('../components/Root');
-var Store = require('../store');
+var actions = require('../actions');
+var Root    = require('../components/Root');
+var Store   = require('../store');
 
 var app = feathers();
 
@@ -25,24 +27,54 @@ app.locals.cacheBuster = function(assetPath) {
 };
 
 app.get('/', function(req, res, next) {
-	app.service('/api/messages').find(function(err, messages) {
-		if (err) {
-			return next(err);
-		}
-		var store = Store({ messages: {
-			items: _.chain(messages)
-				.indexBy('id')
-				.mapObject(function(message) {
-					return { data: message };
-				})
-				.value()
-		} });
+	var store = Store();
 
-		res.render('main', {
-			markup: ReactDOM.renderToString(Root(store)),
-			state:  store.getState()
-		});
-	});
+	var root = Root(store);
+
+	var markup;
+	var done_server_actions = [];
+	async.until(
+		function() {
+			markup = ReactDOM.renderToString(root);
+			return _.chain(store)
+				.result('getState')
+				.result('server_actions')
+				.difference(done_server_actions)
+				.isEmpty()
+				.value();
+		},
+		function(callback) {
+			var todo_actions = _.chain(store)
+				.result('getState')
+				.result('server_actions')
+				.without(done_server_actions)
+				.value();
+			async.each(
+				todo_actions,
+				function(action, callback) {
+					store.dispatch(actions[action.type](actions.params)).then(
+						function() {
+							callback();
+						},
+						callback
+					);
+				},
+				function(err) {
+					done_server_actions = _.union(done_server_actions, todo_actions);
+					callback(err);
+				}
+			);
+		},
+		function(err) {
+			if (err) {
+				return next(err);
+			}
+			res.render('main', {
+				markup: markup,
+				state:  store.getState()
+			});
+		}
+	);
 });
 
 module.exports = app;

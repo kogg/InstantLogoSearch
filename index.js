@@ -1,5 +1,6 @@
 require('babel-register');
 var memory = require('feathers-memory');
+var os     = require('os');
 
 var app = require('./application');
 
@@ -10,4 +11,6 @@ setInterval(function() {
 	i++;
 }, 1000);
 
-app.listen(app.get('port'));
+app.listen(app.get('port'), function() {
+	console.log('Server is running at', 'http://' + os.hostname() + ':' + app.get('port'));
+});
