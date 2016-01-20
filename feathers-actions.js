@@ -20,14 +20,10 @@ module.exports = function(resource) {
 
 	var loadingResources = createAction('LOADING_' + RESOURCES);
 	var loadedResources  = createAction('LOADED_' + RESOURCES);
-	var loadingResource  = createAction('LOADING_' + RESOURCE);
-	var loadedResource   = createAction('LOADED_' + RESOURCE);
 	var createdResource  = createAction('CREATED_' + RESOURCE);
 	var creatingResource = createAction('CREATING_' + RESOURCE);
 	var updatedResource  = createAction('UPDATED_' + RESOURCE);
 	var updatingResource = createAction('UPDATING_' + RESOURCE);
-	var patchedResource  = createAction('PATCHED_' + RESOURCE);
-	var patchingResource = createAction('PATCHING_' + RESOURCE);
 	var removedResource  = createAction('REMOVED_' + RESOURCE);
 	var removingResource = createAction('REMOVING_' + RESOURCE);
 
@@ -36,15 +32,6 @@ module.exports = function(resource) {
 			dispatch(loadingResources());
 			return app.service('/api/' + resources).find(params, function(err, objects) {
 				dispatch(loadedResources(err ? new Error(err.message) : objects));
-			});
-		};
-	};
-
-	actions['load' + Resource] = function(id, params) {
-		return function(dispatch) {
-			dispatch(loadingResource({ id: id }));
-			return app.service('/api/' + resources).get(id, params, function(err, object) {
-				dispatch(loadedResource(err ? _.extend(new Error(err.message), { id: id }) : object));
 			});
 		};
 	};
@@ -69,12 +56,11 @@ module.exports = function(resource) {
 		};
 	};
 
-	actions['patched' + Resource] = patchedResource;
 	actions['patch' + Resource]   = function(id, data, params) {
 		return function(dispatch) {
-			dispatch(patchingResource({ id: id }));
+			dispatch(updatingResource({ id: id }));
 			return app.service('/api/' + resources).patch(id, data, params, function(err, object) {
-				dispatch(patchedResource(err ? _.extend(new Error(err.message), { id: id }) : object));
+				dispatch(updatedResource(err ? _.extend(new Error(err.message), { id: id }) : object));
 			});
 		};
 	};

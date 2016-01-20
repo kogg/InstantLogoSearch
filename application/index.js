@@ -29,14 +29,14 @@ app.get('/', function(req, res, next) {
 		if (err) {
 			return next(err);
 		}
-		var store = Store({ messages: {
-			items: _.chain(messages)
+		var store = Store({
+			messages: _.chain(messages)
 				.indexBy('id')
 				.mapObject(function(message) {
 					return { data: message };
 				})
 				.value()
-		} });
+		});
 
 		res.render('main', {
 			markup: ReactDOM.renderToString(Root(store)),

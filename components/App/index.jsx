@@ -14,7 +14,6 @@ module.exports = connect(function(state) {
 	return {
 		messages: _.chain(state)
 			.result('messages')
-			.result('items')
 			.values()
 			.pluck('data')
 			.sortBy('date')
