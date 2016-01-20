@@ -52,7 +52,7 @@ app.get('/', function(req, res, next) {
 			async.each(
 				todo_actions,
 				function(action, callback) {
-					store.dispatch(actions[action.type]()).then(
+					store.dispatch(actions[action.type](actions.params)).then(
 						function() {
 							callback();
 						},
