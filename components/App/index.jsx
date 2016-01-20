@@ -1,6 +1,7 @@
-var _       = require('underscore');
-var connect = require('react-redux').connect;
-var React   = require('react');
+var _              = require('underscore');
+var connect        = require('react-redux').connect;
+var createSelector = require('reselect').createSelector;
+var React          = require('react');
 
 var FeathersMixin = require('../FeathersMixin');
 
@@ -10,16 +11,18 @@ var Message = React.createClass({
 	}
 });
 
-module.exports = connect(function(state) {
-	return {
-		messages: _.chain(state)
-			.result('messages')
-			.values()
-			.pluck('data')
-			.sortBy('date')
-			.value()
-	};
-})(React.createClass({
+module.exports = connect(createSelector(
+	_.property('messages'),
+	function(messages) {
+		return {
+			messages: _.chain(messages)
+				.values()
+				.pluck('data')
+				.sortBy('date')
+				.value()
+		};
+	}
+))(React.createClass({
 	mixins:             [FeathersMixin],
 	componentWillMount: function() {
 		this.feathers('message', { client_load: true, realtime: true });
