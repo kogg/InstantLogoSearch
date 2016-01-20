@@ -5,16 +5,12 @@ var App      = require('./App');
 var DevTools = process.env.DEVTOOLS && require('./DevTools');
 
 module.exports = function(store) {
-	return DevTools ? (
+	return (
 		<Provider store={store}>
 			<div>
 				<App />
-				<DevTools />
+				{DevTools && <DevTools />}
 			</div>
-		</Provider>
-	) : (
-		<Provider store={store}>
-			<App />
 		</Provider>
 	);
 };
