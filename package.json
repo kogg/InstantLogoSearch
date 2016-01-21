@@ -60,7 +60,6 @@
     "watchify": "^3.6.1"
   },
   "dependencies": {
-    "async": "^1.5.2",
     "autoprefixer": "^6.2.2",
     "babel-preset-react": "^6.3.13",
     "babel-register": "^6.3.13",
