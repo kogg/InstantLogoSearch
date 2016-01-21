@@ -36,7 +36,6 @@ module.exports = connect(createSelector(
 								return this.props.dispatch(actions.patchMessage(message.id, message)).then(function() {
 									if (this.isMounted()) {
 										this.setState({ editing: null });
-										this.refs.create_form.refs.text_field.focus();
 									}
 								}.bind(this));
 							}.bind(this)} /> :
@@ -53,11 +52,7 @@ module.exports = connect(createSelector(
 				);
 			}.bind(this))}
 			<MessageForm ref="create_form" onSubmit={function(e, message) {
-				return this.props.dispatch(actions.createMessage(message)).then(function() {
-					if (this.isMounted()) {
-						this.refs.create_form.refs.text_field.focus();
-					}
-				}.bind(this));
+				return this.props.dispatch(actions.createMessage(message));
 			}.bind(this)} />
 		</ul>;
 	}
