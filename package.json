@@ -10,6 +10,9 @@
     "main": "browser.js",
     "./application": "./application/browser"
   },
+  "engines": {
+    "node": "4.1.2"
+  },
   "scripts": {
     "postinstall": "if [ \"$NODE_ENV\" = 'production' ]; then npm run jsify && npm run postcss; fi",
     "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi",
