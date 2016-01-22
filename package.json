@@ -10,6 +10,9 @@
     "main": "browser.js",
     "./application": "./application/browser"
   },
+  "engines": {
+    "node": "4.1.2"
+  },
   "scripts": {
     "postinstall": "if [ \"$NODE_ENV\" = 'production' ]; then npm run jsify && npm run postcss; fi",
     "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi",
@@ -52,7 +55,6 @@
     "eslint-config-xo": "^0.9.1",
     "eslint-plugin-react": "^3.13.1",
     "nodemon": "^1.8.1",
-    "postcss-reporter": "^1.3.0",
     "pre-commit": "^1.1.2",
     "redux-devtools": "^3.0.0",
     "redux-devtools-dock-monitor": "^1.0.1",
@@ -60,7 +62,6 @@
     "watchify": "^3.6.1"
   },
   "dependencies": {
-    "async": "^1.5.2",
     "autoprefixer": "^6.2.2",
     "babel-preset-react": "^6.3.13",
     "babel-register": "^6.3.13",
@@ -72,7 +73,7 @@
     "feathers": "^1.3.0",
     "feathers-client": "^0.5.0",
     "feathers-memory": "^0.5.1",
-    "feathers-react-redux": "^0.1.0",
+    "feathers-react-redux": "^0.2.0",
     "jade": "^1.11.0",
     "postcss-cachebuster": "^0.1.2",
     "postcss-cli": "^2.3.2",
@@ -80,6 +81,7 @@
     "postcss-custom-media": "^5.0.0",
     "postcss-import": "^7.1.3",
     "postcss-nested": "^1.0.0",
+    "postcss-reporter": "^1.3.0",
     "postcss-url": "^5.0.2",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
