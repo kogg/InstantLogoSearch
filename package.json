@@ -1,0 +1,97 @@
+{
+  "name": "boilerplate",
+  "version": "1.0.0",
+  "description": "Boilerplate Setup for @saiichihashimoto's projects",
+  "repository": "saiichihashimoto/boilerplate",
+  "author": "@saiichihashimoto",
+  "license": "ISC",
+  "main": "index.js",
+  "browser": {
+    "main": "browser.js",
+    "./application": "./application/browser"
+  },
+  "engines": {
+    "node": "4.1.2"
+  },
+  "scripts": {
+    "postinstall": "if [ \"$NODE_ENV\" = 'production' ]; then npm run jsify && npm run postcss; fi",
+    "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi",
+    "test": "eslint . --ignore-path .gitignore --ext .js,.jsx",
+    "clean": "rm -rf dist",
+    "fix": "npm run cssfmt:fix && npm run eslint:fix",
+    "node": "node $npm_package_main",
+    "nodemon": "nodemon --ignore dist/ -e js,jsx $npm_package_main",
+    "jsify": "mkdir -p dist/js && browserify $npm_package_browser_main --verbose --extension=.jsx | uglifyjs -c drop_console,warnings=false -o dist/js/main.js",
+    "watchify": "mkdir -p dist/js && watchify $npm_package_browser_main --debug --verbose --extension=.jsx -o dist/js/main.js",
+    "postcss": "mkdir -p dist/css && postcss -c postcss.js -o dist/css/main.css main.css",
+    "postcss:watch": "npm run postcss -- -w",
+    "eslint:fix": "( git diff --staged --name-only | grep \".jsx\\?$\" | xargs eslint --fix ) && ( git diff --staged --name-only | grep \".jsx\\?$\" | xargs git add )",
+    "cssfmt:fix": "( git diff --staged --name-only | grep \".s\\?css$\" | xargs -I '{}' -n 1 cssfmt {} ) && ( git diff --staged --name-only | grep \".s\\?css$\" | xargs git add )",
+    "discify": "browserify $npm_package_browser_main --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O"
+  },
+  "browserify": {
+    "extension": [
+      "jsx"
+    ],
+    "transform": [
+      "babelify",
+      [
+        "envify",
+        {
+          "_": "purge"
+        }
+      ],
+      "uglifyify"
+    ]
+  },
+  "pre-commit": [
+    "fix",
+    "test"
+  ],
+  "devDependencies": {
+    "cssfmt": "^1.4.1",
+    "disc": "^1.3.2",
+    "eslint": "^1.10.3",
+    "eslint-config-xo": "^0.9.1",
+    "eslint-plugin-react": "^3.13.1",
+    "nodemon": "^1.8.1",
+    "pre-commit": "^1.1.2",
+    "redux-devtools": "^3.0.0",
+    "redux-devtools-dock-monitor": "^1.0.1",
+    "redux-devtools-log-monitor": "^1.0.1",
+    "watchify": "^3.6.1"
+  },
+  "dependencies": {
+    "autoprefixer": "^6.2.2",
+    "babel-preset-react": "^6.3.13",
+    "babel-register": "^6.3.13",
+    "babelify": "^7.2.0",
+    "body-parser": "^1.14.2",
+    "browserify": "^12.0.1",
+    "cssnano": "^3.4.0",
+    "envify": "^3.4.0",
+    "feathers": "^1.3.0",
+    "feathers-client": "^0.5.0",
+    "feathers-memory": "^0.5.1",
+    "feathers-react-redux": "^0.2.0",
+    "jade": "^1.11.0",
+    "postcss-cachebuster": "^0.1.2",
+    "postcss-cli": "^2.3.2",
+    "postcss-color-rgba-fallback": "^2.0.0",
+    "postcss-custom-media": "^5.0.0",
+    "postcss-import": "^7.1.3",
+    "postcss-nested": "^1.0.0",
+    "postcss-reporter": "^1.3.0",
+    "postcss-url": "^5.0.2",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-redux": "^4.0.6",
+    "redux": "^3.0.5",
+    "redux-thunk": "^1.0.3",
+    "reselect": "^2.0.2",
+    "socket.io": "^1.4.0",
+    "uglify-js": "^2.6.1",
+    "uglifyify": "^3.0.1",
+    "underscore": "^1.8.3"
+  }
+}
