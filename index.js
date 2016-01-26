@@ -4,7 +4,11 @@ var os     = require('os');
 
 var app = require('./application');
 
-app.use('/api/messages', memory());
+app.use('/api/logos', memory());
+app.service('/api/logos').create({ name: 'facebook' });
+app.service('/api/logos').create({ name: 'adobe' });
+app.service('/api/logos').create({ name: 'adobe photoshop' });
+app.service('/api/logos').create({ name: 'adobe illustrator' });
 
 app.listen(app.get('port'), function() {
 	console.log('Server is running at', 'http://' + os.hostname() + ':' + app.get('port'));

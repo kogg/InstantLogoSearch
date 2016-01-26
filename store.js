@@ -13,5 +13,5 @@ createStore = applyMiddleware(thunkMiddlware)(createStore);
 
 module.exports = _.partial(createStore, combineReducers({
 	server_actions: serverActionsReducer,
-	messages:       resourcesReducer('message')
+	logos:          resourcesReducer('logo')
 }));
