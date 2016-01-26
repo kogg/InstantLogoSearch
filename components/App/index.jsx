@@ -4,14 +4,20 @@ var createSelector = require('reselect').createSelector;
 var FeathersMixin  = require('feathers-react-redux').FeathersMixin;
 var React          = require('react');
 
+var actions = require('../../actions');
+
 module.exports = connect(createSelector(
 	_.property('logos'),
-	function(logos) {
+	_.property('collection'),
+	function(logos, collection) {
 		return {
 			logos: _.chain(logos)
 				.values()
 				.pluck('data')
 				.sortBy('name')
+				.map(function(logo) {
+					return _.defaults({ in_collection: collection[logo.id] }, logo);
+				})
 				.value()
 		};
 	}
@@ -22,6 +28,9 @@ module.exports = connect(createSelector(
 	},
 	componentWillMount: function() {
 		this.feathers('logo');
+	},
+	componentDidMount: function() {
+		this.props.dispatch(actions.loadCollection());
 	},
 	render: function() {
 		var logos = _.filter(this.props.logos, function(logo) {
@@ -40,8 +49,23 @@ module.exports = connect(createSelector(
 
 				<ul>
 					{logos.map(function(logo) {
-						return <li key={logo.id}>{logo.name}</li>;
-					})}
+						return (
+							<li key={logo.id}>
+								{logo.name}
+								{
+									logo.in_collection ?
+										<a href="" onClick={function(e) {
+											e.preventDefault();
+											this.props.dispatch(actions.removeFromCollection(logo));
+										}.bind(this)}> Remove from Collection</a> :
+										<a href="" onClick={function(e) {
+											e.preventDefault();
+											this.props.dispatch(actions.addToCollection(logo));
+										}.bind(this)}> Add to Collection</a>
+								}
+							</li>
+						);
+					}.bind(this))}
 				</ul>
 			</div>
 		);
