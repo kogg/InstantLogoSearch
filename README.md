@@ -1,2 +1,3 @@
-# InstantLogoSearch
-The fastest way to find logos from hundreds of brands, startups, and companies.
+# Boilerplate
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)

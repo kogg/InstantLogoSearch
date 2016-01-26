@@ -1,2 +1,3 @@
-web: npm start
-watch: npm run watch_popup
+web:      npm run nodemon
+watchify: npm run watchify
+postcss:  npm run postcss:watch
