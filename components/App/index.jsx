@@ -18,18 +18,30 @@ module.exports = connect(createSelector(
 ))(React.createClass({
 	mixins:          [FeathersMixin],
 	getInitialState: function() {
-		return {};
+		return { filters: [''] };
 	},
 	componentWillMount: function() {
 		this.feathers('logo');
 	},
 	render: function() {
+		var logos = _.filter(this.props.logos, function(logo) {
+			return _.every(this.state.filters, function(filter) {
+				return logo.name.toLowerCase().includes(filter);
+			});
+		}.bind(this));
+
 		return (
-			<ul>
-				{this.props.logos.map(function(logo) {
-					return <li key={logo.id}>{logo.name}</li>;
-				})}
-			</ul>
+			<div>
+				<input ref="search" type="text" onChange={function() {
+					this.setState({ filters: this.refs.search.value.toLowerCase().split(/\s+/) });
+				}.bind(this)} />
+
+				<ul>
+					{logos.map(function(logo) {
+						return <li key={logo.id}>{logo.name}</li>;
+					})}
+				</ul>
+			</div>
 		);
 	}
 }));
