@@ -26,13 +26,15 @@ module.exports = connect(createSelector(
 	render: function() {
 		var logos = _.filter(this.props.logos, function(logo) {
 			return _.every(this.state.filters, function(filter) {
-				return logo.name.toLowerCase().includes(filter);
+				return _.some(logo.name.split(/\s+/), function(name_part) {
+					return name_part.toLowerCase().includes(filter);
+				});
 			});
 		}.bind(this));
 
 		return (
 			<div>
-				<input ref="search" type="text" onChange={function() {
+				<input ref="search" type="text" autoFocus onChange={function() {
 					this.setState({ filters: this.refs.search.value.toLowerCase().split(/\s+/) });
 				}.bind(this)} />
 
