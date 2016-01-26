@@ -18,7 +18,7 @@ module.exports = React.createClass({
 				function() {
 					if (this.isMounted()) {
 						this.refs.text_field.disabled = false;
-						this.refs.text_field.value    = this.props.message ? this.props.message.text : '';
+						this.refs.text_field.value = this.props.message ? this.props.message.text : '';
 					}
 				}.bind(this),
 				function(err) {
