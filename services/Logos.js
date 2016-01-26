@@ -1,13 +1,28 @@
-var memory = require('feathers-memory');
+var _     = require('underscore');
+var logos = require('instant-logos');
 
-var service = memory();
+function promisify(func) {
+	return function() {
+		var args     = _.toArray(arguments);
+		if (!_.chain(args).last().isFunction().value()) {
+			args.push(_.noop);
+		}
+		return new Promise(function(resolve, reject) {
+			args[args.length - 1] = _.wrap(args[args.length - 1], function(callback, err, result) {
+				callback(err, result);
+				if (err) {
+					reject(err);
+				} else {
+					resolve(result);
+				}
+			});
+			func.apply(this, args);
+		});
+	};
+}
 
-service.create({ name: 'facebook' });
-service.create({ name: 'adobe' });
-service.create({ name: 'adobe photoshop' });
-service.create({ name: 'adobe illustrator' });
-service.create({ name: 'netflix' });
-service.create({ name: 'zillow' });
-service.create({ name: 'redfin' });
-
-module.exports = service;
+module.exports = {
+	find: promisify(function(params, callback) {
+		callback(null, _.sortBy(logos, 'name'));
+	})
+};

@@ -14,7 +14,6 @@ module.exports = connect(createSelector(
 			logos: _.chain(logos)
 				.values()
 				.pluck('data')
-				.sortBy('name')
 				.map(function(logo) {
 					return _.defaults({ in_collection: collection[logo.id] }, logo);
 				})
