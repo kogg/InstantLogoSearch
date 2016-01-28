@@ -1,8 +1,6 @@
 var _     = require('underscore');
 var React = require('react');
 
-var actions = require('../../actions');
-
 module.exports = React.createClass({
 	render: function() {
 		var logos = _.filter(this.props.logos, function(logo) {
@@ -25,11 +23,11 @@ module.exports = React.createClass({
 								logo.in_collection ?
 									<a href="" onClick={function(e) {
 										e.preventDefault();
-										this.props.dispatch(actions.removeFromCollection(logo));
+										this.props.onUncollectLogo(logo);
 									}.bind(this)}> [Remove from Collection]</a> :
 									<a href="" onClick={function(e) {
 										e.preventDefault();
-										this.props.dispatch(actions.addToCollection(logo));
+										this.props.onCollectLogo(logo);
 									}.bind(this)}> [Add to Collection]</a>
 							}
 						</li>

@@ -39,7 +39,13 @@ module.exports = connect(createSelector(
 				<Header onFilter={function(filters) {
 					this.setState({ filters: filters });
 				}.bind(this)} />
-				<Logos logos={this.props.logos} filters={this.state.filters} />
+				<Logos logos={this.props.logos} filters={this.state.filters}
+					onCollectLogo={function(logo) {
+						this.props.dispatch(actions.addToCollection(logo));
+					}.bind(this)}
+					onUncollectLogo={function(logo) {
+						this.props.dispatch(actions.removeFromCollection(logo));
+					}.bind(this)} />
 			</div>
 		);
 	}
