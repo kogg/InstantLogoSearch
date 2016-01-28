@@ -3,6 +3,7 @@ var _ = require('underscore');
 module.exports = {
 	'use': _.union(
 		[
+			'postcss-import-url',
 			'postcss-import',
 			'postcss-nested',
 			'postcss-custom-media',

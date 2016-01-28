@@ -81,6 +81,7 @@
     "postcss-color-rgba-fallback": "^2.0.0",
     "postcss-custom-media": "^5.0.0",
     "postcss-import": "^7.1.3",
+    "postcss-import-url": "^1.0.0",
     "postcss-nested": "^1.0.0",
     "postcss-reporter": "^1.3.0",
     "postcss-url": "^5.0.2",
