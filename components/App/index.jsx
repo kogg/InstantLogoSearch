@@ -43,7 +43,9 @@ module.exports = connect(createSelector(
 
 		return (
 			<div className="hero">
-				<Header />
+				<Header onFilter={function(filters) {
+					this.setState({ filters: filters });
+				}.bind(this)} />
 				<ul>
 					{logos.map(function(logo) {
 						return (
