@@ -32,3 +32,4 @@ h3 {
   display: flex;
 }
 @import "components/**/*.css";
+@import "https://fonts.googleapis.com/css?family=Lato:400,900,300,700";
