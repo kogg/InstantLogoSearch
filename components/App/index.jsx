@@ -5,6 +5,7 @@ var FeathersMixin  = require('feathers-react-redux').FeathersMixin;
 var React          = require('react');
 
 var actions = require('../../actions');
+var Header = require('../Header');
 
 module.exports = connect(createSelector(
 	_.property('logos'),
@@ -41,11 +42,8 @@ module.exports = connect(createSelector(
 		}.bind(this));
 
 		return (
-			<div>
-				<input ref="search" type="text" autoFocus onChange={function() {
-					this.setState({ filters: this.refs.search.value.toLowerCase().split(/\s+/) });
-				}.bind(this)} />
-
+			<div className="hero">
+				<Header />
 				<ul>
 					{logos.map(function(logo) {
 						return (

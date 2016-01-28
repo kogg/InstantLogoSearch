@@ -1,1 +1,4 @@
+* {
+  box-sizing: border-box;
+}
 @import "components/**/*.css";
