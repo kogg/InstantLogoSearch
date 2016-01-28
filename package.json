@@ -1,9 +1,9 @@
 {
-  "name": "boilerplate",
+  "name": "InstantLogoSearch",
   "version": "1.0.0",
-  "description": "Boilerplate Setup for @saiichihashimoto's projects",
-  "repository": "saiichihashimoto/boilerplate",
-  "author": "@saiichihashimoto",
+  "description": "Search and download thousands of logos svg or png",
+  "repository": "cameronrohani/InstantLogoSearch",
+  "author": "@kogg",
   "license": "ISC",
   "main": "index.js",
   "browser": {
