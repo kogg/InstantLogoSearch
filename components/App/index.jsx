@@ -51,16 +51,18 @@ module.exports = connect(createSelector(
 						return (
 							<li key={logo.id}>
 								{logo.name}
+								<a href={logo.svg_url} download={logo.name + '.svg'}> [Download SVG]</a>
+								<a href={logo.png_url} download={logo.name + '.png'}> [Download PNG]</a>
 								{
 									logo.in_collection ?
 										<a href="" onClick={function(e) {
 											e.preventDefault();
 											this.props.dispatch(actions.removeFromCollection(logo));
-										}.bind(this)}> Remove from Collection</a> :
+										}.bind(this)}> [Remove from Collection]</a> :
 										<a href="" onClick={function(e) {
 											e.preventDefault();
 											this.props.dispatch(actions.addToCollection(logo));
-										}.bind(this)}> Add to Collection</a>
+										}.bind(this)}> [Add to Collection]</a>
 								}
 							</li>
 						);
