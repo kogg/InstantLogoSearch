@@ -5,7 +5,8 @@ var FeathersMixin  = require('feathers-react-redux').FeathersMixin;
 var React          = require('react');
 
 var actions = require('../../actions');
-var Header = require('../Header');
+var Header  = require('../Header');
+var Logos   = require('../Logos');
 
 module.exports = connect(createSelector(
 	_.property('logos'),
@@ -33,41 +34,12 @@ module.exports = connect(createSelector(
 		this.props.dispatch(actions.loadCollection());
 	},
 	render: function() {
-		var logos = _.filter(this.props.logos, function(logo) {
-			return _.every(this.state.filters, function(filter) {
-				return _.some(logo.name.split(/\s+/), function(name_part) {
-					return name_part.toLowerCase().includes(filter);
-				});
-			});
-		}.bind(this));
-
 		return (
 			<div className="hero">
 				<Header onFilter={function(filters) {
 					this.setState({ filters: filters });
 				}.bind(this)} />
-				<ul>
-					{logos.map(function(logo) {
-						return (
-							<li key={logo.id}>
-								{logo.name}
-								<a href={logo.svg_url} download={logo.name + '.svg'}> [Download SVG]</a>
-								<a href={logo.png_url} download={logo.name + '.png'}> [Download PNG]</a>
-								{
-									logo.in_collection ?
-										<a href="" onClick={function(e) {
-											e.preventDefault();
-											this.props.dispatch(actions.removeFromCollection(logo));
-										}.bind(this)}> [Remove from Collection]</a> :
-										<a href="" onClick={function(e) {
-											e.preventDefault();
-											this.props.dispatch(actions.addToCollection(logo));
-										}.bind(this)}> [Add to Collection]</a>
-								}
-							</li>
-						);
-					}.bind(this))}
-				</ul>
+				<Logos logos={this.props.logos} filters={this.state.filters} />
 			</div>
 		);
 	}
