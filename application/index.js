@@ -29,15 +29,14 @@ app.get('/', function(req, res, next) {
 
 	var root = Root(store);
 
-	serverRender(root, store, actions, function(err, markup) {
-		if (err) {
-			return next(err);
-		}
-		res.render('main', {
-			markup: markup,
-			state:  store.getState()
+	serverRender(root, store, actions)
+		.catch(next)
+		.then(function(markup) {
+			res.render('main', {
+				markup: markup,
+				state:  store.getState()
+			});
 		});
-	});
 });
 
 module.exports = app;
