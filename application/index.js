@@ -1,4 +1,5 @@
 var bodyParser   = require('body-parser');
+var compression  = require('compression');
 var feathers     = require('feathers');
 var fs           = require('fs');
 var path         = require('path');
@@ -12,6 +13,7 @@ var app = feathers();
 
 app.set('port', process.env.PORT || 5000);
 
+app.use(compression());
 app.use(feathers.static(path.join(__dirname, '../dist'), { maxage: '365d' }));
 app.configure(feathers.rest());
 app.configure(feathers.socketio());
