@@ -33,8 +33,9 @@ form {
   display: block;
 }
 
-.flex {
+.flex-grid {
   display: flex;
+  flex-wrap: wrap;
 }
 
 ul,

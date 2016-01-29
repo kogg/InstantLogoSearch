@@ -84,6 +84,7 @@
   padding: 10px 20px;
 }
 
+.header_expanded .logo,
 .header_expanded h1,
 .header_expanded h2 {
   display: none;
