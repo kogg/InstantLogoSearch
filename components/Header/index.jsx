@@ -16,10 +16,15 @@ module.exports = React.createClass({
 				<div className="header-content">
 					<h1>Instant Logo Search</h1>
 					<h2>Search and download thousands of logos  svg or png</h2>
-					<input ref="search" type="text" autoFocus onChange={function() {
-						this.setState({ expanded: true });
-						this.props.onFilter(this.refs.search.value.toLowerCase().split(/\s+/));
-					}.bind(this)} />
+					<div className="search-container">
+						<form>
+							<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
+								this.setState({ expanded: true });
+								this.props.onFilter(this.refs.search.value.toLowerCase().split(/\s+/));
+							}.bind(this)} />
+							<i className="search-icon"></i>
+						</form>
+					</div>
 				</div>
 			</div>
 		);
