@@ -43,7 +43,7 @@ app.get('/', function(req, res, next) {
 	serverRender(root, store, actions)
 		.catch(next)
 		.then(function(markup) {
-			res.render('main', {
+			res.render('index', {
 				markup: markup,
 				state:  store.getState()
 			});
@@ -51,11 +51,13 @@ app.get('/', function(req, res, next) {
 });
 
 app.all('*', function(req, res, next) {
-	next(new Error(http.STATUS_CODES[404]));
+	var err = new Error(http.STATUS_CODES[404]);
+	err.status = 404;
+	next(err);
 });
 
 app.use(function(err, req, res, next) {
-	error(err);
+	error('error on url ' + req.url, err);
 	next(err);
 });
 
