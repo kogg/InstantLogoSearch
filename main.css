@@ -3,6 +3,7 @@
 *:after {
   box-sizing: border-box;
   margin: 0;
+  padding: 0;
 }
 
 body {
@@ -32,8 +33,14 @@ form {
   display: block;
 }
 
-.flex {
+.flex-grid {
   display: flex;
+  flex-wrap: wrap;
+}
+
+ul,
+li {
+  list-style: none;
 }
 @import "components/**/*.css";
 @import "https://fonts.googleapis.com/css?family=Lato:400,900,300,700";

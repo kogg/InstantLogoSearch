@@ -14,6 +14,7 @@ module.exports = React.createClass({
 
 		return (
 			<div className={headerClasses}>
+				<div className="logo"></div>
 				<div className="header-content">
 					<h1>{process.env.npm_package_title}</h1>
 					<h2>{process.env.npm_package_description}</h2>
