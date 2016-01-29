@@ -8,5 +8,5 @@ var Logos = require('./services/Logos');
 app.use('/api/logos', Logos);
 
 app.listen(app.get('port'), function() {
-	debug('Server running at', 'http://' + os.hostname() + ':' + app.get('port'));
+	debug('Server running', 'http://' + os.hostname() + ':' + app.get('port'));
 });

@@ -1,3 +1,4 @@
+var _            = require('underscore');
 var bodyParser   = require('body-parser');
 var compression  = require('compression');
 var error        = require('debug')(process.env.npm_package_name + ':application:error');
@@ -24,11 +25,15 @@ app.configure(feathers.socketio());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.set('view engine', 'jade');
-app.set('views', path.join(__dirname, '../views'));
+app.set('view engine', 'jsx');
+app.set('views', path.join(__dirname, '../components'));
+app.engine('jsx', require('express-react-views').createEngine({ transformViews: false }));
 app.locals.cacheBuster = function(assetPath) {
 	return assetPath + '?' + fs.statSync(path.join(__dirname, '../dist', assetPath)).mtime.getTime().toString(16);
 };
+if (process.env.NODE_ENV === 'production') {
+	app.locals.cacheBuster = _.memoize(app.locals.cacheBuster);
+}
 
 app.get('/', function(req, res, next) {
 	var store = Store();
@@ -38,7 +43,7 @@ app.get('/', function(req, res, next) {
 	serverRender(root, store, actions)
 		.catch(next)
 		.then(function(markup) {
-			res.render('main', {
+			res.render('index', {
 				markup: markup,
 				state:  store.getState()
 			});
@@ -46,11 +51,13 @@ app.get('/', function(req, res, next) {
 });
 
 app.all('*', function(req, res, next) {
-	next(new Error(http.STATUS_CODES[404]));
+	var err = new Error(http.STATUS_CODES[404]);
+	err.status = 404;
+	next(err);
 });
 
 app.use(function(err, req, res, next) {
-	error(err);
+	error('error on url ' + req.url, err);
 	next(err);
 });
 
