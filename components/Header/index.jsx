@@ -14,8 +14,8 @@ module.exports = React.createClass({
 		return (
 			<div className={headerClasses}>
 				<div className="header-content">
-					<h1>Instant Logo Search</h1>
-					<h2>Search and download thousands of logos  svg or png</h2>
+					<h1>{process.env.npm_package_title}</h1>
+					<h2>{process.env.npm_package_description}</h2>
 					<div className="search-container">
 						<form>
 							<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
