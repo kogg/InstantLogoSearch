@@ -1,8 +1,10 @@
 var bodyParser   = require('body-parser');
 var compression  = require('compression');
+var error        = require('debug')(process.env.npm_package_name + ':application:error');
 var feathers     = require('feathers');
 var fs           = require('fs');
 var helmet       = require('helmet');
+var http         = require('http');
 var path         = require('path');
 var serverRender = require('feathers-react-redux/serverRender');
 
@@ -41,6 +43,15 @@ app.get('/', function(req, res, next) {
 				state:  store.getState()
 			});
 		});
+});
+
+app.all('*', function(req, res, next) {
+	next(new Error(http.STATUS_CODES[404]));
+});
+
+app.use(function(err, req, res, next) {
+	error(err);
+	next(err);
 });
 
 module.exports = app;
