@@ -13,6 +13,7 @@ module.exports = React.createClass({
 
 		return (
 			<div className={headerClasses}>
+				<div className="logo"></div>
 				<div className="header-content">
 					<h1>Instant Logo Search</h1>
 					<h2>Search and download thousands of logos  svg or png</h2>
