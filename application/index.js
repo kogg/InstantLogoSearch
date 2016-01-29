@@ -1,3 +1,4 @@
+var _            = require('underscore');
 var bodyParser   = require('body-parser');
 var compression  = require('compression');
 var error        = require('debug')(process.env.npm_package_name + ':application:error');
@@ -35,11 +36,8 @@ app.get('/', function(req, res, next) {
 
 	serverRender(root, store, actions)
 		.catch(next)
-		.then(function(markup) {
-			res.render('index', {
-				markup: markup,
-				state:  store.getState()
-			});
+		.then(function(locals) {
+			res.render('index', _.extend(locals, { state: store.getState() }));
 		});
 });
 
