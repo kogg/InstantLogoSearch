@@ -8,5 +8,5 @@ var app = require('./application');
 app.use('/api/messages', memory());
 
 app.listen(app.get('port'), function() {
-	debug('Server running at', 'http://' + os.hostname() + ':' + app.get('port'));
+	debug('Server running', 'http://' + os.hostname() + ':' + app.get('port'));
 });
