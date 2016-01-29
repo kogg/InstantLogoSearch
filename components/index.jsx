@@ -5,7 +5,7 @@ module.exports = React.createClass({
 		return (
 			<html>
 				<head>
-					<title>Base App</title>
+					<title>Instant Logo Search</title>
 					<meta charSet="utf-8" />
 					<link rel="stylesheet" type="text/css" href={this.props.cacheBuster('css/main.css')} />
 				</head>
