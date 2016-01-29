@@ -2,6 +2,7 @@ var bodyParser   = require('body-parser');
 var compression  = require('compression');
 var feathers     = require('feathers');
 var fs           = require('fs');
+var helmet       = require('helmet');
 var path         = require('path');
 var serverRender = require('feathers-react-redux/serverRender');
 
@@ -13,6 +14,7 @@ var app = feathers();
 
 app.set('port', process.env.PORT || 5000);
 
+app.use(helmet());
 app.use(compression());
 app.use(feathers.static(path.join(__dirname, '../dist'), { maxage: '365d' }));
 app.configure(feathers.rest());

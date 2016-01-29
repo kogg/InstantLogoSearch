@@ -75,6 +75,7 @@
     "feathers-client": "^0.5.0",
     "feathers-memory": "^0.5.1",
     "feathers-react-redux": "^0.3.0",
+    "helmet": "^1.1.0",
     "jade": "^1.11.0",
     "postcss-cachebuster": "^0.1.2",
     "postcss-cli": "^2.3.2",
