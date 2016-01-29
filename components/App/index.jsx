@@ -24,10 +24,8 @@ module.exports = connect(createSelector(
 		};
 	}
 ))(React.createClass({
-	mixins:          [FeathersMixin],
-	getInitialState: function() {
-		return { filters: [''] };
-	},
+	mixins:             [FeathersMixin],
+	getInitialState:    _.constant({ filters: [''] }),
 	componentWillMount: function() {
 		this.feathers('logo');
 	},
@@ -52,12 +50,8 @@ module.exports = connect(createSelector(
 					this.setState({ filters: filters });
 				}.bind(this)} />
 				<Logos logos={this.props.logos} filters={this.state.filters}
-					onCollectLogo={function(logo) {
-						this.props.dispatch(actions.addToCollection(logo));
-					}.bind(this)}
-					onUncollectLogo={function(logo) {
-						this.props.dispatch(actions.removeFromCollection(logo));
-					}.bind(this)} />
+					onCollectLogo={_.compose(this.props.dispatch, actions.addToCollection)}
+					onUncollectLogo={_.compose(this.props.dispatch, actions.removeFromCollection)} />
 			</div>
 		);
 	}
