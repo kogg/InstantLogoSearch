@@ -19,7 +19,7 @@ module.exports = React.createClass({
 					<h1>{process.env.npm_package_title}</h1>
 					<h2>{process.env.npm_package_description}</h2>
 					<div className="search-container">
-						<form>
+						<form onSubmit={_.partial(_.result, _, 'preventDefault')} >
 							<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={_.debounce(function() {
 								this.setState({ expanded: true });
 								this.props.onFilter(this.refs.search.value.toLowerCase().split(/\s+/));
