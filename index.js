@@ -69,17 +69,6 @@ app.use(function(err, req, res, next) {
 	next(err);
 });
 
-app.all('*', function(req, res, next) {
-	var err = new Error(http.STATUS_CODES[404]);
-	err.status = 404;
-	next(err);
-});
-
-app.use(function(err, req, res, next) {
-	error('error on url ' + req.url, err);
-	next(err);
-});
-
 app.listen(app.get('port'), function() {
 	debug('Server running', 'http://' + os.hostname() + ':' + app.get('port'));
 });
