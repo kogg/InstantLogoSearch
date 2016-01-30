@@ -29,5 +29,21 @@
 
 .brand-logo-ctas {
   background: white;
-  padding: 12px;
+  padding: 12px 0 8px;
+}
+
+.brand-logo-ctas strong {
+  padding: 0 12px;
+}
+
+.brand-logo-ctas a {
+  text-decoration: none;
+  font-size: 15px;
+  display: block;
+  padding: 4px 12px;
+  color: rgba(0, 0, 0, .7);
+}
+
+.brand-logo-ctas a:hover {
+  background: rgba(0, 0, 0, .05);
 }

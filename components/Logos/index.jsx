@@ -28,25 +28,19 @@ module.exports = React.createClass({
 										<div>
 											<strong>{logo.name}</strong>
 										</div>
-										<div>
-											<a href={logo.svg_url} download={logo.name + '.svg'}> [Download SVG]</a>
-										</div>
-										<div>
-											<a href={logo.png_url} download={logo.name + '.png'}> [Download PNG]</a>
-										</div>
-										<div>
-											{
-												logo.in_collection ?
-													<a href="" onClick={function(e) {
-														e.preventDefault();
-														this.props.onUncollectLogo(logo);
-													}.bind(this)}> [Remove from Collection]</a> :
-													<a href="" onClick={function(e) {
-														e.preventDefault();
-														this.props.onCollectLogo(logo);
-													}.bind(this)}> [Add to Collection]</a>
-											}
-										</div>
+										<a href={logo.svg_url} download={logo.name + '.svg'}> Download SVG</a>
+										<a href={logo.png_url} download={logo.name + '.png'}> Download PNG</a>
+										{
+											logo.in_collection ?
+												<a href="" onClick={function(e) {
+													e.preventDefault();
+													this.props.onUncollectLogo(logo);
+												}.bind(this)}> Remove from Collection</a> :
+												<a href="" onClick={function(e) {
+													e.preventDefault();
+													this.props.onCollectLogo(logo);
+												}.bind(this)}> Add to Collection</a>
+										}
 									</div>
 								</li>
 							);
