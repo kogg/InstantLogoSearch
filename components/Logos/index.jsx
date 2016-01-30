@@ -1,5 +1,6 @@
-var _     = require('underscore');
-var React = require('react');
+var _        = require('underscore');
+var LazyLoad = require('react-lazy-load');
+var React    = require('react');
 
 module.exports = React.createClass({
 	render: function() {
@@ -21,9 +22,11 @@ module.exports = React.createClass({
 						{logos.map(function(logo) {
 							return (
 								<li className="brand-logo" key={logo.id}>
-									<div className="brand-logo-image">
-										<img src={logo.svg.url} />
-									</div>
+									<LazyLoad height={140} offset={1000}>
+										<div className="brand-logo-image">
+											<img src={logo.svg.url} />
+										</div>
+									</LazyLoad>
 									<div className="brand-logo-ctas">
 										<div>
 											<strong>{logo.name}</strong>
