@@ -29,10 +29,10 @@ module.exports = React.createClass({
 											<strong>{logo.name}</strong>
 										</div>
 										<div>
-											<a href={logo.svg.url} download={logo.name + '.svg'}> [Download SVG]</a>
+											<a href={logo.svg.url} download> [Download SVG]</a>
 										</div>
 										<div>
-											<a href={logo.png_url} download={logo.name + '.png'}> [Download PNG]</a>
+											<a href={logo.png ? logo.png.url : ('/png?id=' + logo.id)} download> [Download PNG]</a>
 										</div>
 										<div>
 											{
