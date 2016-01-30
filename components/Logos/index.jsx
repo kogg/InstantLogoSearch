@@ -22,7 +22,7 @@ module.exports = React.createClass({
 						{logos.map(function(logo) {
 							return (
 								<li className="brand-logo" key={logo.id}>
-									<LazyLoad height={140} offset={1000}>
+									<LazyLoad height={140} offset={280}>
 										<div className="brand-logo-image">
 											<img src={logo.svg.url} />
 										</div>
