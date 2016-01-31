@@ -41,9 +41,6 @@ module.exports = React.createClass({
 					<li className="collection-row-list">
 						<img src="/svg/svgporn/composer.svg" />
 					</li>
-					<li className="collection-row-list-end">
-						<div className="dummyimage"></div>
-					</li>
 				</ul>
 				<div className="ctas">
 					<a>Download SVGs</a>

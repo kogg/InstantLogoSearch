@@ -23,7 +23,7 @@ module.exports = React.createClass({
 							return (
 								<li className="brand-logo" key={logo.id}>
 									<LazyLoad height={140} offset={280}>
-										<div className="brand-logo-image">
+										<div className="brand-logo-image flex-center">
 											<img src={logo.svg.url} />
 										</div>
 									</LazyLoad>

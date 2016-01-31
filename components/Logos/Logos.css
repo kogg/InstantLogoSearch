@@ -16,8 +16,7 @@
   border: 1px solid rgba(0, 0, 0, 0.04);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   border-radius: 3px;
-  max-width: calc(20% - 20px);
-  width: 100%;
+  width: calc(20% - 20px);
   margin: 0 20px 20px 0;
 }
 
