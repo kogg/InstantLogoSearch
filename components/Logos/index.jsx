@@ -24,12 +24,12 @@ module.exports = React.createClass({
 								<li className="brand-logo" key={logo.id}>
 									<LazyLoad height={140} offset={280}>
 										<div className="brand-logo-image flex-center">
-											<img src={logo.svg.url} />
+											<img src={logo.svg} />
 										</div>
 									</LazyLoad>
 									<div className="brand-logo-ctas">
 										<strong>{logo.name}</strong>
-										<a href={logo.svg.url} download> Download SVG</a>
+										<a href={logo.svg} download> Download SVG</a>
 										<a href={logo.png ? logo.png.url : ('/png?id=' + logo.id)} download> Download PNG</a>
 										{
 											logo.in_collection ?
