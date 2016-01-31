@@ -5,23 +5,21 @@ var FeathersMixin  = require('feathers-react-redux').FeathersMixin;
 var Helmet         = require('react-helmet');
 var React          = require('react');
 
-var actions = require('../../actions');
-var Header  = require('../Header');
-var Collection  = require('../Collection');
-var Logos   = require('../Logos');
+var actions    = require('../../actions');
+var Collection = require('../Collection');
+var Header     = require('../Header');
+var Logos      = require('../Logos');
 
 module.exports = connect(createSelector(
 	_.property('logos'),
 	_.property('collection'),
 	function(logos, collection) {
+		var collectionById = _.countBy(collection, _.identity);
 		return {
-			logos: _.chain(logos)
-				.values()
-				.pluck('data')
-				.map(function(logo) {
-					return _.defaults({ in_collection: collection[logo.id] }, logo);
-				})
-				.value()
+			collection: collection,
+			logos:      _.map(logos, function(logo) {
+				return _.defaults({ in_collection: collectionById[logo.data.id] }, logo.data);
+			})
 		};
 	}
 ))(React.createClass({
