@@ -1,7 +1,6 @@
 var _                        = require('underscore');
 var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
-var LazyLoad                 = require('react-lazy-load');
 var React                    = require('react');
 
 module.exports = React.createClass({
@@ -38,14 +37,12 @@ module.exports = React.createClass({
 						<h3>Most Popular Logos</h3>
 					</div>
 					<ul className="flex-grid">
-						{props.logos.map(function(logo) {
+						{_.first(props.logos, 20).map(function(logo) {
 							return (
 								<li className="brand-logo" key={logo.id}>
-									<LazyLoad height={140} offset={280}>
-										<div className="brand-logo-image flex-center">
-											<img src={logo.svg} />
-										</div>
-									</LazyLoad>
+									<div className="brand-logo-image flex-center">
+										<img src={logo.svg} />
+									</div>
 									<div className="brand-logo-ctas">
 										<strong>{logo.name}</strong>
 										<a href={logo.svg} download> Download SVG</a>
