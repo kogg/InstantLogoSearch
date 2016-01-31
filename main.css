@@ -9,7 +9,7 @@
 body {
   font-family: 'Lato', sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: #fbfaf8;
+  background: #fafafa;
 }
 
 h1 {
@@ -36,6 +36,18 @@ form {
 .flex-grid {
   display: flex;
   flex-wrap: wrap;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-spread {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 ul,

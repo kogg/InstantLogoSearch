@@ -5,6 +5,7 @@ var error        = require('debug')(process.env.npm_package_name + ':application
 var feathers     = require('feathers');
 var helmet       = require('helmet');
 var http         = require('http');
+var logos        = require('instant-logos');
 var path         = require('path');
 var serverRender = require('feathers-react-redux/serverRender');
 
@@ -22,6 +23,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(feathers.static(path.join(__dirname, '../dist'), { maxage: '365d' }));
+_.chain(logos)
+	.reject(function(logo) {
+		return !logo.svg || !logo.svg.path;
+	})
+	.indexBy(function(logo) {
+		return logo.svg.path.directory;
+	})
+	.each(function(logo) {
+		app.use('/svg/' + logo.source.shortname, feathers.static(logo.svg.path.directory, { maxage: '365d' }));
+	});
 app.configure(feathers.rest());
 app.configure(feathers.socketio());
 

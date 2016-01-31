@@ -1,3 +1,4 @@
+var _          = require('underscore');
 var classNames = require('classnames');
 var React      = require('react');
 
@@ -13,16 +14,23 @@ module.exports = React.createClass({
 
 		return (
 			<div className={headerClasses}>
-				<div className="logo"></div>
+				<div className="flex-spread">
+					<div className="logo"></div>
+					<div>
+						<a className="social-action" href="">t tweet</a>
+						<a className="social-action" href="">f share</a>
+						<a className="social-action" href="">s star</a>
+					</div>
+				</div>
 				<div className="header-content">
 					<h1>{process.env.npm_package_title}</h1>
 					<h2>{process.env.npm_package_description}</h2>
 					<div className="search-container">
 						<form>
-							<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
+							<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={_.debounce(function() {
 								this.setState({ expanded: true });
 								this.props.onFilter(this.refs.search.value.toLowerCase().split(/\s+/));
-							}.bind(this)} />
+							}.bind(this), 25)} />
 							<i className="search-icon"></i>
 						</form>
 					</div>

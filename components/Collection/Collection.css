@@ -1,0 +1,80 @@
+.collection {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.97) !important;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.44);
+}
+
+.collection-row {
+  display: flex;
+  flex-flow: row;
+  overflow: auto;
+  padding: 10px 30px;
+  width: calc(100% - 180px);
+}
+
+.collection-row-list {
+  height: 80px;
+  padding: 12px;
+  background: #f2f2f2;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  margin-right: 12px;
+  border-radius: 3px;
+}
+
+.collection-row-list img {
+  height: 100%;
+}
+
+.collection-row-list-end {
+  width: 150px;
+  display: inline-block;
+}
+
+.dummyimage {
+  width: 10px;
+  background: black;
+  height: 100%;
+}
+
+.ctas {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 180px;
+  height: 100%;
+  padding: 10px 30px 0 0;
+  background: white;
+}
+
+.ctas:before {
+  content: "";
+  position: absolute;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, #fff);
+  height: 100%;
+  width: 12px;
+  margin-left: -12px;
+}
+
+.ctas a {
+  display: block;
+  line-height: 38px;
+  text-align: center;
+  border-radius: 3px;
+  font-weight: 900;
+}
+
+.ctas a:first-of-type {
+  color: white;
+  background: #036ded;
+}
+
+.ctas a:last-of-type {
+  margin-top: 4px;
+  color: #036ded !important;
+  line-height: 34px;
+  color: white;
+  border: 2px solid #036ded;
+}

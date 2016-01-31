@@ -7,6 +7,7 @@ var React          = require('react');
 
 var actions = require('../../actions');
 var Header  = require('../Header');
+var Collection  = require('../Collection');
 var Logos   = require('../Logos');
 
 module.exports = connect(createSelector(
@@ -52,6 +53,7 @@ module.exports = connect(createSelector(
 				<Logos logos={this.props.logos} filters={this.state.filters}
 					onCollectLogo={_.compose(this.props.dispatch, actions.addToCollection)}
 					onUncollectLogo={_.compose(this.props.dispatch, actions.removeFromCollection)} />
+				<Collection />
 			</div>
 		);
 	}

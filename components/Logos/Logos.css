@@ -1,5 +1,11 @@
 .logos {
   padding: 30px 10px 10px 30px;
+  overflow: auto;
+}
+
+.header_expanded + .logos {
+  max-height: calc(100vh - 73px);
+  overflow: auto;
 }
 
 .logos-title {
@@ -7,7 +13,8 @@
 }
 
 .brand-logo {
-  border: 1px solid rgba(0, 0, 0, .1);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   border-radius: 3px;
   max-width: calc(20% - 20px);
   width: 100%;
@@ -33,7 +40,11 @@
 }
 
 .brand-logo-ctas strong {
-  padding: 0 12px;
+  padding: 0 12px 4px;
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .brand-logo-ctas a {
@@ -41,6 +52,7 @@
   font-size: 15px;
   display: block;
   padding: 4px 12px;
+  cursor: pointer;
   color: rgba(0, 0, 0, .7);
 }
 

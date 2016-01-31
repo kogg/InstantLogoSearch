@@ -21,13 +21,11 @@ module.exports = React.createClass({
 						{logos.map(function(logo) {
 							return (
 								<li className="brand-logo" key={logo.id}>
-									<div className="brand-logo-image">
-										<img src={logo.svg_url} />
+									<div className="brand-logo-image flex-center">
+										<img src={logo.svg.url} />
 									</div>
 									<div className="brand-logo-ctas">
-										<div>
-											<strong>{logo.name}</strong>
-										</div>
+										<strong>{logo.name}</strong>
 										<a href={logo.svg_url} download={logo.name + '.svg'}> Download SVG</a>
 										<a href={logo.png_url} download={logo.name + '.png'}> Download PNG</a>
 										{
