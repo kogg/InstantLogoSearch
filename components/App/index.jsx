@@ -1,30 +1,25 @@
-var _              = require('underscore');
-var connect        = require('react-redux').connect;
-var createSelector = require('reselect').createSelector;
-var FeathersMixin  = require('feathers-react-redux').FeathersMixin;
-var Helmet         = require('react-helmet');
-var React          = require('react');
+var _                        = require('underscore');
+var connect                  = require('react-redux').connect;
+var createSelector           = require('reselect').createSelector;
+var createStructuredSelector = require('reselect').createStructuredSelector;
+var FeathersMixin            = require('feathers-react-redux').FeathersMixin;
+var Helmet                   = require('react-helmet');
+var React                    = require('react');
 
 var actions    = require('../../actions');
 var Collection = require('../Collection');
 var Header     = require('../Header');
 var Logos      = require('../Logos');
 
-module.exports = connect(createSelector(
-	_.property('logos'),
-	_.property('collection'),
-	function(logos, collection) {
-		var collectionById = _.countBy(collection, _.identity);
-		return {
-			collection: collection,
-			logos:      _.map(logos, function(logo) {
-				return _.defaults({ in_collection: collectionById[logo.data.id] }, logo.data);
-			})
-		};
-	}
-))(React.createClass({
+module.exports = connect(createStructuredSelector({
+	logos: createSelector(
+		_.property('logos'),
+		_.partial(_.pluck, _, 'data')
+	),
+	collection: _.property('collection')
+}))(React.createClass({
 	mixins:             [FeathersMixin],
-	getInitialState:    _.constant({ filters: [''] }),
+	getInitialState:    _.constant({ filter: '' }),
 	componentWillMount: function() {
 		this.feathers('logo');
 	},
@@ -45,10 +40,10 @@ module.exports = connect(createSelector(
 						{ name: 'twitter:description', content: process.env.npm_package_description }
 					]}
 				/>
-				<Header onFilter={function(filters) {
-					this.setState({ filters: filters });
+				<Header onFilter={function(filter) {
+					this.setState({ filter: filter });
 				}.bind(this)} />
-				<Logos logos={this.props.logos} filters={this.state.filters}
+				<Logos logos={this.props.logos} collection={this.props.collection} filter={this.state.filter}
 					onCollectLogo={_.compose(this.props.dispatch, actions.addToCollection)}
 					onUncollectLogo={_.compose(this.props.dispatch, actions.removeFromCollection)} />
 				<Collection />
