@@ -1,5 +1,6 @@
-var _     = require('underscore');
-var React = require('react');
+var _        = require('underscore');
+var LazyLoad = require('react-lazy-load');
+var React    = require('react');
 
 module.exports = React.createClass({
 	render: function() {
@@ -21,13 +22,15 @@ module.exports = React.createClass({
 						{logos.map(function(logo) {
 							return (
 								<li className="brand-logo" key={logo.id}>
-									<div className="brand-logo-image flex-center">
-										<img src={logo.svg.url} />
-									</div>
+									<LazyLoad height={140} offset={280}>
+										<div className="brand-logo-image">
+											<img src={logo.svg.url} />
+										</div>
+									</LazyLoad>
 									<div className="brand-logo-ctas">
 										<strong>{logo.name}</strong>
-										<a href={logo.svg_url} download={logo.name + '.svg'}> Download SVG</a>
-										<a href={logo.png_url} download={logo.name + '.png'}> Download PNG</a>
+										<a href={logo.svg.url} download> Download SVG</a>
+										<a href={logo.png ? logo.png.url : ('/png?id=' + logo.id)} download> Download PNG</a>
 										{
 											logo.in_collection ?
 												<a href="" onClick={function(e) {

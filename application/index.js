@@ -1,11 +1,9 @@
 var _            = require('underscore');
 var bodyParser   = require('body-parser');
 var compression  = require('compression');
-var error        = require('debug')(process.env.npm_package_name + ':application:error');
 var feathers     = require('feathers');
 var helmet       = require('helmet');
-var http         = require('http');
-var logos        = require('instant-logos');
+var memoize      = require('memoizee');
 var path         = require('path');
 var serverRender = require('feathers-react-redux/serverRender');
 
@@ -23,16 +21,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(feathers.static(path.join(__dirname, '../dist'), { maxage: '365d' }));
-_.chain(logos)
-	.reject(function(logo) {
-		return !logo.svg || !logo.svg.path;
-	})
-	.indexBy(function(logo) {
-		return logo.svg.path.directory;
-	})
-	.each(function(logo) {
-		app.use('/svg/' + logo.source.shortname, feathers.static(logo.svg.path.directory, { maxage: '365d' }));
-	});
 app.configure(feathers.rest());
 app.configure(feathers.socketio());
 
@@ -40,27 +28,28 @@ app.set('view engine', 'jsx');
 app.set('views', path.join(__dirname, '../components'));
 app.engine('jsx', require('express-react-views').createEngine({ transformViews: false }));
 
-app.get('/', function(req, res, next) {
+app.set('page-render', memoize(function(url, callback) {
 	var store = Store();
-
 	var root = Root(store);
 
 	serverRender(root, store, actions)
-		.catch(next)
+		.catch(callback)
 		.then(function(locals) {
-			res.render('index', _.extend(locals, { state: store.getState() }));
+			app.render('index', _.extend(locals, { state: store.getState() }), function(err, html) {
+				callback(err, { html: html, date: (new Date()).toUTCString() });
+			});
 		});
-});
+}, { async: true, length: 1 }));
 
-app.all('*', function(req, res, next) {
-	var err = new Error(http.STATUS_CODES[404]);
-	err.status = 404;
-	next(err);
-});
-
-app.use(function(err, req, res, next) {
-	error('error on url ' + req.url, err);
-	next(err);
+app.get('/', function(req, res, next) {
+	app.get('page-render')(req.url, function(err, render) {
+		if (err) {
+			return next(err);
+		}
+		res.set('Cache-Control', 'public, max-age=' + (24 * 60 * 60));
+		res.set('Last-Modified', render.date);
+		res.send(render.html);
+	});
 });
 
 module.exports = app;
