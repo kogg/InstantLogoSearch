@@ -4,6 +4,10 @@
   bottom: 0;
   background: rgba(255, 255, 255, 0.97) !important;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.44);
+
+  &_untouchable {
+    pointer-events: none;
+  }
 }
 
 .collection-row {
