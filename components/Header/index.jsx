@@ -29,10 +29,10 @@ module.exports = React.createClass({
 						<form onSubmit={_.partial(_.result, _, 'preventDefault')} >
 							<label>
 								<i className="search-icon"></i>
-								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={_.debounce(function() {
+								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
 									this.setState({ expanded: true });
 									this.props.onFilter(this.refs.search.value);
-								}.bind(this), 25)} />
+								}.bind(this)} />
 							</label>
 						</form>
 					</div>
