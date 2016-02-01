@@ -1,6 +1,10 @@
 .logos {
   padding: 30px 10px 10px 30px;
   overflow: auto;
+
+  &_extra-bottom {
+    background: pink;
+  }
 }
 
 .header_expanded + .logos {
@@ -19,6 +23,10 @@
   width: calc(20% - 20px);
   margin: 0 20px 20px 0;
   display: inline-block;
+
+  &_collected {
+    border: 1px solid rgba(0, 0, 0, 1);
+  }
 }
 
 .brand-logo-image {

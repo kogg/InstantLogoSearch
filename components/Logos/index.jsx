@@ -24,7 +24,10 @@ module.exports = React.createClass({
 	),
 	render: function() {
 		return (
-			<div className="logos">
+			<div className={classNames({
+				'logos':              true,
+				'logos_extra-bottom': !_.isEmpty(this.props.collection)
+			})}>
 				<div className="logos-container">
 					<div className="logos-title">
 						<h3>Most Popular Logos</h3>

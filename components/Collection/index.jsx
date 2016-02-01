@@ -36,8 +36,9 @@ module.exports = React.createClass({
 
 		return (
 			<div className={classNames({
-				collection:       true,
-				collection_empty: _.isEmpty(collectedLogos)
+				collection:             true,
+				collection_empty:       _.isEmpty(collectedLogos),
+				collection_untouchable: this.props.considering
 			})}>
 				<ul className="collection-row">
 					{collectedLogos.map(function(logo) {
