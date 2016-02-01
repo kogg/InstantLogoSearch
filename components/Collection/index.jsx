@@ -14,6 +14,7 @@ module.exports = React.createClass({
 			return _.chain(collectionAsArray)
 				.map(_.propertyOf(logos))
 				.pluck('data')
+				.reverse()
 				.value();
 		}
 	),
