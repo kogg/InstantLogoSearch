@@ -23,12 +23,7 @@ module.exports = React.createClass({
 				});
 			}
 		),
-		collectionById: createSelector(
-			_.property('collection'),
-			function(collection) {
-				return _.indexBy(collection, _.identity);
-			}
-		)
+		collection: _.property('collection')
 	}),
 	render: function() {
 		var props = this.massageProps(this.props);
@@ -52,12 +47,12 @@ module.exports = React.createClass({
 										<a href={logo.png ? logo.png.url : ('/png?id=' + logo.id)} download> Download PNG</a>
 										<a href="" onClick={function(e) {
 											e.preventDefault();
-											if (props.collectionById[logo.id]) {
+											if (props.collection[logo.id]) {
 												this.props.onUncollectLogo(logo);
 											} else {
 												this.props.onCollectLogo(logo);
 											}
-										}.bind(this)}> {props.collectionById[logo.id] ? 'Remove from' : 'Add to'} Collection</a>
+										}.bind(this)}> {props.collection[logo.id] ? 'Remove from' : 'Add to'} Collection</a>
 									</div>
 								</li>
 							);

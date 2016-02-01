@@ -25,14 +25,18 @@ module.exports = _.partial(createStore, combineReducers({
 	logos:          resourcesReducer('logo'),
 	collection:     handleActions({
 		LOAD_COLLECTION: function() {
-			return global.localStorage ? JSON.parse(global.localStorage.getItem('collection')) || [] : [];
+			return global.localStorage ? JSON.parse(global.localStorage.getItem('collection')) || {} : {};
 		},
-		CLEAR_COLLECTION:  reduceToStorage('collection', _.constant([])),
+		CLEAR_COLLECTION:  reduceToStorage('collection', _.constant({})),
 		ADD_TO_COLLECTION: reduceToStorage('collection', function(state, action) {
-			return _.union(state, [action.payload.id]);
+			var new_state = _.clone(state);
+			new_state[action.payload.id] = true;
+			return new_state;
 		}),
 		REMOVE_FROM_COLLECTION: reduceToStorage('collection', function(state, action) {
-			return _.without(state, action.payload.id);
+			var new_state = _.clone(state);
+			delete new_state[action.payload.id];
+			return new_state;
 		})
 	}, [])
 }));
