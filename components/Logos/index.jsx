@@ -1,4 +1,5 @@
 var _              = require('underscore');
+var classNames     = require('classnames');
 var createSelector = require('reselect').createSelector;
 var React          = require('react');
 
@@ -31,7 +32,10 @@ module.exports = React.createClass({
 					<ul className="flex-grid">
 						{_.first(this.logos(this.props), 20).map(function(logo) {
 							return (
-								<li className="brand-logo" key={logo.id}>
+								<li className={classNames({
+									'brand-logo':           true,
+									'brand-logo_collected': this.props.collection[logo.id]
+								})} key={logo.id}>
 									<div className="brand-logo-image flex-center">
 										<img src={logo.svg} />
 									</div>
