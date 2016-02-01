@@ -15,7 +15,7 @@ module.exports = connect(createStructuredSelector({
 	collection: _.property('collection')
 }))(React.createClass({
 	mixins:             [FeathersMixin],
-	getInitialState:    _.constant({ filter: '' }),
+	getInitialState:    _.constant({}),
 	componentWillMount: function() {
 		this.feathers('logo');
 	},
@@ -40,20 +40,23 @@ module.exports = connect(createStructuredSelector({
 					this.setState({ filter: filter });
 				}.bind(this)} />
 				<Logos logos={this.props.logos} collection={this.props.collection} filter={this.state.filter}
-					onCollectLogo={function(logo) {
-						this.props.dispatch(actions.addToCollection(logo));
-						this.refs.header.focus();
+					onToggleCollectLogo={this.toggleCollectLogo}
+					onConsiderCollectLogo={function(logo) {
+						this.setState({ considering: logo.id });
 					}.bind(this)}
-					onUncollectLogo={function(logo) {
-						this.props.dispatch(actions.removeFromCollection(logo));
-						this.refs.header.focus();
+					onUnconsiderCollectLogo={function(logo) {
+						if (this.state.considering !== logo.id) {
+							return;
+						}
+						this.setState({ considering: null });
 					}.bind(this)} />
-				<Collection logos={this.props.logos} collection={this.props.collection}
-					onUncollectLogo={function(logo) {
-						this.props.dispatch(actions.removeFromCollection(logo));
-						this.refs.header.focus();
-					}.bind(this)} />
+				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.state.considering}
+					onToggleCollectLogo={this.toggleCollectLogo} />
 			</div>
 		);
+	},
+	toggleCollectLogo: function(logo) {
+		this.props.dispatch(actions[this.props.collection[logo.id] ? 'removeFromCollection' : 'addToCollection'](logo));
+		this.refs.header.focus();
 	}
 }));

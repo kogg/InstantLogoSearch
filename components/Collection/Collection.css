@@ -36,6 +36,14 @@
   border-radius: 3px;
 }
 
+.collection-row-list_considering_addition {
+  background: blue;
+}
+
+.collection-row-list_considering_removal {
+  background: red;
+}
+
 .collection-row-list img {
   height: 54px;
 }
