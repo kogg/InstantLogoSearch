@@ -1,32 +1,28 @@
-var _                        = require('underscore');
-var createSelector           = require('reselect').createSelector;
-var createStructuredSelector = require('reselect').createStructuredSelector;
-var React                    = require('react');
+var _              = require('underscore');
+var createSelector = require('reselect').createSelector;
+var React          = require('react');
 
 module.exports = React.createClass({
-	massageProps: createStructuredSelector({
-		logos: createSelector(
-			createSelector(
-				_.property('logos'),
-				_.partial(_.pluck, _, 'data')
-			),
-			function(props) {
-				return props.filter.toLowerCase().split(/\s+/);
-			},
-			function(logos, filters) {
-				return _.filter(logos, function(logo) {
-					return _.every(filters, function(filter) {
-						return _.some(logo.name.split(/\s+/), function(name_part) {
-							return name_part.toLowerCase().includes(filter);
-						});
+	massageLogos: createSelector(
+		createSelector(
+			_.property('logos'),
+			_.partial(_.pluck, _, 'data')
+		),
+		function(props) {
+			return props.filter.toLowerCase().split(/\s+/);
+		},
+		function(logos, filters) {
+			return _.filter(logos, function(logo) {
+				return _.every(filters, function(filter) {
+					return _.some(logo.name.split(/\s+/), function(name_part) {
+						return name_part.toLowerCase().includes(filter);
 					});
 				});
-			}
-		),
-		collection: _.property('collection')
-	}),
+			});
+		}
+	),
 	render: function() {
-		var props = this.massageProps(this.props);
+		var logos = this.massageLogos(this.props);
 
 		return (
 			<div className="logos">
@@ -35,7 +31,7 @@ module.exports = React.createClass({
 						<h3>Most Popular Logos</h3>
 					</div>
 					<ul className="flex-grid">
-						{_.first(props.logos, 20).map(function(logo) {
+						{_.first(logos, 20).map(function(logo) {
 							return (
 								<li className="brand-logo" key={logo.id}>
 									<div className="brand-logo-image flex-center">
@@ -47,12 +43,12 @@ module.exports = React.createClass({
 										<a href={logo.png ? logo.png.url : ('/png?id=' + logo.id)} download> Download PNG</a>
 										<a href="" onClick={function(e) {
 											e.preventDefault();
-											if (props.collection[logo.id]) {
+											if (this.props.collection[logo.id]) {
 												this.props.onUncollectLogo(logo);
 											} else {
 												this.props.onCollectLogo(logo);
 											}
-										}.bind(this)}> {props.collection[logo.id] ? 'Remove from' : 'Add to'} Collection</a>
+										}.bind(this)}> {this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Collection</a>
 									</div>
 								</li>
 							);
