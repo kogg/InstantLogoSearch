@@ -6,7 +6,10 @@ var React                    = require('react');
 module.exports = React.createClass({
 	massageProps: createStructuredSelector({
 		logos: createSelector(
-			_.property('logos'),
+			createSelector(
+				_.property('logos'),
+				_.partial(_.pluck, _, 'data')
+			),
 			function(props) {
 				return props.filter.toLowerCase().split(/\s+/);
 			},

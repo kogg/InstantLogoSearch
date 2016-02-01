@@ -1,6 +1,5 @@
 var _                        = require('underscore');
 var connect                  = require('react-redux').connect;
-var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
 var FeathersMixin            = require('feathers-react-redux').FeathersMixin;
 var Helmet                   = require('react-helmet');
@@ -12,10 +11,7 @@ var Header     = require('../Header');
 var Logos      = require('../Logos');
 
 module.exports = connect(createStructuredSelector({
-	logos: createSelector(
-		_.property('logos'),
-		_.partial(_.pluck, _, 'data')
-	),
+	logos:      _.property('logos'),
 	collection: _.property('collection')
 }))(React.createClass({
 	mixins:             [FeathersMixin],
