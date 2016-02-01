@@ -12,6 +12,10 @@
 .collection_empty {
   transform: translate3d(0, 100px, 0);
 
+  &_empty {
+    background: pink !important;
+  }
+
   &_untouchable {
     pointer-events: none;
   }
