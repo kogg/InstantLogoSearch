@@ -3,7 +3,7 @@ var createSelector = require('reselect').createSelector;
 var React          = require('react');
 
 module.exports = React.createClass({
-	massageLogos: createSelector(
+	logos: createSelector(
 		createSelector(
 			_.property('logos'),
 			_.partial(_.pluck, _, 'data')
@@ -22,8 +22,6 @@ module.exports = React.createClass({
 		}
 	),
 	render: function() {
-		var logos = this.massageLogos(this.props);
-
 		return (
 			<div className="logos">
 				<div className="logos-container">
@@ -31,7 +29,7 @@ module.exports = React.createClass({
 						<h3>Most Popular Logos</h3>
 					</div>
 					<ul className="flex-grid">
-						{_.first(logos, 20).map(function(logo) {
+						{_.first(this.logos(this.props), 20).map(function(logo) {
 							return (
 								<li className="brand-logo" key={logo.id}>
 									<div className="brand-logo-image flex-center">
