@@ -1,58 +1,39 @@
-var React = require('react');
+var _              = require('underscore');
+var classNames     = require('classnames');
+var createSelector = require('reselect').createSelector;
+var React          = require('react');
 
 module.exports = React.createClass({
+	collectedLogos: createSelector(
+		_.property('logos'),
+		createSelector(
+			_.property('collection'),
+			_.keys
+		),
+		function(logos, collectionAsArray) {
+			return _.chain(collectionAsArray)
+				.map(_.propertyOf(logos))
+				.pluck('data')
+				.value();
+		}
+	),
 	render: function() {
+		var collectedLogos = this.collectedLogos(this.props);
+
 		return (
-			<div className="collection">
+			<div className={classNames({
+				collection:       true,
+				collection_empty: _.isEmpty(collectedLogos)
+			})}>
 				<ul className="collection-row">
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/dotnet.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/100tb.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/appcode.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/desk.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/authy.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/appdynamics.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/tomcat.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/dreamhost.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/divshot.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/codebase.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/codepen.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
-					<li className="collection-row-list">
-						<img src="/svg/svgporn/composer.svg" />
-						<div className="collection-delete-item"></div>
-					</li>
+					{collectedLogos.map(function(logo) {
+						return (
+							<li className="collection-row-list" key={logo.id}>
+								<img src={logo.svg} />
+								<div className="collection-delete-item" onClick={_.partial(this.props.onUncollectLogo, logo)}></div>
+							</li>
+						);
+					}.bind(this))}
 				</ul>
 				<div className="ctas">
 					<a>Download SVGs</a>

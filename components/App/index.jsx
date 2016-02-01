@@ -42,7 +42,8 @@ module.exports = connect(createStructuredSelector({
 				<Logos logos={this.props.logos} collection={this.props.collection} filter={this.state.filter}
 					onCollectLogo={_.compose(this.props.dispatch, actions.addToCollection)}
 					onUncollectLogo={_.compose(this.props.dispatch, actions.removeFromCollection)} />
-				<Collection />
+				<Collection logos={this.props.logos} collection={this.props.collection}
+					onUncollectLogo={_.compose(this.props.dispatch, actions.removeFromCollection)} />
 			</div>
 		);
 	}

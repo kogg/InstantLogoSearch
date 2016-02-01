@@ -7,13 +7,11 @@ module.exports = React.createClass({
 		return { expanded: false };
 	},
 	render: function() {
-		var headerClasses = classNames({
-			header:          true,
-			header_expanded: this.state.expanded
-		});
-
 		return (
-			<div className={headerClasses}>
+			<div className={classNames({
+				header:          true,
+				header_expanded: this.state.expanded
+			})}>
 				<div className="flex-spread">
 					<div className="logo"></div>
 					<div>
