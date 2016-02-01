@@ -15,7 +15,7 @@ module.exports = connect(createStructuredSelector({
 	collection: _.property('collection')
 }))(React.createClass({
 	mixins:             [FeathersMixin],
-	getInitialState:    _.constant({ filter: '' }),
+	getInitialState:    _.constant({}),
 	componentWillMount: function() {
 		this.feathers('logo');
 	},
@@ -39,8 +39,19 @@ module.exports = connect(createStructuredSelector({
 				<Header ref="header" onFilter={function(filter) {
 					this.setState({ filter: filter });
 				}.bind(this)} />
-				<Logos logos={this.props.logos} collection={this.props.collection} filter={this.state.filter} onToggleCollectLogo={this.toggleCollectLogo} />
-				<Collection logos={this.props.logos} collection={this.props.collection} onToggleCollectLogo={this.toggleCollectLogo} />
+				<Logos logos={this.props.logos} collection={this.props.collection} filter={this.state.filter}
+					onToggleCollectLogo={this.toggleCollectLogo}
+					onConsiderCollectLogo={function(logo) {
+						this.setState({ considering: logo.id });
+					}.bind(this)}
+					onUnconsiderCollectLogo={function(logo) {
+						if (this.state.considering !== logo.id) {
+							return;
+						}
+						this.setState({ considering: null });
+					}.bind(this)} />
+				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.state.considering}
+					onToggleCollectLogo={this.toggleCollectLogo} />
 			</div>
 		);
 	},

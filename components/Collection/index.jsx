@@ -5,17 +5,30 @@ var React          = require('react');
 
 module.exports = React.createClass({
 	collectedLogos: createSelector(
-		_.property('logos'),
 		createSelector(
-			_.property('collection'),
-			_.keys
+			_.property('logos'),
+			createSelector(_.property('collection'), _.keys),
+			function(logos, collectionAsArray) {
+				return _.chain(collectionAsArray)
+					.map(_.propertyOf(logos))
+					.pluck('data')
+					.reverse()
+					.value();
+			}
 		),
-		function(logos, collectionAsArray) {
-			return _.chain(collectionAsArray)
-				.map(_.propertyOf(logos))
-				.pluck('data')
-				.reverse()
-				.value();
+		_.property('logos'),
+		_.property('considering'),
+		function(collectedLogos, logos, considering) {
+			if (_.isEmpty(considering)) {
+				return collectedLogos;
+			}
+			var index = _.findIndex(collectedLogos, _.matcher({ id: considering }));
+			if (index === -1) {
+				return _.union([_.defaults({ considering: 'addition' }, logos[considering].data)], collectedLogos);
+			}
+			collectedLogos = _.clone(collectedLogos);
+			collectedLogos[index] = _.defaults({ considering: 'removal' }, collectedLogos[index]);
+			return collectedLogos;
 		}
 	),
 	render: function() {
@@ -29,12 +42,17 @@ module.exports = React.createClass({
 				<ul className="collection-row">
 					{collectedLogos.map(function(logo) {
 						return (
-							<li className="collection-row-list" key={logo.id}>
+							<li key={logo.id} className={classNames({
+								'collection-row-list':                      true,
+								'collection-row-list_considering_addition': logo.considering === 'addition',
+								'collection-row-list_considering_removal':  logo.considering === 'removal'
+							})}>
 								<img src={logo.svg} />
-								<div className="collection-delete-item" onClick={function(e) {
-									e.preventDefault();
-									this.props.onToggleCollectLogo(logo);
-								}.bind(this)}></div>
+								<div className="collection-delete-item"
+									onClick={function(e) {
+										e.preventDefault();
+										this.props.onToggleCollectLogo(logo);
+									}.bind(this)}></div>
 							</li>
 						);
 					}.bind(this))}
