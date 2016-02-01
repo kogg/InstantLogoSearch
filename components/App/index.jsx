@@ -39,21 +39,13 @@ module.exports = connect(createStructuredSelector({
 				<Header ref="header" onFilter={function(filter) {
 					this.setState({ filter: filter });
 				}.bind(this)} />
-				<Logos logos={this.props.logos} collection={this.props.collection} filter={this.state.filter}
-					onCollectLogo={function(logo) {
-						this.props.dispatch(actions.addToCollection(logo));
-						this.refs.header.focus();
-					}.bind(this)}
-					onUncollectLogo={function(logo) {
-						this.props.dispatch(actions.removeFromCollection(logo));
-						this.refs.header.focus();
-					}.bind(this)} />
-				<Collection logos={this.props.logos} collection={this.props.collection}
-					onUncollectLogo={function(logo) {
-						this.props.dispatch(actions.removeFromCollection(logo));
-						this.refs.header.focus();
-					}.bind(this)} />
+				<Logos logos={this.props.logos} collection={this.props.collection} filter={this.state.filter} onToggleCollectLogo={this.toggleCollectLogo} />
+				<Collection logos={this.props.logos} collection={this.props.collection} onToggleCollectLogo={this.toggleCollectLogo} />
 			</div>
 		);
+	},
+	toggleCollectLogo: function(logo) {
+		this.props.dispatch(actions[this.props.collection[logo.id] ? 'removeFromCollection' : 'addToCollection'](logo));
+		this.refs.header.focus();
 	}
 }));

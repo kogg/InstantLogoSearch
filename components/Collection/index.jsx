@@ -31,7 +31,10 @@ module.exports = React.createClass({
 						return (
 							<li className="collection-row-list" key={logo.id}>
 								<img src={logo.svg} />
-								<div className="collection-delete-item" onClick={_.partial(this.props.onUncollectLogo, logo)}></div>
+								<div className="collection-delete-item" onClick={function(e) {
+									e.preventDefault();
+									this.props.onToggleCollectLogo(logo);
+								}.bind(this)}></div>
 							</li>
 						);
 					}.bind(this))}
