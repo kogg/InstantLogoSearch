@@ -12,7 +12,10 @@ module.exports = {
 				if (!logo.svg || !logo.svg.path) {
 					return logo;
 				}
-				return _.defaults({ svg: { url: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename) } }, logo);
+				return _.chain({ svg: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename) })
+					.defaults(logo)
+					.omit('source')
+					.value();
 			})
 			.sortBy(function(logo) {
 				return logo.name.charAt(0).toLowerCase();
