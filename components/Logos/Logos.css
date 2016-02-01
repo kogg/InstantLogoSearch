@@ -18,6 +18,7 @@
   border-radius: 3px;
   width: calc(20% - 20px);
   margin: 0 20px 20px 0;
+  display: inline-block;
 }
 
 .brand-logo-image {
@@ -52,9 +53,25 @@
   display: block;
   padding: 4px 12px;
   cursor: pointer;
-  color: rgba(0, 0, 0, .7);
+  color: black;
+  opacity: .6;
+}
+
+.brand-logo-ctas a:not(:last-of-type) {
+  background: url('downarrow105.svg');
+  background-size: 14px;
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+}
+
+.brand-logo-ctas a:last-of-type {
+  background: url('plus79.svg');
+  background-size: 14px;
+  background-position: right 12px center;
+  background-repeat: no-repeat;
 }
 
 .brand-logo-ctas a:hover {
-  background: rgba(0, 0, 0, .05);
+  opacity: 1;
+  background-color: rgba(0, 0, 0, .02);
 }

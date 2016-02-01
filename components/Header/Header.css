@@ -1,6 +1,7 @@
 .header {
-  background: linear-gradient(-12deg, #036ded 22.5%, #5bd6dd 52.75%);
-  background-size: 100% 920px;
+  background-color: #1d1d1d;
+  background-image: url('pattern-test12.png');
+  background-size: cover;
   background-position: center bottom;
   color: white;
   padding: 30px;
@@ -10,10 +11,11 @@
 }
 
 .logo {
-  background: url('logotest.png');
-  width: 52px;
-  height: 52px;
-  background-size: 100%;
+  background: url('logo.svg');
+  width: 46px;
+  height: 46px;
+  background-size: 90%;
+  background-repeat: no-repeat;
 }
 
 .social-action {
@@ -27,10 +29,9 @@
   text-decoration: none;
 }
 
-.header:before {
+/*.header:before {
   content: "";
-
-  /*background: url('pattern-temporary.svg') center;*/
+  background: url('pattern-header.png') center;
   background-size: 400px;
   position: absolute;
   width: 100%;
@@ -38,9 +39,8 @@
   top: 0;
   left: 0;
   z-index: 0;
-  opacity: .12;
-}
-
+  opacity: .05;
+}*/
 .header-content {
   padding: 5% 0 7%;
   position: relative;
@@ -61,7 +61,7 @@
 .search-input {
   color: #555;
   background: transparent;
-  width: calc(100% - 50px);
+  width: calc(100% - 34px);
   outline: none;
   margin-top: -2px;
   border: none;
@@ -75,20 +75,22 @@
 }
 
 .search-icon {
-  width: 50px;
-  height: 24px;
+  width: 34px;
+  height: 28px;
   vertical-align: top;
   display: inline-block;
-  background: url('search-icon.png');
-  background-position: right center;
-  background-size: 16px;
+  background: url('logo-black.svg');
+  background-position: left 0;
+  background-size: 24px;
   background-repeat: no-repeat;
   opacity: .4;
+  position: relative;
+  top: -2px;
 }
 
 /*header_expanded*/
 .header_expanded {
-  padding: 10px 30px 10px 10px;
+  padding: 10px 30px 10px 15px;
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
@@ -114,6 +116,5 @@
 
 .header_expanded .search-container {
   margin: 0;
-  border: 1px solid rgba(0, 0, 0, 0.15);
   box-shadow: none;
 }

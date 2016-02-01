@@ -27,11 +27,13 @@ module.exports = React.createClass({
 					<h2>{process.env.npm_package_description}</h2>
 					<div className="search-container">
 						<form onSubmit={_.partial(_.result, _, 'preventDefault')} >
-							<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={_.debounce(function() {
-								this.setState({ expanded: true });
-								this.props.onFilter(this.refs.search.value);
-							}.bind(this), 25)} />
-							<i className="search-icon"></i>
+							<label>
+								<i className="search-icon"></i>
+								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={_.debounce(function() {
+									this.setState({ expanded: true });
+									this.props.onFilter(this.refs.search.value);
+								}.bind(this), 25)} />
+							</label>
 						</form>
 					</div>
 				</div>

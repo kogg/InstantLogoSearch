@@ -34,8 +34,9 @@ form {
 }
 
 .flex-grid {
-  display: flex;
-  flex-wrap: wrap;
+
+  /*display: flex;
+  flex-wrap: wrap;*/
 }
 
 .flex-center {
