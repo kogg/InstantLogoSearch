@@ -25,6 +25,7 @@
 }
 
 .collection-row-list {
+  vertical-align: top;
   display: inline-block;
   position: relative;
   height: 80px;
@@ -36,22 +37,15 @@
   border-radius: 3px;
 }
 
-.collection-row-list_considering_addition {
-  background: blue;
-}
-
-.collection-row-list_considering_removal {
-  background: red;
+.collection-row-list_considering_removal img,
+.collection-row-list_considering_addition img {
+  animation: pulsate 1.2s ease-out;
+  animation-iteration-count: infinite;
+  opacity: 1;
 }
 
 .collection-row-list img {
   height: 54px;
-}
-
-.pulse {
-  animation: pulsate 1.2s ease-out;
-  animation-iteration-count: infinite;
-  opacity: 1;
 }
 
 @keyframes pulsate {
