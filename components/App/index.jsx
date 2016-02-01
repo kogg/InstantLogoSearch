@@ -36,14 +36,23 @@ module.exports = connect(createStructuredSelector({
 						{ name: 'twitter:description', content: process.env.npm_package_description }
 					]}
 				/>
-				<Header onFilter={function(filter) {
+				<Header ref="header" onFilter={function(filter) {
 					this.setState({ filter: filter });
 				}.bind(this)} />
 				<Logos logos={this.props.logos} collection={this.props.collection} filter={this.state.filter}
-					onCollectLogo={_.compose(this.props.dispatch, actions.addToCollection)}
-					onUncollectLogo={_.compose(this.props.dispatch, actions.removeFromCollection)} />
+					onCollectLogo={function(logo) {
+						this.props.dispatch(actions.addToCollection(logo));
+						this.refs.header.focus();
+					}.bind(this)}
+					onUncollectLogo={function(logo) {
+						this.props.dispatch(actions.removeFromCollection(logo));
+						this.refs.header.focus();
+					}.bind(this)} />
 				<Collection logos={this.props.logos} collection={this.props.collection}
-					onUncollectLogo={_.compose(this.props.dispatch, actions.removeFromCollection)} />
+					onUncollectLogo={function(logo) {
+						this.props.dispatch(actions.removeFromCollection(logo));
+						this.refs.header.focus();
+					}.bind(this)} />
 			</div>
 		);
 	}

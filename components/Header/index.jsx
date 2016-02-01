@@ -6,6 +6,9 @@ module.exports = React.createClass({
 	getInitialState: function() {
 		return { expanded: false };
 	},
+	focus: function() {
+		this.refs.search.select();
+	},
 	render: function() {
 		return (
 			<div className={classNames({
