@@ -41,16 +41,18 @@ module.exports = React.createClass({
 									</div>
 									<div className="brand-logo-ctas">
 										<strong>{logo.name}</strong>
-										<a href={logo.svg} download> Download SVG</a>
-										<a href={logo.png ? logo.png.url : ('/png?id=' + logo.id)} download> Download PNG</a>
-										<a href="" onClick={function(e) {
-											e.preventDefault();
-											if (this.props.collection[logo.id]) {
+										<a href={logo.svg} download>Download SVG</a>
+										<a href={logo.png ? logo.png.url : ('/png?id=' + logo.id)} download>Download PNG</a>
+										{this.props.collection[logo.id] ?
+											<a href="" onClick={function(e) {
+												e.preventDefault();
 												this.props.onUncollectLogo(logo);
-											} else {
+											}.bind(this)}>Remove from Collection:</a> :
+											<a href="" onClick={function(e) {
+												e.preventDefault();
 												this.props.onCollectLogo(logo);
-											}
-										}.bind(this)}> {this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Collection</a>
+											}.bind(this)} >Add to Collection</a>
+										}
 									</div>
 								</li>
 							);
