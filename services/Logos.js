@@ -12,9 +12,12 @@ module.exports = {
 				if (!logo.svg || !logo.svg.path) {
 					return logo;
 				}
-				return _.chain({ svg: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename) })
+				return _.chain({
+					svg: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
+					png: '/png?id=' + logo.id
+				})
 					.defaults(logo)
-					.omit('source')
+					.pick('id', 'name', 'svg', 'png')
 					.value();
 			})
 			.sortBy(function(logo) {

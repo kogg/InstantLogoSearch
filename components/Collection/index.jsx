@@ -75,8 +75,8 @@ module.exports = React.createClass({
 						</div>
 					) : (
 						<div className="ctas">
-							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.png'} onClick={this.props.onDownloadLogos}>Download SVG</a>
-							<a href={collectedLogos[0].png || ('/png?id=' + collectedLogos[0].id)} download={collectedLogos[0].id + '.png'} onClick={this.props.onDownloadLogos}>Download PNG</a>
+							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.svg'} onClick={this.props.onDownloadLogos}>Download SVG</a>
+							<a href={collectedLogos[0].png} download={collectedLogos[0].id + '.png'} onClick={this.props.onDownloadLogos}>Download PNG</a>
 						</div>
 					))
 				}
@@ -89,14 +89,13 @@ module.exports = React.createClass({
 		var promise = Promise.all(
 			_.chain(logos)
 				.map(function(logo) {
-					switch (filetype) {
-						case 'svg':
-							return Promise.resolve(logo.svg);
-						case 'png':
-							return Promise.resolve(logo.png || ('/png?id=' + logo.id));
-						default:
-							return Promise.reject(new Error('No Logo type was provided'));
+					if (!filetype) {
+						return Promise.reject(new Error('No Logo type was provided'));
 					}
+					if (!logo[filetype]) {
+						return Promise.reject(new Error('Logo ' + logo.id + ' does not have a ' + filetype));
+					}
+					return Promise.resolve(logo[filetype]);
 				})
 				.invoke('then', axios.get)
 				.map(function(promise, i) {
