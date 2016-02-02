@@ -59,8 +59,8 @@ module.exports = React.createClass({
 					}.bind(this))}
 				</ul>
 				<div className="ctas">
-					<a>Download SVGs</a>
-					<a>Download PNGs</a>
+					<a>Download SVG{(collectedLogos.length > 1) && 's'}</a>
+					<a>Download PNG{(collectedLogos.length > 1) && 's'}</a>
 				</div>
 			</div>
 		);
