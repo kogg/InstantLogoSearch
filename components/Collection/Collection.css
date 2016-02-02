@@ -28,6 +28,10 @@
   white-space: nowrap;
 }
 
+.collection-row:hover .collection-row-list img {
+  opacity: 1;
+}
+
 .collection-row::-webkit-scrollbar {
   display: none;
 }
@@ -43,6 +47,7 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   margin-right: 12px;
   border-radius: 3px;
+  transition: all .1s ease-in-out;
 }
 
 .collection-row-list_considering_removal img,
@@ -54,6 +59,7 @@
 
 .collection-row-list img {
   height: 54px;
+  opacity: .5;
 }
 
 @keyframes pulsate {
@@ -62,7 +68,7 @@
   }
 
   50% {
-    opacity: .18;
+    opacity: .5;
   }
 
   100% {
