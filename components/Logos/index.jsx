@@ -10,7 +10,7 @@ module.exports = React.createClass({
 			_.partial(_.pluck, _, 'data')
 		),
 		function(props) {
-			return (props.filter || '').toLowerCase().split(/\s+/);
+			return props.filter.toLowerCase().split(/\s+/);
 		},
 		function(logos, filters) {
 			return _.filter(logos, function(logo) {
@@ -31,9 +31,9 @@ module.exports = React.createClass({
 				'logos_extra-bottom': !_.isEmpty(this.props.collection)
 			})}>
 				<div className="logos-container">
-					<div className="logos-title">
+					{_.isEmpty(this.props.filter) && <div className="logos-title">
 						<h3>Most Popular Logos</h3>
-					</div>
+					</div>}
 					<ul className="flex-grid">
 						{_.first(this.logos(this.props), 20).map(function(logo) {
 							return (

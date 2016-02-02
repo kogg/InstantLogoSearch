@@ -15,7 +15,7 @@ module.exports = connect(createStructuredSelector({
 	collection: _.property('collection')
 }))(React.createClass({
 	mixins:             [FeathersMixin],
-	getInitialState:    _.constant({}),
+	getInitialState:    _.constant({ filter: '' }),
 	componentWillMount: function() {
 		this.feathers('logo');
 	},
