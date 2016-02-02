@@ -45,9 +45,6 @@
       "uglifyify"
     ]
   },
-  "feathersjs": {
-    "socket": "true"
-  },
   "pre-commit": [
     "fix",
     "test"
