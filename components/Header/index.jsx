@@ -27,9 +27,6 @@ module.exports = React.createClass({
 								<i className="search-icon"></i>
 								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
 									var filter = this.refs.search.value.trim();
-									if (_.isEmpty(filter)) {
-										return;
-									}
 									this.setState({ expanded: true });
 									this.props.onFilter(filter);
 								}.bind(this)} />
