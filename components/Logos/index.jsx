@@ -60,8 +60,7 @@ module.exports = React.createClass({
 											}.bind(this)}
 											onMouseLeave={function() {
 												clearTimeout(timeout);
-												timeout = null;
-												this.props.onUnconsiderCollectLogo(logo);
+												timeout = setTimeout(_.partial(this.props.onUnconsiderCollectLogo, logo), 50);
 											}.bind(this)}>
 											{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Collection
 										</a>
