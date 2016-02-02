@@ -28,7 +28,7 @@
     "postcss:watch": "npm run postcss -- -w",
     "eslint:fix": "( git diff --staged --name-only | grep \".jsx\\?$\" | xargs eslint --fix ) && ( git diff --staged --name-only | grep \".jsx\\?$\" | xargs git add )",
     "cssfmt:fix": "( git diff --staged --name-only | grep \".s\\?css$\" | xargs -I '{}' -n 1 cssfmt {} ) && ( git diff --staged --name-only | grep \".s\\?css$\" | xargs git add )",
-    "discify": "browserify $npm_package_browser_main --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O"
+    "discify": "NODE_ENV=production browserify $npm_package_browser_main --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O"
   },
   "browserify": {
     "extension": [
