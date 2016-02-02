@@ -56,7 +56,7 @@ module.exports = React.createClass({
 											}.bind(this)}
 											onMouseMove={function() {
 												clearTimeout(timeout);
-												timeout = setTimeout(_.partial(this.props.onConsiderCollectLogo, logo), 25);
+												timeout = setTimeout(_.partial(this.props.onConsiderCollectLogo, logo), 50);
 											}.bind(this)}
 											onMouseLeave={function() {
 												clearTimeout(timeout);
