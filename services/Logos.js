@@ -21,7 +21,7 @@ module.exports = {
 					.value();
 			})
 			.sortBy(function(logo) {
-				return logo.name.charAt(0).toLowerCase();
+				return logo.name.toLowerCase();
 			})
 			.value();
 	}
