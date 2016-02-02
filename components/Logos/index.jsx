@@ -46,9 +46,9 @@ module.exports = React.createClass({
 									</div>
 									<div className="brand-logo-ctas">
 										<strong>{logo.name}</strong>
-										<a href={logo.svg} download>Download SVG</a>
-										<a href={logo.png ? logo.png.url : ('/png?id=' + logo.id)} download>Download PNG</a>
-										<a href=""
+										<a href={logo.svg} download={logo.id + '.png'}>Download SVG</a>
+										<a href={logo.png || ('/png?id=' + logo.id)} download={logo.id + '.png'}>Download PNG</a>
+										<a href={logo.svg || logo.png || ('/png?id=' + logo.id)}
 											onClick={function(e) {
 												e.preventDefault();
 												clearTimeout(timeout);

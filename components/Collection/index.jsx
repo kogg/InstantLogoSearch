@@ -1,6 +1,9 @@
 var _              = require('underscore');
+var axios          = require('axios');
 var classNames     = require('classnames');
 var createSelector = require('reselect').createSelector;
+var saveAs         = process.browser && require('filesaverjs').saveAs;
+var JSZip          = require('jszip');
 var React          = require('react');
 
 module.exports = React.createClass({
@@ -61,17 +64,55 @@ module.exports = React.createClass({
 				{Boolean(collectedLogos.length) && ((collectedLogos.length > 1) ?
 					(
 						<div className="ctas">
-							<a href="todo.txt" download>Download SVGs</a>
-							<a href="todo.txt" download>Download PNGs</a>
+							<a href="" download onClick={function(e) {
+								e.preventDefault();
+								this.downloadAndZip(collectedLogos, 'svg').then(this.props.onDownloadLogos);
+							}.bind(this)}>Download SVGs</a>
+							<a href="" download onClick={function(e) {
+								e.preventDefault();
+								this.downloadAndZip(collectedLogos, 'png').then(this.props.onDownloadLogos);
+							}.bind(this)}>Download PNGs</a>
 						</div>
 					) : (
 						<div className="ctas">
-							<a href={collectedLogos[0].svg} download>Download SVG</a>
-							<a href={collectedLogos[0].png ? collectedLogos[0].png.url : ('/png?id=' + collectedLogos[0].id)} download>Download PNG</a>
+							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.png'} onClick={this.props.onDownloadLogos}>Download SVG</a>
+							<a href={collectedLogos[0].png || ('/png?id=' + collectedLogos[0].id)} download={collectedLogos[0].id + '.png'} onClick={this.props.onDownloadLogos}>Download PNG</a>
 						</div>
 					))
 				}
 			</div>
 		);
+	},
+	downloadAndZip: function(logos, filetype) {
+		var zip = new JSZip();
+
+		var promise = Promise.all(
+			_.chain(logos)
+				.map(function(logo) {
+					switch (filetype) {
+						case 'svg':
+							return Promise.resolve(logo.svg);
+						case 'png':
+							return Promise.resolve(logo.png || ('/png?id=' + logo.id));
+						default:
+							return Promise.reject(new Error('No Logo type was provided'));
+					}
+				})
+				.invoke('then', axios.get)
+				.map(function(promise, i) {
+					return promise.then(function(response) {
+						zip.file(logos[i].id + '.' + filetype, response.data);
+					});
+				})
+				.value()
+		).then(function() {
+			saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
+		});
+
+		promise.catch(function(err) {
+			 console.error(err);
+		});
+
+		return promise;
 	}
 });

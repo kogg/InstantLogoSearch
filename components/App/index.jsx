@@ -51,7 +51,11 @@ module.exports = connect(createStructuredSelector({
 						this.setState({ considering: null });
 					}.bind(this)} />
 				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.state.considering}
-					onToggleCollectLogo={this.toggleCollectLogo} />
+					onToggleCollectLogo={this.toggleCollectLogo}
+					onDownloadLogos={function() {
+						this.props.dispatch(actions.clearCollection());
+					}.bind(this)}
+				/>
 			</div>
 		);
 	},
