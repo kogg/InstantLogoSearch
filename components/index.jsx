@@ -20,7 +20,7 @@ module.exports = React.createClass({
 				<body>
 					<div id="react-app" dangerouslySetInnerHTML={{ __html: this.props.markup }} />
 					<script id="react-state" type="text/json" dangerouslySetInnerHTML={{ __html: JSON.stringify(this.props.state) }} />
-					<script type="text/javascript" src="/socket.io/socket.io.js" />
+					{process.env.npm_package_feathersjs_socket && <script type="text/javascript" src="/socket.io/socket.io.js" />}
 					<script type="text/javascript" src={this.cacheBuster('js/main.js')} async />
 					{this.props.head.script.toComponent()}
 				</body>
