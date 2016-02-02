@@ -23,6 +23,8 @@ module.exports = React.createClass({
 		}
 	),
 	render: function() {
+		var timeout;
+
 		return (
 			<div className={classNames({
 				'logos':              true,
@@ -52,8 +54,15 @@ module.exports = React.createClass({
 												this.props.onToggleCollectLogo(logo);
 												this.props.onUnconsiderCollectLogo(logo);
 											}.bind(this)}
-											onMouseEnter={_.partial(this.props.onConsiderCollectLogo, logo)}
-											onMouseLeave={_.partial(this.props.onUnconsiderCollectLogo, logo)}>
+											onMouseMove={function() {
+												clearTimeout(timeout);
+												timeout = setTimeout(_.partial(this.props.onConsiderCollectLogo, logo), 25);
+											}.bind(this)}
+											onMouseLeave={function() {
+												clearTimeout(timeout);
+												timeout = null;
+												this.props.onUnconsiderCollectLogo(logo);
+											}.bind(this)}>
 											{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Collection
 										</a>
 									</div>
