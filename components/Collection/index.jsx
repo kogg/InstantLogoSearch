@@ -58,7 +58,7 @@ module.exports = React.createClass({
 						);
 					}.bind(this))}
 				</ul>
-				{collectedLogos.length && ((collectedLogos.length > 1) ?
+				{Boolean(collectedLogos.length) && ((collectedLogos.length > 1) ?
 					(
 						<div className="ctas">
 							<a href="todo.txt" download>Download SVGs</a>
