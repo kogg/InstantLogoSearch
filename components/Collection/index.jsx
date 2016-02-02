@@ -58,10 +58,19 @@ module.exports = React.createClass({
 						);
 					}.bind(this))}
 				</ul>
-				<div className="ctas">
-					<a>Download SVG{(collectedLogos.length > 1) && 's'}</a>
-					<a>Download PNG{(collectedLogos.length > 1) && 's'}</a>
-				</div>
+				{collectedLogos.length && ((collectedLogos.length > 1) ?
+					(
+						<div className="ctas">
+							<a href="todo.txt" download>Download SVGs</a>
+							<a href="todo.txt" download>Download PNGs</a>
+						</div>
+					) : (
+						<div className="ctas">
+							<a href={collectedLogos[0].svg} download>Download SVG</a>
+							<a href={collectedLogos[0].png ? collectedLogos[0].png.url : ('/png?id=' + collectedLogos[0].id)} download>Download PNG</a>
+						</div>
+					))
+				}
 			</div>
 		);
 	}
