@@ -1,15 +1,19 @@
 .logos {
   padding: 30px 10px 10px 30px;
   overflow: auto;
+}
 
-  &_extra-bottom {
-    margin-bottom: 100px;
-  }
+.logos_extra-bottom {
+  margin-bottom: 100px;
 }
 
 .header_expanded + .logos {
   max-height: calc(100vh - 73px);
   overflow: auto;
+
+  &_extra-bottom {
+    max-height: calc(100vh - 173px);
+  }
 }
 
 .logos-title {
@@ -23,9 +27,11 @@
   width: calc(20% - 20px);
   margin: 0 20px 20px 0;
   display: inline-block;
+  vertical-align: top;
+  transition: all .3s ease-in-out;
 
   &_collected {
-    border: 1px solid pink;
+    box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .15);
   }
 }
 
@@ -72,6 +78,10 @@
   background-size: 14px;
   background-position: right 12px center;
   background-repeat: no-repeat;
+}
+
+.brand-logo-ctas a::after:not(:last-of-type) {
+  content: "test";
 }
 
 .brand-logo-ctas a:last-of-type {

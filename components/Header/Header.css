@@ -1,9 +1,8 @@
 .header {
-  background-color: #1d1d1d;
-  background-image: url('pattern-test12.png');
+  background-color: #fff;
+  background-image: url('desk43.png');
   background-size: cover;
   background-position: center bottom;
-  color: white;
   padding: 30px;
   text-align: center;
   position: relative;
@@ -11,7 +10,7 @@
 }
 
 .logo {
-  background: url('logo.svg');
+  background: url('logo-black.svg');
   width: 46px;
   height: 46px;
   background-size: 90%;
@@ -20,11 +19,11 @@
 
 .social-action {
   line-height: 32px;
-  border: 1px solid rgba(255, 255, 255, .7);
+  border: 1px solid rgba(0, 0, 0, .7);
   border-radius: 3px;
+  color: black;
   padding: 0 12px;
   margin-left: 8px;
-  color: white;
   display: inline-block;
   text-decoration: none;
 }
