@@ -15,8 +15,8 @@ module.exports = React.createClass({
 		function(logos, filters) {
 			return _.filter(logos, function(logo) {
 				return _.every(filters, function(filter) {
-					return _.some(logo.name.split(/\s+/), function(name_part) {
-						return name_part.toLowerCase().includes(filter);
+					return _.some(logo.keywords, function(keyword) {
+						return keyword.toLowerCase().includes(filter);
 					});
 				});
 			});

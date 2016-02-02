@@ -13,11 +13,16 @@ module.exports = {
 					return logo;
 				}
 				return _.chain({
-					svg: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
-					png: '/png?id=' + logo.id
+					svg:      '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
+					png:      '/png?id=' + logo.id,
+					keywords: _.chain(logo.name.split(/\s+/))
+						.invoke('toLowerCase')
+						.union(logo.keywords)
+						.sortBy('length')
+						.value()
 				})
 					.defaults(logo)
-					.pick('id', 'name', 'svg', 'png')
+					.pick('id', 'name', 'svg', 'png', 'keywords')
 					.value();
 			})
 			.sortBy(function(logo) {
