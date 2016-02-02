@@ -12,13 +12,21 @@ module.exports = {
 				if (!logo.svg || !logo.svg.path) {
 					return logo;
 				}
-				return _.chain({ svg: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename) })
+				return _.chain({
+					svg:      '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
+					png:      '/png?id=' + logo.id,
+					keywords: _.chain(logo.name.split(/\s+/))
+						.invoke('toLowerCase')
+						.union(logo.keywords)
+						.sortBy('length')
+						.value()
+				})
 					.defaults(logo)
-					.omit('source')
+					.pick('id', 'name', 'svg', 'png', 'keywords')
 					.value();
 			})
 			.sortBy(function(logo) {
-				return logo.name.charAt(0).toLowerCase();
+				return logo.name.toLowerCase();
 			})
 			.value();
 	}

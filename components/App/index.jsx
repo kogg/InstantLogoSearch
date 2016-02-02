@@ -15,7 +15,7 @@ module.exports = connect(createStructuredSelector({
 	collection: _.property('collection')
 }))(React.createClass({
 	mixins:             [FeathersMixin],
-	getInitialState:    _.constant({}),
+	getInitialState:    _.constant({ filter: '' }),
 	componentWillMount: function() {
 		this.feathers('logo');
 	},
@@ -51,7 +51,11 @@ module.exports = connect(createStructuredSelector({
 						this.setState({ considering: null });
 					}.bind(this)} />
 				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.state.considering}
-					onToggleCollectLogo={this.toggleCollectLogo} />
+					onToggleCollectLogo={this.toggleCollectLogo}
+					onDownloadLogos={function() {
+						this.props.dispatch(actions.clearCollection());
+					}.bind(this)}
+				/>
 			</div>
 		);
 	},

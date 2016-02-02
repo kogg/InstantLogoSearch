@@ -1,6 +1,9 @@
 var _              = require('underscore');
+var axios          = require('axios');
 var classNames     = require('classnames');
 var createSelector = require('reselect').createSelector;
+var saveAs         = process.browser && require('filesaverjs').saveAs;
+var JSZip          = require('jszip');
 var React          = require('react');
 
 module.exports = React.createClass({
@@ -58,11 +61,57 @@ module.exports = React.createClass({
 						);
 					}.bind(this))}
 				</ul>
-				<div className="ctas">
-					<a>Download SVGs</a>
-					<a>Download PNGs</a>
-				</div>
+				{Boolean(collectedLogos.length) && ((collectedLogos.length > 1) ?
+					(
+						<div className="ctas">
+							<a href="" download onClick={function(e) {
+								e.preventDefault();
+								this.downloadAndZip(collectedLogos, 'svg').then(this.props.onDownloadLogos);
+							}.bind(this)}>Download SVGs</a>
+							<a href="" download onClick={function(e) {
+								e.preventDefault();
+								this.downloadAndZip(collectedLogos, 'png').then(this.props.onDownloadLogos);
+							}.bind(this)}>Download PNGs</a>
+						</div>
+					) : (
+						<div className="ctas">
+							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.svg'} onClick={this.props.onDownloadLogos}>Download SVG</a>
+							<a href={collectedLogos[0].png} download={collectedLogos[0].id + '.png'} onClick={this.props.onDownloadLogos}>Download PNG</a>
+						</div>
+					))
+				}
 			</div>
 		);
+	},
+	downloadAndZip: function(logos, filetype) {
+		var zip = new JSZip();
+
+		var promise = Promise.all(
+			_.chain(logos)
+				.map(function(logo) {
+					if (!filetype) {
+						return Promise.reject(new Error('No Logo type was provided'));
+					}
+					if (!logo[filetype]) {
+						return Promise.reject(new Error('Logo ' + logo.id + ' does not have a ' + filetype));
+					}
+					return Promise.resolve(logo[filetype]);
+				})
+				.invoke('then', axios.get)
+				.map(function(promise, i) {
+					return promise.then(function(response) {
+						zip.file(logos[i].id + '.' + filetype, response.data);
+					});
+				})
+				.value()
+		).then(function() {
+			saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
+		});
+
+		promise.catch(function(err) {
+			 console.error(err);
+		});
+
+		return promise;
 	}
 });
