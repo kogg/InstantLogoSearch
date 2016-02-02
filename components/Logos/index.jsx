@@ -31,9 +31,9 @@ module.exports = React.createClass({
 				'logos_extra-bottom': !_.isEmpty(this.props.collection)
 			})}>
 				<div className="logos-container">
-					{_.isEmpty(this.props.filter) && <div className="logos-title">
-						<h3>Most Popular Logos</h3>
-					</div>}
+					<div className="logos-title">
+						<h3>{_.isEmpty(this.props.filter) ? 'Most Popular Logos' : ('Search Results for "' + this.props.filter + '"')}</h3>
+					</div>
 					<ul className="flex-grid">
 						{_.first(this.logos(this.props), 20).map(function(logo) {
 							return (
