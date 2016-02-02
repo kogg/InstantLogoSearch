@@ -51,6 +51,8 @@ module.exports = React.createClass({
 										<a href=""
 											onClick={function(e) {
 												e.preventDefault();
+												clearTimeout(timeout);
+												timeout = null;
 												this.props.onToggleCollectLogo(logo);
 												this.props.onUnconsiderCollectLogo(logo);
 											}.bind(this)}
