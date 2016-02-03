@@ -11,7 +11,7 @@ FeathersMixin.setFeathersActions(actions);
 
 module.exports = React.createClass({
 	componentDidMount: function() {
-		global.ga('send', 'pageview');
+		ga('send', 'pageview');
 	},
 	render: function() {
 		return (
