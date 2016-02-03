@@ -93,7 +93,7 @@ module.exports = connect(createStructuredSelector({
 		_.each(logos, function(logo) {
 			ga('ec:addProduct', _.chain(logo).pick('id', 'name').extend({ variant: filetype }).value());
 		});
-		ga('ec:setAction', 'purchase', { id: 'uhhh' });
+		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
 	},
 	clearCollection: function() {
 		this.props.dispatch(actions.clearCollection());
