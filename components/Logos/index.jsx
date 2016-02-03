@@ -6,25 +6,38 @@ var React          = require('react');
 var PAGE_SIZE = 20;
 
 function props_filter_to_filters(props) {
-	return props.filter.toLowerCase().split(/\s+/);
+	return _.chain(props.filter.toLowerCase().split(/\s+/))
+		.compact()
+		.invoke('replace', /[. ]/gi, '')
+		.value();
 }
 
 module.exports = React.createClass({
 	getInitialState: _.constant({ pages: 1 }),
 	logos:           createSelector(
-		createSelector(
-			_.property('logos'),
-			_.partial(_.pluck, _, 'data')
-		),
+		_.property('logos'),
 		props_filter_to_filters,
 		function(logos, filters) {
-			return _.filter(logos, function(logo) {
-				return _.every(filters, function(filter) {
-					return _.some(logo.keywords, function(keyword) {
-						return keyword.toLowerCase().includes(filter);
-					});
-				});
-			});
+			if (_.isEmpty(filters)) {
+				return _.pluck(logos, 'data');
+			}
+			return _.chain(logos)
+				.mapObject(function(logo) {
+					var name = logo.data.name.toLowerCase().replace(/[. ]/gi, '');
+
+					return _.defaults({
+						pos: _.chain(filters)
+							.map(function(filter) {
+								return name.indexOf(filter, 0);
+							})
+							.min()
+							.value()
+					}, logo);
+				})
+				.reject(_.matcher({ pos: -1 }))
+				.sortBy('pos')
+				.pluck('data')
+				.value();
 		}
 	),
 	componentWillReceiveProps: function(nextProps) {
