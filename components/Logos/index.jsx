@@ -3,15 +3,20 @@ var classNames     = require('classnames');
 var createSelector = require('reselect').createSelector;
 var React          = require('react');
 
+var PAGE_SIZE = 20;
+
+function props_filter_to_filters(props) {
+	return props.filter.toLowerCase().split(/\s+/);
+}
+
 module.exports = React.createClass({
-	logos: createSelector(
+	getInitialState: _.constant({ pages: 1 }),
+	logos:           createSelector(
 		createSelector(
 			_.property('logos'),
 			_.partial(_.pluck, _, 'data')
 		),
-		function(props) {
-			return props.filter.toLowerCase().split(/\s+/);
-		},
+		props_filter_to_filters,
 		function(logos, filters) {
 			return _.filter(logos, function(logo) {
 				return _.every(filters, function(filter) {
@@ -22,8 +27,15 @@ module.exports = React.createClass({
 			});
 		}
 	),
+	componentWillReceiveProps: function(nextProps) {
+		if (_.isEqual(props_filter_to_filters(this.props), props_filter_to_filters(nextProps))) {
+			return;
+		}
+		this.setState({ pages: 1 });
+	},
 	render: function() {
 		var timeout;
+		var logos = this.logos(this.props);
 
 		return (
 			<div className={classNames({
@@ -35,7 +47,7 @@ module.exports = React.createClass({
 						<h3>{_.isEmpty(this.props.filter) ? 'Most Popular Logos' : ('Search Results for "' + this.props.filter + '"')}</h3>
 					</div>
 					<ul className="flex-grid">
-						{_.first(this.logos(this.props), 20).map(function(logo) {
+						{_.first(logos, this.state.pages * PAGE_SIZE).map(function(logo) {
 							return (
 								<li className={classNames({
 									'brand-logo':           true,
@@ -71,9 +83,14 @@ module.exports = React.createClass({
 							);
 						}.bind(this))}
 					</ul>
-					<div className="load-more">
-						<a className="load-more-cta">Show More</a>
-					</div>
+					{((this.state.pages * PAGE_SIZE) < logos.length) && (
+						<div className="load-more">
+							<a href="" className="load-more-cta" onClick={function(e) {
+								e.preventDefault();
+								this.setState({ pages: this.state.pages + 1 });
+							}.bind(this)}>Show More</a>
+						</div>
+					)}
 				</div>
 			</div>
 		);
