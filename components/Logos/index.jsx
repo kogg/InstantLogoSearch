@@ -68,12 +68,10 @@ module.exports = React.createClass({
 										<a href=""
 											onClick={function(e) {
 												e.preventDefault();
-												this.replaceTimeoutWith(null);
-												this.props[this.props.collection[logo.id] ? 'onUncollectLogo' : 'onCollectLogo'](logo);
-												this.props.onUnconsiderCollectingLogo(logo);
+												this[this.props.collection[logo.id] ? 'uncollectLogo' : 'collectLogo'](logo);
 											}.bind(this)}
-											onMouseMove={_.partial(this.replaceTimeoutWith, _.partial(this.props.onConsiderCollectingLogo, logo))}
-											onMouseLeave={_.partial(this.replaceTimeoutWith, _.partial(this.props.onUnconsiderCollectingLogo, logo))}>
+											onMouseMove={_.partial(this.replaceTimeout, _.partial(this.props.onConsiderCollectingLogo, logo))}
+											onMouseLeave={_.partial(this.replaceTimeout, _.partial(this.props.onUnconsiderCollectingLogo, logo))}>
 											{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Collection
 										</a>
 									</div>
@@ -96,7 +94,17 @@ module.exports = React.createClass({
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout);
 	},
-	replaceTimeoutWith: function(func) {
+	collectLogo: function(logo) {
+		clearTimeout(this.timeout);
+		this.props.onCollectLogo(logo);
+		this.props.onUnconsiderCollectingLogo(logo);
+	},
+	uncollectLogo: function(logo) {
+		clearTimeout(this.timeout);
+		this.props.onUncollectLogo(logo);
+		this.props.onUnconsiderCollectingLogo(logo);
+	},
+	replaceTimeout: function(func) {
 		clearTimeout(this.timeout);
 		this.timeout = setTimeout(func, 50);
 	}

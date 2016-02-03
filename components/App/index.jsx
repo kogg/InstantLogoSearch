@@ -41,9 +41,7 @@ module.exports = connect(createStructuredSelector({
 						{ name: 'twitter:description', content: process.env.npm_package_description }
 					]}
 				/>
-				<Header ref="header" onFilters={function(filters) {
-					this.setState({ filters: filters });
-				}.bind(this)} />
+				<Header ref="header" onFilters={this.filterLogos} />
 				<Logos logos={this.props.logos} collection={this.props.collection} filters={this.state.filters}
 					onConsiderCollectingLogo={this.considerCollectingLogo}
 					onUnconsiderCollectingLogo={this.unconsiderCollectingLogo}
@@ -56,6 +54,9 @@ module.exports = connect(createStructuredSelector({
 					onDownloadedLogos={this.clearCollection} />
 			</div>
 		);
+	},
+	filterLogos: function(filters) {
+		this.setState({ filters: filters });
 	},
 	considerCollectingLogo: function(logo) {
 		this.setState({ considering: logo.id });
