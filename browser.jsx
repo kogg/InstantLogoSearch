@@ -6,18 +6,14 @@ var Provider = require('react-redux').Provider;
 var React    = require('react');
 var ReactDOM = require('react-dom');
 
-var App      = require('./components/App');
-var DevTools = process.env.DEVTOOLS && require('./components/DevTools');
-var Store    = require('./store');
+var App   = require('./components/App');
+var Store = require('./store');
 
 var state = JSON.parse(document.getElementById('react-state').innerHTML);
 
 ReactDOM.render(
 	<Provider store={Store(state)}>
-		<div>
-			<App />
-			{DevTools && <DevTools />}
-		</div>
+		<App />
 	</Provider>,
 	document.getElementById('react-app'),
 	function() {
