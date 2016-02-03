@@ -8,7 +8,6 @@ module.exports = {
 			'postcss-nested',
 			'postcss-custom-media',
 			'autoprefixer',
-			'postcss-color-rgba-fallback',
 			'postcss-url',
 			'postcss-cachebuster'
 		],
@@ -21,6 +20,6 @@ module.exports = {
 	'postcss-url':      {
 		url:        'inline',
 		fallback:   'copy',
-		assetsPath: 'assets'
+		assetsPath: '../assets'
 	}
 };
