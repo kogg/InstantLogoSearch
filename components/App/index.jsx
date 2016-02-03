@@ -52,8 +52,8 @@ module.exports = connect(createStructuredSelector({
 					onDownloadedLogo={_.noop} />
 				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.state.considering}
 					onUncollectLogo={this.unCollectLogo}
-					onDownloadedLogo={_.compose(this.props.dispatch, actions.clearCollection)}
-					onDownloadedLogos={_.compose(this.props.dispatch, actions.clearCollection)} />
+					onDownloadedLogo={this.clearCollection}
+					onDownloadedLogos={this.clearCollection} />
 			</div>
 		);
 	},
@@ -73,5 +73,8 @@ module.exports = connect(createStructuredSelector({
 	uncollectLogo: function(logo) {
 		this.props.dispatch(actions.removeFromCollection(logo));
 		this.refs.header.focus();
+	},
+	clearCollection: function() {
+		this.props.dispatch(actions.clearCollection());
 	}
 }));
