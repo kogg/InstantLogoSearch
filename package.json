@@ -100,6 +100,7 @@
     "socket.io": "^1.4.0",
     "uglify-js": "^2.6.1",
     "uglifyify": "^3.0.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "whatwg-fetch": "^0.11.0"
   }
 }
