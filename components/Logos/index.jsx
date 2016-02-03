@@ -12,7 +12,12 @@ module.exports = React.createClass({
 		_.property('filters'),
 		function(logos, filters) {
 			if (_.isEmpty(filters)) {
-				return _.pluck(logos, 'data');
+				return _.chain(logos)
+					.pluck('data')
+					.sortBy(function(logo) {
+						return -logo.downloads;
+					})
+					.value();
 			}
 			return _.chain(logos)
 				.map(function(logo) {
