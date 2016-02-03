@@ -3,8 +3,23 @@ var classNames = require('classnames');
 var React      = require('react');
 
 module.exports = React.createClass({
-	getInitialState: _.constant({}),
-	render:          function() {
+	getInitialState:   _.constant({}),
+	componentDidMount: function() {
+		var keydown = function(e) {
+			if (e.keyCode !== 27) {
+				return;
+			}
+			e.preventDefault();
+			this.refs.search.value = '';
+			this.props.onFilter('');
+			this.focus();
+		}.bind(this);
+		document.addEventListener('keydown', keydown);
+		this.cleanups = _.union([function() {
+			document.removeEventListener('keydown', keydown);
+		}], this.cleanups);
+	},
+	render: function() {
 		return (
 			<div className={classNames({
 				header:          true,
@@ -44,5 +59,9 @@ module.exports = React.createClass({
 	},
 	focus: function() {
 		this.refs.search.select();
+	},
+	componentWillUnmount: function() {
+		_.each(this.cleanups, _.partial);
+		this.cleanups = [];
 	}
 });
