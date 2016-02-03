@@ -8,7 +8,7 @@
   "license": "ISC",
   "main": "index.js",
   "browser": {
-    "main": "browser.js",
+    "main": "browser.jsx",
     "./application": "./application/browser"
   },
   "engines": {

@@ -1,7 +1,13 @@
-var Helmet = require('react-helmet');
-var React  = require('react');
+var FeathersMixin = require('feathers-react-redux').FeathersMixin;
+var Helmet        = require('react-helmet');
+var React         = require('react');
 
+var actions  = require('../../actions');
+var app      = require('../../application');
 var Messages = require('../Messages');
+
+FeathersMixin.setFeathersApp(app);
+FeathersMixin.setFeathersActions(actions);
 
 module.exports = React.createClass({
 	render: function() {
