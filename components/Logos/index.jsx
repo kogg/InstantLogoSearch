@@ -8,7 +8,7 @@ var PAGE_SIZE = 20;
 function props_filter_to_filters(props) {
 	return _.chain(props.filter.split(/\s+/))
 		.invoke('toLowerCase')
-		.invoke('replace', /[.-]/gi, '')
+		.invoke('replace', /[.\- ]/gi, '')
 		.compact()
 		.value();
 }
@@ -24,7 +24,7 @@ module.exports = React.createClass({
 			}
 			return _.chain(logos)
 				.mapObject(function(logo) {
-					var name = logo.data.name.toLowerCase().replace(/[.-]/gi, '');
+					var name = logo.data.name.toLowerCase().replace(/[.\- ]/gi, '');
 
 					return _.defaults({
 						pos: _.chain(filters)
