@@ -6,8 +6,8 @@ var resourcesReducer     = require('feathers-react-redux').resourcesReducer;
 var serverActionsReducer = require('feathers-react-redux').serverActionsReducer;
 var thunkMiddlware       = require('redux-thunk');
 
-if (process.env.DEVTOOLS) {
-	createStore = require('./components/DevTools').instrument()(createStore);
+if (global.window && global.window.devToolsExtension) {
+	createStore = global.window.devToolsExtension()(createStore);
 }
 createStore = applyMiddleware(thunkMiddlware)(createStore);
 
