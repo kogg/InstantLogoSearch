@@ -5,13 +5,16 @@ var React          = require('react');
 
 var PAGE_SIZE = 20;
 
-function props_filter_to_filters(props) {
-	return _.chain(props.filter.split(/\s+/))
-		.invoke('toLowerCase')
-		.invoke('replace', /[.\- ]/gi, '')
-		.compact()
-		.value();
-}
+var props_filter_to_filters = createSelector(
+	_.property('filter'),
+	function(filter) {
+		return _.chain(filter.split(/\s+/))
+			.invoke('toLowerCase')
+			.invoke('replace', /[.\- ]/gi, '')
+			.compact()
+			.value();
+	}
+);
 
 module.exports = React.createClass({
 	getInitialState: _.constant({ pages: 1 }),
