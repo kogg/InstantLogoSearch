@@ -20,6 +20,6 @@ module.exports = {
 	'postcss-url':      {
 		url:        'inline',
 		fallback:   'copy',
-		assetsPath: 'assets'
+		assetsPath: '../assets'
 	}
 };
