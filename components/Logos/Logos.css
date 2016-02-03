@@ -31,8 +31,15 @@
   transition: all .3s ease-in-out;
 
   &_collected {
+    position: static;
     box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .15);
   }
+}
+
+.brand-logo:hover {
+  position: relative;
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .15);
+  z-index: 2;
 }
 
 .brand-logo-image {
@@ -93,4 +100,25 @@
 .brand-logo-ctas a:hover {
   opacity: 1;
   background-color: rgba(0, 0, 0, .02);
+}
+
+.load-more {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.load-more-cta {
+  line-height: 120px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, .15);
+  color: rgba(0, 0, 0, 0.44);
+  cursor: pointer;
+}
+
+.load-more-cta:hover {
+  color: rgba(0, 0, 0, 0.6);
+  border-color: rgba(0, 0, 0, 0.3);
 }

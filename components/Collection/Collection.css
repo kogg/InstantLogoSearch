@@ -126,17 +126,19 @@
   text-align: center;
   border-radius: 3px;
   font-weight: 900;
+  text-decoration: none;
+  border-radius: 30px;
 }
 
 .ctas a:first-of-type {
   color: white;
-  background: #036ded;
+  background: #7ab55c;
 }
 
 .ctas a:last-of-type {
   margin-top: 4px;
-  color: #036ded !important;
+  color: #7ab55c !important;
   line-height: 34px;
   color: white;
-  border: 2px solid #036ded;
+  border: 2px solid #7ab55c;
 }

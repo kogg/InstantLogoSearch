@@ -71,6 +71,9 @@ module.exports = React.createClass({
 							);
 						}.bind(this))}
 					</ul>
+					<div className="load-more">
+						<a className="load-more-cta">Show More</a>
+					</div>
 				</div>
 			</div>
 		);

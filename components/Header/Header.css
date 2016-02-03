@@ -1,6 +1,6 @@
 .header {
   background-color: #fff;
-  background-image: url('desk43.png');
+  background-image: url('desk55.png');
   background-size: cover;
   background-position: center bottom;
   padding: 30px;
@@ -14,18 +14,26 @@
   width: 46px;
   height: 46px;
   background-size: 90%;
+  opacity: .75;
   background-repeat: no-repeat;
 }
 
 .social-action {
   line-height: 32px;
-  border: 1px solid rgba(0, 0, 0, .7);
-  border-radius: 3px;
-  color: black;
-  padding: 0 12px;
-  margin-left: 8px;
+  border: 1px solid rgba(0, 0, 0, .15);
+  color: rgba(0, 0, 0, 0.44);
+
+  /*border-radius: 3px;*/
+  padding: 0 16px;
+  margin-left: 10px;
   display: inline-block;
+  border-radius: 33px;
   text-decoration: none;
+}
+
+.social-action:hover {
+  color: rgba(0, 0, 0, 0.6);
+  border-color: rgba(0, 0, 0, 0.3);
 }
 
 /*.header:before {
@@ -100,11 +108,6 @@
 
 .header_expanded .header-content {
   padding: 0px;
-}
-
-.header_expanded .social-action {
-  color: black;
-  border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .header_expanded .logo,
