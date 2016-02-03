@@ -24,6 +24,7 @@ module.exports = connect(createStructuredSelector({
 		this.feathers('logo');
 	},
 	componentDidMount: function() {
+		ga('require', 'ec');
 		ga('send', 'pageview');
 		this.props.dispatch(actions.loadCollection());
 	},
