@@ -26,7 +26,7 @@ module.exports = React.createClass({
 				return _.pluck(logos, 'data');
 			}
 			return _.chain(logos)
-				.mapObject(function(logo) {
+				.map(function(logo) {
 					var name = logo.data.name.toLowerCase().replace(/[.\- ]/gi, '');
 
 					return _.defaults({
