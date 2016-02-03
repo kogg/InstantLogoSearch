@@ -6,10 +6,13 @@ var helmet       = require('helmet');
 var memoize      = require('memoizee');
 var path         = require('path');
 var serverRender = require('feathers-react-redux/serverRender');
+var Provider     = require('react-redux').Provider;
+var React        = require('react');
 
-var actions = require('../actions');
-var Root    = require('../components/Root');
-var Store   = require('../store');
+var actions  = require('../actions');
+var App      = require('../components/App');
+var DevTools = process.env.DEVTOOLS && require('../components/DevTools');
+var Store    = require('../store');
 
 var app = feathers();
 
@@ -32,7 +35,15 @@ app.engine('jsx', require('express-react-views').createEngine({ transformViews: 
 
 app.set('page-render', memoize(function(url, callback) {
 	var store = Store();
-	var root = Root(store);
+
+	var root = (
+		<Provider store={store}>
+			<div>
+				<App />
+				{DevTools && <DevTools />}
+			</div>
+		</Provider>
+	);
 
 	serverRender(root, store, actions)
 		.catch(callback)

@@ -6,9 +6,13 @@ var Helmet                   = require('react-helmet');
 var React                    = require('react');
 
 var actions    = require('../../actions');
+var app        = require('../../application');
 var Collection = require('../Collection');
 var Header     = require('../Header');
 var Logos      = require('../Logos');
+
+FeathersMixin.setFeathersApp(app);
+FeathersMixin.setFeathersActions(actions);
 
 module.exports = connect(createStructuredSelector({
 	logos:      _.property('logos'),
