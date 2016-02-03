@@ -8,7 +8,6 @@ module.exports = {
 			'postcss-nested',
 			'postcss-custom-media',
 			'autoprefixer',
-			'postcss-color-rgba-fallback',
 			'postcss-url',
 			'postcss-cachebuster'
 		],
