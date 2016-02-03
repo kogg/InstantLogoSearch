@@ -15,7 +15,7 @@ module.exports = connect(createStructuredSelector({
 	collection: _.property('collection')
 }))(React.createClass({
 	mixins:             [FeathersMixin],
-	getInitialState:    _.constant({ filter: '' }),
+	getInitialState:    _.constant({ filters: [] }),
 	componentWillMount: function() {
 		this.feathers('logo');
 	},
@@ -36,10 +36,10 @@ module.exports = connect(createStructuredSelector({
 						{ name: 'twitter:description', content: process.env.npm_package_description }
 					]}
 				/>
-				<Header ref="header" onFilter={function(filter) {
-					this.setState({ filter: filter });
+				<Header ref="header" onFilters={function(filters) {
+					this.setState({ filters: filters });
 				}.bind(this)} />
-				<Logos logos={this.props.logos} collection={this.props.collection} filter={this.state.filter}
+				<Logos logos={this.props.logos} collection={this.props.collection} filters={this.state.filters}
 					onToggleCollectLogo={this.toggleCollectLogo}
 					onConsiderCollectLogo={function(logo) {
 						this.setState({ considering: logo.id });

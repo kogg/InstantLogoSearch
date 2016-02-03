@@ -11,7 +11,7 @@ module.exports = React.createClass({
 			}
 			e.preventDefault();
 			this.refs.search.value = '';
-			this.props.onFilter('');
+			this.props.onFilters([]);
 			this.focus();
 		}.bind(this);
 		document.addEventListener('keydown', keydown);
@@ -42,13 +42,16 @@ module.exports = React.createClass({
 								<i className="search-icon" onClick={function() {
 									this.refs.search.value = '';
 									this.setState({ expanded: false });
-									this.props.onFilter('');
+									this.props.onFilters([]);
 									this.focus();
 								}.bind(this)}></i>
 								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
-									var filter = this.refs.search.value.trim();
 									this.setState({ expanded: true });
-									this.props.onFilter(filter);
+									this.props.onFilters(_.chain(this.refs.search.value.trim().split(/\s+/))
+										.invoke('toLowerCase')
+										.invoke('replace', /[.\- ]/gi, '')
+										.compact()
+										.value());
 								}.bind(this)} />
 							</label>
 						</form>

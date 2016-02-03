@@ -5,22 +5,11 @@ var React          = require('react');
 
 var PAGE_SIZE = 20;
 
-var props_filter_to_filters = createSelector(
-	_.property('filter'),
-	function(filter) {
-		return _.chain(filter.split(/\s+/))
-			.invoke('toLowerCase')
-			.invoke('replace', /[.\- ]/gi, '')
-			.compact()
-			.value();
-	}
-);
-
 module.exports = React.createClass({
 	getInitialState: _.constant({ pages: 1 }),
 	logos:           createSelector(
 		_.property('logos'),
-		props_filter_to_filters,
+		_.property('filters'),
 		function(logos, filters) {
 			if (_.isEmpty(filters)) {
 				return _.pluck(logos, 'data');
@@ -45,15 +34,14 @@ module.exports = React.createClass({
 		}
 	),
 	componentWillReceiveProps: function(nextProps) {
-		if (_.isEqual(props_filter_to_filters(nextProps), props_filter_to_filters(this.props))) {
+		if (_.isEqual(nextProps.filters, this.props.filters)) {
 			return;
 		}
 		this.setState({ pages: 1 });
 	},
 	render: function() {
 		var timeout;
-		var logos   = this.logos(this.props);
-		var filters = props_filter_to_filters(this.props);
+		var logos = this.logos(this.props);
 
 		return (
 			<div className={classNames({
@@ -62,7 +50,7 @@ module.exports = React.createClass({
 			})}>
 				<div className="logos-container">
 					<div className="logos-title">
-						<h3>{_.isEmpty(filters) ? 'Most Popular Logos' : ('Search Results for "' + this.props.filter + '"')}</h3>
+						<h3>{_.isEmpty(this.props.filters) ? 'Most Popular Logos' : ('Searching for "' + this.props.filters.join('" and "') + '"')}</h3>
 					</div>
 					<ul className="flex-grid">
 						{_.first(logos, this.state.pages * PAGE_SIZE).map(function(logo) {
