@@ -24,7 +24,12 @@ module.exports = React.createClass({
 					<div className="search-container">
 						<form onSubmit={_.partial(_.result, _, 'preventDefault')} >
 							<label>
-								<i className="search-icon"></i>
+								<i className="search-icon" onClick={function() {
+									this.refs.search.value = '';
+									this.setState({ expanded: false });
+									this.props.onFilter('');
+									this.focus();
+								}.bind(this)}></i>
 								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
 									var filter = this.refs.search.value.trim();
 									this.setState({ expanded: true });
