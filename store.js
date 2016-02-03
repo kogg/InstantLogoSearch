@@ -38,5 +38,5 @@ module.exports = _.partial(createStore, combineReducers({
 			delete new_state[action.payload.id];
 			return new_state;
 		})
-	}, [])
+	}, {})
 }));
