@@ -2,6 +2,7 @@ var _              = require('underscore');
 var axios          = require('axios');
 var classNames     = require('classnames');
 var createSelector = require('reselect').createSelector;
+var error          = require('debug')(process.env.npm_package_name + ':application:error');
 var saveAs         = process.browser && require('filesaverjs').saveAs;
 var JSZip          = require('jszip');
 var React          = require('react');
@@ -56,6 +57,7 @@ module.exports = React.createClass({
 									onClick={function(e) {
 										e.preventDefault();
 										this.props.onUncollectLogo(logo);
+										global.ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
 									}.bind(this)}></div>
 							</li>
 						);
@@ -66,17 +68,17 @@ module.exports = React.createClass({
 						<div className="ctas">
 							<a href="" download onClick={function(e) {
 								e.preventDefault();
-								this.downloadAndZip(collectedLogos, 'svg').then(_.partial(this.props.onDownloadedLogos, collectedLogos, 'svg'));
+								this.downloadAndZip(collectedLogos, 'svg').then(_.partial(this.downloadedLogos, collectedLogos, 'svg'));
 							}.bind(this)}>Download SVGs</a>
 							<a href="" download onClick={function(e) {
 								e.preventDefault();
-								this.downloadAndZip(collectedLogos, 'png').then(_.partial(this.props.onDownloadedLogos, collectedLogos, 'png'));
+								this.downloadAndZip(collectedLogos, 'png').then(_.partial(this.downloadedLogos, collectedLogos, 'png'));
 							}.bind(this)}>Download PNGs</a>
 						</div>
 					) : (
 						<div className="ctas">
-							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.svg'} onClick={_.partial(this.props.onDownloadedLogo, collectedLogos[0], 'svg')}>Download SVG</a>
-							<a href={collectedLogos[0].png} download={collectedLogos[0].id + '.png'} onClick={_.partial(this.props.onDownloadedLogo, collectedLogos[0], 'png')}>Download PNG</a>
+							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.svg'} onClick={_.partial(this.downloadedLogo, collectedLogos[0], 'svg')}>Download SVG</a>
+							<a href={collectedLogos[0].png} download={collectedLogos[0].id + '.png'} onClick={_.partial(this.downloadedLogo, collectedLogos[0], 'png')}>Download PNG</a>
 						</div>
 					))
 				}
@@ -109,9 +111,23 @@ module.exports = React.createClass({
 		});
 
 		promise.catch(function(err) {
-			 console.error(err);
+			error(err);
+			if (err instanceof Error) {
+				global.ga('send', 'exception', { exDescription: err.message, exFatal: true });
+			} else {
+				// Axios rejects promises but not with an Error when falling outside of 2xx
+				global.ga('send', 'exception', { exDescription: err.status + ' - ' + err.data, exFatal: false });
+			}
 		});
 
 		return promise;
+	},
+	downloadedLogo: function(logo, filetype) {
+		this.props.onDownloadedLogo(logo, filetype);
+		global.ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+	},
+	downloadedLogos: function(logos, filetype) {
+		this.props.onDownloadedLogos(logos, filetype);
+		global.ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
 	}
 });

@@ -63,8 +63,8 @@ module.exports = React.createClass({
 									</div>
 									<div className="brand-logo-ctas">
 										<strong>{logo.name}</strong>
-										<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.props.onDownloadedLogo, logo, 'svg')}>Download SVG</a>
-										<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.props.onDownloadedLogo, logo, 'png')}>Download PNG</a>
+										<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.downloadedLogo, logo, 'svg')}>Download SVG</a>
+										<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.downloadedLogo, logo, 'png')}>Download PNG</a>
 										<a href=""
 											onClick={function(e) {
 												e.preventDefault();
@@ -84,6 +84,7 @@ module.exports = React.createClass({
 							<a href="" className="load-more-cta" onClick={function(e) {
 								e.preventDefault();
 								this.setState({ pages: this.state.pages + 1 });
+								global.ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
 							}.bind(this)}>Show More</a>
 						</div>
 					)}
@@ -98,11 +99,17 @@ module.exports = React.createClass({
 		clearTimeout(this.timeout);
 		this.props.onCollectLogo(logo);
 		this.props.onUnconsiderCollectingLogo(logo);
+		global.ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
 	},
 	uncollectLogo: function(logo) {
 		clearTimeout(this.timeout);
 		this.props.onUncollectLogo(logo);
 		this.props.onUnconsiderCollectingLogo(logo);
+		global.ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+	},
+	downloadedLogo: function(logo, filetype) {
+		this.props.onDownloadedLogo(logo, filetype);
+		global.ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
 	},
 	replaceTimeout: function(func) {
 		clearTimeout(this.timeout);

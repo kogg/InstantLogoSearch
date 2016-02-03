@@ -47,11 +47,18 @@ module.exports = connect(createStructuredSelector({
 					onUnconsiderCollectingLogo={this.unconsiderCollectingLogo}
 					onCollectLogo={this.collectLogo}
 					onUncollectLogo={this.uncollectLogo}
-					onDownloadedLogo={_.noop} />
+					onDownloadedLogo={this.downloadedLogo} />
 				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.state.considering}
-					onUncollectLogo={this.unCollectLogo}
+					onUncollectLogo={this.uncollectLogo}
 					onDownloadedLogo={this.clearCollection}
-					onDownloadedLogos={this.clearCollection} />
+					onDownloadedLogo={function(logo, filetype) {
+						this.clearCollection();
+						this.downloadedLogo(logo, filetype);
+					}.bind(this)}
+					onDownloadedLogos={function(logos, filetype) {
+						this.clearCollection();
+						this.downloadedLogos(logos, filetype);
+					}.bind(this)} />
 			</div>
 		);
 	},
@@ -70,10 +77,23 @@ module.exports = connect(createStructuredSelector({
 	collectLogo: function(logo) {
 		this.props.dispatch(actions.addToCollection(logo));
 		this.refs.header.focus();
+		global.ga('ec:addProduct', _.pick(logo, 'id', 'name'));
+		global.ga('ec:setAction', 'add');
 	},
 	uncollectLogo: function(logo) {
 		this.props.dispatch(actions.removeFromCollection(logo));
 		this.refs.header.focus();
+		global.ga('ec:addProduct', _.pick(logo, 'id', 'name'));
+		global.ga('ec:setAction', 'remove');
+	},
+	downloadedLogo: function(logo, filetype) {
+		return this.downloadedLogos([logo], filetype);
+	},
+	downloadedLogos: function(logos, filetype) {
+		_.each(logos, function(logo) {
+			global.ga('ec:addProduct', _.chain(logo).pick('id', 'name').extend({ variant: filetype }).value());
+		});
+		global.ga('ec:setAction', 'purchase', { id: 'uhhh' });
 	},
 	clearCollection: function() {
 		this.props.dispatch(actions.clearCollection());
