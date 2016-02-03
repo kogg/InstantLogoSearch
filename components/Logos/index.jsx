@@ -40,7 +40,6 @@ module.exports = React.createClass({
 		this.setState({ pages: 1 });
 	},
 	render: function() {
-		var timeout;
 		var logos = this.logos(this.props);
 
 		return (
@@ -64,24 +63,17 @@ module.exports = React.createClass({
 									</div>
 									<div className="brand-logo-ctas">
 										<strong>{logo.name}</strong>
-										<a href={logo.svg} download={logo.id + '.svg'}>Download SVG</a>
-										<a href={logo.png} download={logo.id + '.png'}>Download PNG</a>
+										<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.props.onDownloadedLogo, logo, 'svg')}>Download SVG</a>
+										<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.props.onDownloadedLogo, logo, 'png')}>Download PNG</a>
 										<a href=""
 											onClick={function(e) {
 												e.preventDefault();
-												clearTimeout(timeout);
-												timeout = null;
-												this.props.onToggleCollectLogo(logo);
-												this.props.onUnconsiderCollectLogo(logo);
+												this.replaceTimeoutWith(null);
+												this.props[this.props.collection[logo.id] ? 'onUncollectLogo' : 'onCollectLogo'](logo);
+												this.props.onUnconsiderCollectingLogo(logo);
 											}.bind(this)}
-											onMouseMove={function() {
-												clearTimeout(timeout);
-												timeout = setTimeout(_.partial(this.props.onConsiderCollectLogo, logo), 50);
-											}.bind(this)}
-											onMouseLeave={function() {
-												clearTimeout(timeout);
-												timeout = setTimeout(_.partial(this.props.onUnconsiderCollectLogo, logo), 50);
-											}.bind(this)}>
+											onMouseMove={_.partial(this.replaceTimeoutWith, _.partial(this.props.onConsiderCollectingLogo, logo))}
+											onMouseLeave={_.partial(this.replaceTimeoutWith, _.partial(this.props.onUnconsiderCollectingLogo, logo))}>
 											{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Collection
 										</a>
 									</div>
@@ -100,5 +92,12 @@ module.exports = React.createClass({
 				</div>
 			</div>
 		);
+	},
+	componentWillUnmount: function() {
+		clearTimeout(this.timeout);
+	},
+	replaceTimeoutWith: function(func) {
+		clearTimeout(this.timeout);
+		this.timeout = setTimeout(func, 50);
 	}
 });

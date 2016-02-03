@@ -45,27 +45,33 @@ module.exports = connect(createStructuredSelector({
 					this.setState({ filters: filters });
 				}.bind(this)} />
 				<Logos logos={this.props.logos} collection={this.props.collection} filters={this.state.filters}
-					onToggleCollectLogo={this.toggleCollectLogo}
-					onConsiderCollectLogo={function(logo) {
-						this.setState({ considering: logo.id });
-					}.bind(this)}
-					onUnconsiderCollectLogo={function(logo) {
-						if (this.state.considering !== logo.id) {
-							return;
-						}
-						this.setState({ considering: null });
-					}.bind(this)} />
+					onConsiderCollectingLogo={this.considerCollectingLogo}
+					onUnconsiderCollectingLogo={this.unconsiderCollectingLogo}
+					onCollectLogo={this.collectLogo}
+					onUncollectLogo={this.uncollectLogo}
+					onDownloadedLogo={_.noop} />
 				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.state.considering}
-					onToggleCollectLogo={this.toggleCollectLogo}
-					onDownloadLogos={function() {
-						this.props.dispatch(actions.clearCollection());
-					}.bind(this)}
-				/>
+					onUncollectLogo={this.unCollectLogo}
+					onDownloadedLogo={_.compose(this.props.dispatch, actions.clearCollection)}
+					onDownloadedLogos={_.compose(this.props.dispatch, actions.clearCollection)} />
 			</div>
 		);
 	},
-	toggleCollectLogo: function(logo) {
-		this.props.dispatch(actions[this.props.collection[logo.id] ? 'removeFromCollection' : 'addToCollection'](logo));
+	considerCollectingLogo: function(logo) {
+		this.setState({ considering: logo.id });
+	},
+	unconsiderCollectingLogo: function(logo) {
+		if (this.state.considering !== logo.id) {
+			return;
+		}
+		this.setState({ considering: null });
+	},
+	collectLogo: function(logo) {
+		this.props.dispatch(actions.addToCollection(logo));
+		this.refs.header.focus();
+	},
+	uncollectLogo: function(logo) {
+		this.props.dispatch(actions.removeFromCollection(logo));
 		this.refs.header.focus();
 	}
 }));

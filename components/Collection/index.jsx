@@ -55,7 +55,7 @@ module.exports = React.createClass({
 								<div className="collection-delete-item"
 									onClick={function(e) {
 										e.preventDefault();
-										this.props.onToggleCollectLogo(logo);
+										this.props.onUncollectLogo(logo);
 									}.bind(this)}></div>
 							</li>
 						);
@@ -66,17 +66,17 @@ module.exports = React.createClass({
 						<div className="ctas">
 							<a href="" download onClick={function(e) {
 								e.preventDefault();
-								this.downloadAndZip(collectedLogos, 'svg').then(this.props.onDownloadLogos);
+								this.downloadAndZip(collectedLogos, 'svg').then(_.partial(this.props.onDownloadedLogos, collectedLogos, 'svg'));
 							}.bind(this)}>Download SVGs</a>
 							<a href="" download onClick={function(e) {
 								e.preventDefault();
-								this.downloadAndZip(collectedLogos, 'png').then(this.props.onDownloadLogos);
+								this.downloadAndZip(collectedLogos, 'png').then(_.partial(this.props.onDownloadedLogos, collectedLogos, 'png'));
 							}.bind(this)}>Download PNGs</a>
 						</div>
 					) : (
 						<div className="ctas">
-							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.svg'} onClick={this.props.onDownloadLogos}>Download SVG</a>
-							<a href={collectedLogos[0].png} download={collectedLogos[0].id + '.png'} onClick={this.props.onDownloadLogos}>Download PNG</a>
+							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.svg'} onClick={_.partial(this.props.onDownloadedLogo, collectedLogos[0], 'svg')}>Download SVG</a>
+							<a href={collectedLogos[0].png} download={collectedLogos[0].id + '.png'} onClick={_.partial(this.props.onDownloadedLogo, collectedLogos[0], 'png')}>Download PNG</a>
 						</div>
 					))
 				}
