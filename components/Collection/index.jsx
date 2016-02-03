@@ -57,7 +57,7 @@ module.exports = React.createClass({
 									onClick={function(e) {
 										e.preventDefault();
 										this.props.onUncollectLogo(logo);
-										global.ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+										ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
 									}.bind(this)}></div>
 							</li>
 						);
@@ -113,10 +113,10 @@ module.exports = React.createClass({
 		promise.catch(function(err) {
 			error(err);
 			if (err instanceof Error) {
-				global.ga('send', 'exception', { exDescription: err.message, exFatal: true });
+				ga('send', 'exception', { exDescription: err.message, exFatal: true });
 			} else {
 				// Axios rejects promises but not with an Error when falling outside of 2xx
-				global.ga('send', 'exception', { exDescription: err.status + ' - ' + err.data, exFatal: false });
+				ga('send', 'exception', { exDescription: err.status + ' - ' + err.data, exFatal: false });
 			}
 		});
 
@@ -124,10 +124,10 @@ module.exports = React.createClass({
 	},
 	downloadedLogo: function(logo, filetype) {
 		this.props.onDownloadedLogo(logo, filetype);
-		global.ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+		ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
 	},
 	downloadedLogos: function(logos, filetype) {
 		this.props.onDownloadedLogos(logos, filetype);
-		global.ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+		ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
 	}
 });
