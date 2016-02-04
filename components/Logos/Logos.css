@@ -34,6 +34,8 @@
   }
 
   &_considering {
+    position: relative;
+    z-index: 9;
   }
 
   @media (max-width: 1680px) {
