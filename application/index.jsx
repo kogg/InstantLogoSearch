@@ -43,6 +43,7 @@ app.set('page-render', memoize(function(url, redirect) {
 				return Promise.resolve();
 			}
 			if (!response[1]) {
+				console.log('NEXT', url);
 				return Promise.reject();
 			}
 
@@ -57,7 +58,7 @@ app.set('page-render', memoize(function(url, redirect) {
 		});
 }, { length: 1 })); // TODO Won't this cache actions performed in serverRender forever?
 
-app.get(/(?!\/api\/.*)/, function(req, res, next) { // TODO Also avoid the svg and png urls
+app.get(/^(?!\/(?:(?:api|svg)\/|png)).*$/, function(req, res, next) { // TODO Also avoid the svg and png urls
 	app.get('page-render')(req.url, res.redirect.bind(res)).then(
 		function(render) {
 			if (!render) {
