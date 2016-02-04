@@ -59,7 +59,7 @@ app.get('/png', function(req, res, next) {
 });
 
 app.all('*', function(req, res, next) {
-	var err = new Error(http.STATUS_CODES[404]);
+	var err = new Error(http.STATUS_CODES[404] + ' - ' + req.url);
 	err.status = 404;
 	next(err);
 });
