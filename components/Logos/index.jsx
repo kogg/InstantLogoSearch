@@ -89,7 +89,7 @@ module.exports = React.createClass({
 							<a href="" className="load-more-cta" onClick={function(e) {
 								e.preventDefault();
 								this.setState({ pages: this.state.pages + 1 });
-								ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+								ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 							}.bind(this)}>Show More</a>
 						</div>
 					)}
@@ -104,17 +104,17 @@ module.exports = React.createClass({
 		clearTimeout(this.timeout);
 		this.props.onCollectLogo(logo);
 		this.props.onUnconsiderCollectingLogo(logo);
-		ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	uncollectLogo: function(logo) {
 		clearTimeout(this.timeout);
 		this.props.onUncollectLogo(logo);
 		this.props.onUnconsiderCollectingLogo(logo);
-		ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	downloadedLogo: function(logo, filetype) {
 		this.props.onDownloadedLogo(logo, filetype);
-		ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	replaceTimeout: function(func) {
 		clearTimeout(this.timeout);
