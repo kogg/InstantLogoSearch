@@ -1,7 +1,6 @@
 require('babel-register');
 var debug  = require('debug')(process.env.npm_package_name + ':application');
 var error  = require('debug')(process.env.npm_package_name + ':application:error');
-var http   = require('http');
 var memory = require('feathers-memory');
 var os     = require('os');
 
@@ -18,8 +17,7 @@ app.use(function(err, req, res, next) {
 	if (res.headersSent) {
 		return next(err);
 	}
-	var status = err.status || 500;
-	res.status(status).send(err.message || http.STATUS_CODES[status]);
+	res.status(500).send(err.message);
 });
 
 app.listen(app.get('port'), function() {

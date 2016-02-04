@@ -5,6 +5,7 @@ var feathers       = require('feathers');
 var helmet         = require('helmet');
 var match          = require('react-router').match;
 var path           = require('path');
+var promisify      = require('es6-promisify');
 var serverRender   = require('feathers-react-redux/serverRender');
 var Provider       = require('react-redux').Provider;
 var React          = require('react');
@@ -34,25 +35,23 @@ app.set('views', path.join(__dirname, '../components'));
 app.engine('jsx', require('express-react-views').createEngine({ transformViews: false }));
 
 app.get(/(?!\/api\/.*)/, function(req, res, next) {
-	match({ routes: routes, location: req.url }, function(err, redirectLocation, renderProps) {
-		if (err) {
-			return next(err);
-		}
-		if (redirectLocation) {
-			return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-		}
-		if (!renderProps) {
-			return next();
-		}
+	promisify(match)({ routes: routes, location: req.url })
+		.then(function(response) { // Correlates with redirectLocation, renderProps
+			if (response[0]) {
+				return res.redirect(302, response[0].pathname + response[0].search);
+			}
+			if (!response[1]) {
+				return next();
+			}
 
-		var store = Store();
-
-		serverRender(<Provider store={store}><RoutingContext {...renderProps} /></Provider>, store, actions)
-			.catch(next)
-			.then(function(locals) {
+			var store = Store();
+			return serverRender(<Provider store={store}><RoutingContext {...response[1]} /></Provider>, store, actions).then(function(locals) {
 				res.render('index', _.extend(locals, { state: store.getState() }));
 			});
-	});
+		})
+		.catch(function(err) {
+			next(err);
+		});
 });
 
 module.exports = app;
