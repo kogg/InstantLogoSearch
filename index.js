@@ -21,7 +21,7 @@ app.use(function(err, req, res, next) {
 		return next(err);
 	}
 	res.status(err.status || 500);
-	res.json({ message: err.message });
+	res.json({ message: err.message, status: err.status || 500 });
 });
 
 app.listen(app.get('port'), function() {
