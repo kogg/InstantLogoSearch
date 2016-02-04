@@ -28,18 +28,53 @@
   margin: 0 20px 20px 0;
   display: inline-block;
   vertical-align: top;
-  transition: all .3s ease-in-out;
 
   &_collected {
     position: static;
-    box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .15);
+  }
+}
+
+@media (max-width: 1680px) {
+  .brand-logo {
+    width: calc(16.667% - 20px);
+  }
+}
+
+@media (max-width: 1480px) {
+  .brand-logo {
+    width: calc(20% - 20px);
+  }
+}
+
+@media (max-width: 1240px) {
+  .brand-logo {
+    width: calc(25% - 20px);
+  }
+}
+
+@media (max-width: 980px) {
+  .brand-logo {
+    width: calc(33.333% - 20px);
+  }
+}
+
+@media (max-width: 740px) {
+  .brand-logo {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 520px) {
+  .brand-logo {
+    width: calc(100% - 20px);
   }
 }
 
 .brand-logo:hover {
-  position: relative;
-  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .15);
-  z-index: 2;
+
+  /*position: relative;*/
+
+  /*z-index: 2;*/
 }
 
 .brand-logo-image {
@@ -80,19 +115,22 @@
 }
 
 .brand-logo-ctas a:not(:last-of-type) {
-  background: url('downarrow105.svg');
-  background-size: 14px;
+  background: url('downarrow106.svg');
+  background-size: 19px;
   background-position: right 12px center;
   background-repeat: no-repeat;
 }
 
-.brand-logo-ctas a::after:not(:last-of-type) {
-  content: "test";
+.brand-logo-ctas a:last-of-type {
+  background: url('plus84.svg');
+  background-size: 19px;
+  background-position: right 12px center;
+  background-repeat: no-repeat;
 }
 
-.brand-logo-ctas a:last-of-type {
-  background: url('plus79.svg');
-  background-size: 14px;
+.brand-logo_collected .brand-logo-ctas a:last-of-type {
+  background: url('check.svg');
+  background-size: 19px;
   background-position: right 12px center;
   background-repeat: no-repeat;
 }
@@ -116,6 +154,7 @@
   border: 1px solid rgba(0, 0, 0, .15);
   color: rgba(0, 0, 0, 0.44);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .load-more-cta:hover {

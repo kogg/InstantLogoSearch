@@ -28,9 +28,9 @@ module.exports = React.createClass({
 				<div className="flex-spread">
 					<div className="logo"></div>
 					<div>
-						<a className="social-action" href="">t tweet</a>
-						<a className="social-action" href="">f share</a>
-						<a className="social-action" href="">s star</a>
+            <a className="social-action" href=""><img className="social-action-icon" src="/svg/logomono/twitter.svg" />tweet</a>
+            <a className="social-action" href=""><img className="social-action-icon" src="/svg/svgporn/facebook.svg" />share</a>
+            <a className="social-action" href=""><img className="social-action-icon" src="/svg/svgporn/github-icon.svg" />star</a>
 					</div>
 				</div>
 				<div className="header-content">

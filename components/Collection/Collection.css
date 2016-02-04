@@ -6,15 +6,20 @@
   background: white;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.44);
   transform: translate3d(0, 0, 0);
-  transition: all .2s ease-in-out;
+  transition: transform .2s ease-in-out;
 
   &_empty {
     transform: translate3d(0, 100px, 0);
   }
 
   &_untouchable {
-    pointer-events: none;
+
+    /*pointer-events: none;*/
   }
+}
+
+.collection_untouchable:hover {
+  display: none;
 }
 
 .collection-row {
@@ -132,13 +137,13 @@
 
 .ctas a:first-of-type {
   color: white;
-  background: #7ab55c;
+  background: #02b875;
 }
 
 .ctas a:last-of-type {
   margin-top: 4px;
-  color: #7ab55c !important;
+  color: #02b875 !important;
   line-height: 34px;
   color: white;
-  border: 2px solid #7ab55c;
+  border: 2px solid #02b875;
 }
