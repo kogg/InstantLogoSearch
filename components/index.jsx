@@ -15,6 +15,7 @@ var HTMLDoc = React.createClass({
 					{this.props.head.base.toComponent()}
 					{this.props.head.title.toComponent()}
 					<meta charSet="utf-8" />
+					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					{this.props.head.meta.toComponent()}
 					<link rel="stylesheet" type="text/css" href={HTMLDoc.cacheBuster('css/main.css')} />
 					{this.props.head.link.toComponent()}
