@@ -110,40 +110,40 @@
         background-position: right 12px center;
         background-repeat: no-repeat;
       }
+
+      .brand-logo_collected &:last-of-type {
+        background: url('check.svg');
+        background-size: 19px;
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+      }
+
+      &:hover {
+        opacity: 1;
+        background-color: rgba(0, 0, 0, .02);
+      }
     }
   }
-}
-
-.brand-logo_collected .brand-logo-ctas a:last-of-type {
-  background: url('check.svg');
-  background-size: 19px;
-  background-position: right 12px center;
-  background-repeat: no-repeat;
-}
-
-.brand-logo-ctas a:hover {
-  opacity: 1;
-  background-color: rgba(0, 0, 0, .02);
 }
 
 .load-more {
   text-align: center;
   margin: 40px 0;
-}
 
-.load-more-cta {
-  line-height: 120px;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  display: inline-block;
-  border: 1px solid rgba(0, 0, 0, .15);
-  color: rgba(0, 0, 0, 0.44);
-  cursor: pointer;
-  text-decoration: none;
-}
+  &-cta {
+    line-height: 120px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, .15);
+    color: rgba(0, 0, 0, 0.44);
+    cursor: pointer;
+    text-decoration: none;
 
-.load-more-cta:hover {
-  color: rgba(0, 0, 0, 0.6);
-  border-color: rgba(0, 0, 0, 0.3);
+    &:hover {
+      color: rgba(0, 0, 0, 0.6);
+      border-color: rgba(0, 0, 0, 0.3);
+    }
+  }
 }
