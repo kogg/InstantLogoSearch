@@ -24,8 +24,7 @@ module.exports = React.createClass({
 						{ property: 'og:description', content: process.env.npm_package_description },
 						{ name: 'twitter:title', content: process.env.npm_package_title },
 						{ name: 'twitter:description', content: process.env.npm_package_description }
-					]}
-				/>
+					]} />
 				{this.props.children}
 			</div>
 		);
