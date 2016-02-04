@@ -43,7 +43,6 @@ app.set('page-render', memoize(function(url, redirect) {
 				return Promise.resolve();
 			}
 			if (!response[1]) {
-				console.log('NEXT', url);
 				return Promise.reject();
 			}
 
