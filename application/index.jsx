@@ -49,9 +49,7 @@ app.get(/(?!\/api\/.*)/, function(req, res, next) {
 				res.render('index', _.extend(locals, { state: store.getState() }));
 			});
 		})
-		.catch(function(err) {
-			next(err);
-		});
+		.catch(next);
 });
 
 module.exports = app;
