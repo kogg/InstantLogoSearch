@@ -57,7 +57,7 @@ module.exports = React.createClass({
 									onClick={function(e) {
 										e.preventDefault();
 										this.props.onUncollectLogo(logo);
-										ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+										ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 									}.bind(this)}></div>
 							</li>
 						);
@@ -124,10 +124,10 @@ module.exports = React.createClass({
 	},
 	downloadedLogo: function(logo, filetype) {
 		this.props.onDownloadedLogo(logo, filetype);
-		ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	downloadedLogos: function(logos, filetype) {
 		this.props.onDownloadedLogos(logos, filetype);
-		ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	}
 });

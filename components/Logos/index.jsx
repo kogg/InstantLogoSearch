@@ -12,7 +12,12 @@ module.exports = React.createClass({
 		_.property('filters'),
 		function(logos, filters) {
 			if (_.isEmpty(filters)) {
-				return _.pluck(logos, 'data');
+				return _.chain(logos)
+					.pluck('data')
+					.sortBy(function(logo) {
+						return -logo.downloads;
+					})
+					.value();
 			}
 			return _.chain(logos)
 				.map(function(logo) {
@@ -28,11 +33,16 @@ module.exports = React.createClass({
 					}, logo);
 				})
 				.reject(_.matcher({ pos: -1 }))
-				.sortBy('pos')
+				.sortBy(function(logo) {
+					return 1000 * logo.pos - logo.data.downloads;
+				})
 				.pluck('data')
 				.value();
 		}
 	),
+	componentDidMount: function() {
+		ga('send', 'pageview');
+	},
 	componentWillReceiveProps: function(nextProps) {
 		if (_.isEqual(nextProps.filters, this.props.filters)) {
 			return;
@@ -84,7 +94,7 @@ module.exports = React.createClass({
 							<a href="" className="load-more-cta" onClick={function(e) {
 								e.preventDefault();
 								this.setState({ pages: this.state.pages + 1 });
-								ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+								ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 							}.bind(this)}>Show More</a>
 						</div>
 					)}
@@ -99,17 +109,17 @@ module.exports = React.createClass({
 		clearTimeout(this.timeout);
 		this.props.onCollectLogo(logo);
 		this.props.onUnconsiderCollectingLogo(logo);
-		ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	uncollectLogo: function(logo) {
 		clearTimeout(this.timeout);
 		this.props.onUncollectLogo(logo);
 		this.props.onUnconsiderCollectingLogo(logo);
-		ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	downloadedLogo: function(logo, filetype) {
 		this.props.onDownloadedLogo(logo, filetype);
-		ga('send', 'event', 'UX', 'click', 'add to cart'); // FIXME
+		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	replaceTimeout: function(func) {
 		clearTimeout(this.timeout);

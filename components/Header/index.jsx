@@ -6,13 +6,14 @@ module.exports = React.createClass({
 	getInitialState:   _.constant({}),
 	componentDidMount: function() {
 		var keydown = function(e) {
-			if (e.keyCode !== 27) {
+			if (e.keyCode !== 27 && this.refs.search !== '') {
 				return;
 			}
 			e.preventDefault();
 			this.refs.search.value = '';
 			this.props.onFilters([]);
 			this.focus();
+			ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 		}.bind(this);
 		document.addEventListener('keydown', keydown);
 		this.cleanups = _.union([function() {
@@ -44,6 +45,7 @@ module.exports = React.createClass({
 									this.setState({ expanded: false });
 									this.props.onFilters([]);
 									this.focus();
+									ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 								}.bind(this)}></i>
 								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
 									this.setState({ expanded: true });

@@ -24,7 +24,6 @@ module.exports = connect(createStructuredSelector({
 		this.feathers('logo');
 	},
 	componentDidMount: function() {
-		ga('send', 'pageview');
 		this.props.dispatch(actions.loadCollection());
 	},
 	render: function() {
@@ -39,8 +38,7 @@ module.exports = connect(createStructuredSelector({
 						{ property: 'og:description', content: process.env.npm_package_description },
 						{ name: 'twitter:title', content: process.env.npm_package_title },
 						{ name: 'twitter:description', content: process.env.npm_package_description }
-					]}
-				/>
+					]} />
 				<Header ref="header" onFilters={this.filterLogos} />
 				<Logos logos={this.props.logos} collection={this.props.collection} filters={this.state.filters}
 					onConsiderCollectingLogo={this.considerCollectingLogo}
@@ -93,7 +91,7 @@ module.exports = connect(createStructuredSelector({
 		_.each(logos, function(logo) {
 			ga('ec:addProduct', _.chain(logo).pick('id', 'name').extend({ variant: filetype }).value());
 		});
-		ga('ec:setAction', 'purchase', { id: 'uhhh' });
+		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
 	},
 	clearCollection: function() {
 		this.props.dispatch(actions.clearCollection());

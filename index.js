@@ -1,24 +1,22 @@
 require('babel-register');
-var _        = require('underscore');
-var debug    = require('debug')(process.env.npm_package_name + ':application');
-var error    = require('debug')(process.env.npm_package_name + ':application:error');
-var feathers = require('feathers');
-var fs       = require('fs');
-var http     = require('http');
-var logos    = require('instant-logos');
-var memoize  = require('memoizee');
-var os       = require('os');
-var path     = require('path');
-var q        = require('q');
-var svg2png  = require('svg2png');
+var _         = require('underscore');
+var debug     = require('debug')(process.env.npm_package_name + ':application');
+var error     = require('debug')(process.env.npm_package_name + ':application:error');
+var feathers  = require('feathers');
+var fs        = require('fs');
+var logos     = require('instant-logos');
+var memoize   = require('memoizee');
+var os        = require('os');
+var path      = require('path');
+var promisify = require('es6-promisify');
+var svg2png   = require('svg2png');
 
-var app   = require('./application');
-var Logos = require('./services/Logos');
-
-var readFile  = q.denodeify(fs.readFile);
+var app         = require('./application');
+var Logos       = require('./services/Logos');
+var Suggestions = require('./services/Suggestions');
 
 var convertLogo = memoize(function(file_path, callback) {
-	return readFile(file_path)
+	return promisify(fs.readFile)(file_path)
 		.then(_.partial(svg2png, _, { height: 512 }))
 		.then(
 			_.partial(callback, null),
@@ -36,7 +34,6 @@ _.chain(logos)
 	.each(function(logo) {
 		app.use('/svg/' + logo.source.shortname, feathers.static(logo.svg.path.directory, { maxage: '365d' }));
 	});
-app.use('/api/logos', Logos);
 app.get('/png', function(req, res, next) {
 	if (!req.query.id) {
 		return next();
@@ -57,16 +54,19 @@ app.get('/png', function(req, res, next) {
 		res.send(png);
 	});
 });
+app.use('/api/logos', Logos);
+app.use('/api/suggestions', Suggestions);
 
-app.all('*', function(req, res, next) {
-	var err = new Error(http.STATUS_CODES[404]);
-	err.status = 404;
-	next(err);
+app.all('*', function(req, res) {
+	res.status(404).send('Not Found');
 });
 
 app.use(function(err, req, res, next) {
-	error('error on url ' + req.url, err);
-	next(err);
+	error('error on url ' + req.url, err.stack);
+	if (res.headersSent) {
+		return next(err);
+	}
+	res.status(500).send(err.message);
 });
 
 app.listen(app.get('port'), function() {

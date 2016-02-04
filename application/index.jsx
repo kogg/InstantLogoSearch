@@ -1,16 +1,19 @@
-var _            = require('underscore');
-var bodyParser   = require('body-parser');
-var compression  = require('compression');
-var feathers     = require('feathers');
-var helmet       = require('helmet');
-var memoize      = require('memoizee');
-var path         = require('path');
-var serverRender = require('feathers-react-redux/serverRender');
-var Provider     = require('react-redux').Provider;
-var React        = require('react');
+var _              = require('underscore');
+var bodyParser     = require('body-parser');
+var compression    = require('compression');
+var feathers       = require('feathers');
+var helmet         = require('helmet');
+var match          = require('react-router').match;
+var memoize        = require('memoizee');
+var path           = require('path');
+var promisify      = require('es6-promisify');
+var serverRender   = require('feathers-react-redux/serverRender');
+var Provider       = require('react-redux').Provider;
+var React          = require('react');
+var RoutingContext = require('react-router').RoutingContext;
 
 var actions = require('../actions');
-var App     = require('../components/App');
+var routes  = require('../components/routes');
 var Store   = require('../store');
 
 var app = feathers();
@@ -32,33 +35,40 @@ app.set('view engine', 'jsx');
 app.set('views', path.join(__dirname, '../components'));
 app.engine('jsx', require('express-react-views').createEngine({ transformViews: false }));
 
-app.set('page-render', memoize(function(url, callback) {
-	var store = Store();
+app.set('page-render', memoize(function(url, redirect) {
+	return promisify(match)({ routes: routes, location: url })
+		.then(function(response) { // Correlates with redirectLocation, renderProps
+			if (response[0]) {
+				redirect(302, response[0].pathname + response[0].search);
+				return Promise.resolve();
+			}
+			if (!response[1]) {
+				return Promise.reject();
+			}
 
-	var root = (
-		<Provider store={store}>
-			<App />
-		</Provider>
-	);
-
-	serverRender(root, store, actions)
-		.catch(callback)
-		.then(function(locals) {
-			app.render('index', _.extend(locals, { state: store.getState() }), function(err, html) {
-				callback(err, { html: html, date: (new Date()).toUTCString() });
-			});
+			var store = Store();
+			return serverRender(<Provider store={store}><RoutingContext {...response[1]} /></Provider>, store, actions)
+				.then(function(locals) {
+					return promisify(app.render).bind(app)('index', _.extend(locals, { state: store.getState() }));
+				})
+				.then(function(html) {
+					return { html: html, date: (new Date()).toUTCString() };
+				});
 		});
-}, { async: true, length: 1 }));
+}, { length: 1 })); // TODO Won't this cache actions performed in serverRender forever?
 
-app.get('/', function(req, res, next) {
-	app.get('page-render')(req.url, function(err, render) {
-		if (err) {
-			return next(err);
-		}
-		res.set('Cache-Control', 'public, max-age=' + (24 * 60 * 60));
-		res.set('Last-Modified', render.date);
-		res.send(render.html);
-	});
+app.get(/^(?!\/(?:(?:api|svg)\/|png)).*$/, function(req, res, next) {
+	app.get('page-render')(req.url, res.redirect.bind(res)).then(
+		function(render) {
+			if (!render) {
+				return;
+			}
+			res.set('Cache-Control', 'public, max-age=' + (24 * 60 * 60));
+			res.set('Last-Modified', render.date);
+			res.send(render.html);
+		},
+		next
+	);
 });
 
 module.exports = app;

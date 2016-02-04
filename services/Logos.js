@@ -12,12 +12,13 @@ module.exports = {
 				if (!logo.svg || !logo.svg.path) {
 					return logo;
 				}
-				return _.chain({
-					svg: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
-					png: '/png?id=' + logo.id
-				})
-					.defaults(logo)
-					.pick('id', 'name', 'svg', 'png')
+				return _.chain(logo)
+					.pick('id', 'name')
+					.defaults({
+						svg:       '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
+						png:       '/png?id=' + logo.id,
+						downloads: Math.round(1000 * Math.random())
+					})
 					.value();
 			})
 			.sortBy(function(logo) {
