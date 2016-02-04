@@ -17,7 +17,11 @@ app.all('*', function(req, res, next) {
 
 app.use(function(err, req, res, next) {
 	error('error on url ' + req.url, err);
-	next(err);
+	if (res.headersSent) {
+		return next(err);
+	}
+	res.status(err.status || 500);
+	res.json(err);
 });
 
 app.listen(app.get('port'), function() {
