@@ -38,6 +38,9 @@ module.exports = React.createClass({
 				.value();
 		}
 	),
+	componentDidMount: function() {
+		ga('send', 'pageview');
+	},
 	componentWillReceiveProps: function(nextProps) {
 		if (_.isEqual(nextProps.filters, this.props.filters)) {
 			return;

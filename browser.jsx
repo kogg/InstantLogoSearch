@@ -15,6 +15,7 @@ var Store  = require('./store');
 var state = JSON.parse(document.getElementById('react-state').innerHTML);
 
 global.ga = global.ga || _.noop;
+ga('require', 'ec');
 
 ReactDOM.render(
 	<Provider store={Store(state)}>
