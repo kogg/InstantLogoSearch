@@ -1,24 +1,22 @@
 require('babel-register');
-var _        = require('underscore');
-var debug    = require('debug')(process.env.npm_package_name + ':application');
-var error    = require('debug')(process.env.npm_package_name + ':application:error');
-var feathers = require('feathers');
-var fs       = require('fs');
-var logos    = require('instant-logos');
-var memoize  = require('memoizee');
-var os       = require('os');
-var path     = require('path');
-var q        = require('q');
-var svg2png  = require('svg2png');
+var _         = require('underscore');
+var debug     = require('debug')(process.env.npm_package_name + ':application');
+var error     = require('debug')(process.env.npm_package_name + ':application:error');
+var feathers  = require('feathers');
+var fs        = require('fs');
+var logos     = require('instant-logos');
+var memoize   = require('memoizee');
+var os        = require('os');
+var path      = require('path');
+var promisify = require('es6-promisify');
+var svg2png   = require('svg2png');
 
 var app         = require('./application');
 var Logos       = require('./services/Logos');
 var Suggestions = require('./services/Suggestions');
 
-var readFile  = q.denodeify(fs.readFile); // TODO Replace with promisify
-
 var convertLogo = memoize(function(file_path, callback) {
-	return readFile(file_path)
+	return promisify(fs.readFile)(file_path)
 		.then(_.partial(svg2png, _, { height: 512 }))
 		.then(
 			_.partial(callback, null),
