@@ -9,19 +9,17 @@ var app = require('./application');
 
 app.use('/api/messages', memory());
 
-app.all('*', function(req, res, next) {
-	var err = new Error(http.STATUS_CODES[404] + ' - ' + req.url);
-	err.status = 404;
-	next(err);
+app.all('*', function(req, res) {
+	res.status(404).send('Not Found');
 });
 
 app.use(function(err, req, res, next) {
-	error('error on url ' + req.url, err);
+	error('error on url ' + req.url, err.stack);
 	if (res.headersSent) {
 		return next(err);
 	}
-	res.status(err.status || 500);
-	res.json({ message: err.message, status: err.status || 500 });
+	var status = err.status || 500;
+	res.status(status).send(err.message || http.STATUS_CODES[status]);
 });
 
 app.listen(app.get('port'), function() {
