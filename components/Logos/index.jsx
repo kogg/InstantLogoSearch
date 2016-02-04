@@ -33,11 +33,16 @@ module.exports = React.createClass({
 					}, logo);
 				})
 				.reject(_.matcher({ pos: -1 }))
-				.sortBy('pos')
+				.sortBy(function(logo) {
+					return 1000 * logo.pos - logo.data.downloads;
+				})
 				.pluck('data')
 				.value();
 		}
 	),
+	componentDidMount: function() {
+		ga('send', 'pageview');
+	},
 	componentWillReceiveProps: function(nextProps) {
 		if (_.isEqual(nextProps.filters, this.props.filters)) {
 			return;

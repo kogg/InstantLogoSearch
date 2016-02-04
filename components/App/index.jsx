@@ -24,8 +24,6 @@ module.exports = connect(createStructuredSelector({
 		this.feathers('logo');
 	},
 	componentDidMount: function() {
-		ga('require', 'ec');
-		ga('send', 'pageview');
 		this.props.dispatch(actions.loadCollection());
 	},
 	render: function() {
@@ -40,8 +38,7 @@ module.exports = connect(createStructuredSelector({
 						{ property: 'og:description', content: process.env.npm_package_description },
 						{ name: 'twitter:title', content: process.env.npm_package_title },
 						{ name: 'twitter:description', content: process.env.npm_package_description }
-					]}
-				/>
+					]} />
 				<Header ref="header" onFilters={this.filterLogos} />
 				<Logos logos={this.props.logos} collection={this.props.collection} filters={this.state.filters}
 					onConsiderCollectingLogo={this.considerCollectingLogo}
