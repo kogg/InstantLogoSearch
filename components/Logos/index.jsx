@@ -33,7 +33,9 @@ module.exports = React.createClass({
 					}, logo);
 				})
 				.reject(_.matcher({ pos: -1 }))
-				.sortBy('pos')
+				.sortBy(function(logo) {
+					return 1000 * logo.pos - logo.data.downloads;
+				})
 				.pluck('data')
 				.value();
 		}
