@@ -40,8 +40,7 @@ module.exports = connect(createStructuredSelector({
 						{ property: 'og:description', content: process.env.npm_package_description },
 						{ name: 'twitter:title', content: process.env.npm_package_title },
 						{ name: 'twitter:description', content: process.env.npm_package_description }
-					]}
-				/>
+					]} />
 				<Header ref="header" onFilters={this.filterLogos} />
 				<Logos logos={this.props.logos} collection={this.props.collection} filters={this.state.filters}
 					onConsiderCollectingLogo={this.considerCollectingLogo}

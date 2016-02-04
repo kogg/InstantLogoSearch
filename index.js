@@ -4,7 +4,6 @@ var debug    = require('debug')(process.env.npm_package_name + ':application');
 var error    = require('debug')(process.env.npm_package_name + ':application:error');
 var feathers = require('feathers');
 var fs       = require('fs');
-var http     = require('http');
 var logos    = require('instant-logos');
 var memoize  = require('memoizee');
 var os       = require('os');
@@ -16,7 +15,7 @@ var app         = require('./application');
 var Logos       = require('./services/Logos');
 var Suggestions = require('./services/Suggestions');
 
-var readFile  = q.denodeify(fs.readFile);
+var readFile  = q.denodeify(fs.readFile); // TODO Replace with promisify
 
 var convertLogo = memoize(function(file_path, callback) {
 	return readFile(file_path)
@@ -60,19 +59,16 @@ app.get('/png', function(req, res, next) {
 app.use('/api/logos', Logos);
 app.use('/api/suggestions', Suggestions);
 
-app.all('*', function(req, res, next) {
-	var err = new Error(http.STATUS_CODES[404] + ' - ' + req.url);
-	err.status = 404;
-	next(err);
+app.all('*', function(req, res) {
+	res.status(404).send('Not Found');
 });
 
 app.use(function(err, req, res, next) {
-	error('error on url ' + req.url, err);
+	error('error on url ' + req.url, err.stack);
 	if (res.headersSent) {
 		return next(err);
 	}
-	res.status(err.status || 500);
-	res.json({ message: err.message });
+	res.status(500).send(err.message);
 });
 
 app.listen(app.get('port'), function() {
