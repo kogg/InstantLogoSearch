@@ -13,13 +13,8 @@
   }
 
   &_untouchable {
-
-    /*pointer-events: none;*/
+    pointer-events: none;
   }
-}
-
-.collection_untouchable:hover {
-  display: none;
 }
 
 .collection-row {
