@@ -6,11 +6,13 @@ var GitHubApi = require('github');
 
 var github = new GitHubApi({ version: '3.0.0' });
 
-github.authenticate({
-	type:     'basic',
-	username: process.env.GITHUB_USERNAME,
-	password: process.env.GITHUB_PERSONAL_ACCESS_TOKEN
-});
+if (process.env.GITHUB_USERNAME && process.env.GITHUB_PERSONAL_ACCESS_TOKEN) {
+	github.authenticate({
+		type:     'basic',
+		username: process.env.GITHUB_USERNAME,
+		password: process.env.GITHUB_PERSONAL_ACCESS_TOKEN
+	});
+}
 
 var STATUS_MESSAGES = _.invert(http.STATUS_CODES);
 
