@@ -70,7 +70,7 @@ app.use(function(err, req, res, next) {
 		return next(err);
 	}
 	res.status(err.status || 500);
-	res.json(err);
+	res.json({ message: err.message });
 });
 
 app.listen(app.get('port'), function() {
