@@ -2,9 +2,8 @@ var FeathersMixin = require('feathers-react-redux').FeathersMixin;
 var Helmet        = require('react-helmet');
 var React         = require('react');
 
-var actions  = require('../../actions');
-var app      = require('../../application');
-var Messages = require('../Messages');
+var actions = require('../../actions');
+var app     = require('../../application');
 
 FeathersMixin.setFeathersApp(app);
 FeathersMixin.setFeathersActions(actions);
@@ -27,7 +26,7 @@ module.exports = React.createClass({
 						{ name: 'twitter:description', content: process.env.npm_package_description }
 					]}
 				/>
-				<Messages />
+				{this.props.children}
 			</div>
 		);
 	}
