@@ -33,22 +33,22 @@ app.set('view engine', 'jsx');
 app.set('views', path.join(__dirname, '../components'));
 app.engine('jsx', require('express-react-views').createEngine({ transformViews: false }));
 
-app.get('/', function(req, res, next) {
-	var store = Store();
-
+app.get('*', function(req, res, next) {
 	match({ routes: routes, location: req.url }, function(err, redirectLocation, renderProps) {
 		if (err) {
 			res.status(500).send(err.message);
 		} else if (redirectLocation) {
 			res.redirect(302, redirectLocation.pathname + redirectLocation.search);
 		} else if (renderProps) {
+			var store = Store();
+
 			serverRender(<Provider store={store}><RoutingContext {...renderProps} /></Provider>, store, actions)
 				.catch(next)
 				.then(function(locals) {
 					res.render('index', _.extend(locals, { state: store.getState() }));
 				});
 		} else {
-			res.status(404).send('Not found');
+			next();
 		}
 	});
 });
