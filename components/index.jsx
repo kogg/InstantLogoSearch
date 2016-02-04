@@ -18,7 +18,7 @@ var HTMLDoc = React.createClass({
 					{this.props.head.meta.toComponent()}
 					<link rel="stylesheet" type="text/css" href={HTMLDoc.cacheBuster('css/main.css')} />
 					{this.props.head.link.toComponent()}
-					{process.env.GOOGLE_ANALYTICS_ID && <script dangerouslySetInnerHTML={{
+					{process.env.GOOGLE_ANALYTICS_ID && <script type="text/javascript" dangerouslySetInnerHTML={{
 						__html: '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){\n' +
 							'(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n' +
 							'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n' +
