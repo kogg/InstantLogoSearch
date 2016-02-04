@@ -67,7 +67,7 @@ module.exports = React.createClass({
 								<li className={classNames({
 									'brand-logo':             true,
 									'brand-logo_collected':   this.props.collection[logo.id],
-									'brand-logo_considering': this.props.considering === logo.id
+									'brand-logo_considering': _.isEmpty(this.props.collection) && (this.props.considering === logo.id)
 								})} key={logo.id}>
 									<div className="brand-logo-image flex-center">
 										<img src={logo.svg} />
