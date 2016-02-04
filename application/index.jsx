@@ -34,7 +34,7 @@ app.set('view engine', 'jsx');
 app.set('views', path.join(__dirname, '../components'));
 app.engine('jsx', require('express-react-views').createEngine({ transformViews: false }));
 
-app.get(/(?!\/api\/.*)/, function(req, res, next) {
+app.get(/^(?!\/api\/).*$/, function(req, res, next) {
 	promisify(match)({ routes: routes, location: req.url })
 		.then(function(response) { // Correlates with redirectLocation, renderProps
 			if (response[0]) {
