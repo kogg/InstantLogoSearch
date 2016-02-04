@@ -33,6 +33,9 @@
     position: static;
   }
 
+  &_considering {
+  }
+
   @media (max-width: 1680px) {
   width: calc(16.667% - 20px);
   }
@@ -56,64 +59,57 @@
   @media (max-width: 520px) {
   width: calc(100% - 20px);
   }
-}
 
-.brand-logo:hover {
+  &-image {
+    background: #f2f2f2;
+    padding: 12px;
+    height: 140px;
 
-  /*position: relative;*/
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+      margin: auto;
+      height: 100%;
+    }
+  }
 
-  /*z-index: 2;*/
-}
+  &-ctas {
+    background: white;
+    padding: 12px 0 8px;
 
-.brand-logo-image {
-  background: #f2f2f2;
-  padding: 12px;
-  height: 140px;
-}
+    strong {
+      padding: 0 12px 4px;
+      display: block;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
 
-.brand-logo-image img {
-  max-width: 100%;
-  max-height: 100%;
-  display: block;
-  margin: auto;
-  height: 100%;
-}
+    a {
+      text-decoration: none;
+      font-size: 15px;
+      display: block;
+      padding: 4px 12px;
+      cursor: pointer;
+      color: black;
+      opacity: .6;
 
-.brand-logo-ctas {
-  background: white;
-  padding: 12px 0 8px;
-}
+      &:not(:last-of-type) {
+        background: url('downarrow106.svg');
+        background-size: 19px;
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+      }
 
-.brand-logo-ctas strong {
-  padding: 0 12px 4px;
-  display: block;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.brand-logo-ctas a {
-  text-decoration: none;
-  font-size: 15px;
-  display: block;
-  padding: 4px 12px;
-  cursor: pointer;
-  color: black;
-  opacity: .6;
-}
-
-.brand-logo-ctas a:not(:last-of-type) {
-  background: url('downarrow106.svg');
-  background-size: 19px;
-  background-position: right 12px center;
-  background-repeat: no-repeat;
-}
-
-.brand-logo-ctas a:last-of-type {
-  background: url('plus84.svg');
-  background-size: 19px;
-  background-position: right 12px center;
-  background-repeat: no-repeat;
+      &:last-of-type {
+        background: url('plus84.svg');
+        background-size: 19px;
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+      }
+    }
+  }
 }
 
 .brand-logo_collected .brand-logo-ctas a:last-of-type {

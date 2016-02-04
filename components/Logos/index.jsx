@@ -65,8 +65,9 @@ module.exports = React.createClass({
 						{_.first(logos, this.state.pages * PAGE_SIZE).map(function(logo) {
 							return (
 								<li className={classNames({
-									'brand-logo':           true,
-									'brand-logo_collected': this.props.collection[logo.id]
+									'brand-logo':             true,
+									'brand-logo_collected':   this.props.collection[logo.id],
+									'brand-logo_considering': this.props.considering === logo.id
 								})} key={logo.id}>
 									<div className="brand-logo-image flex-center">
 										<img src={logo.svg} />
