@@ -1,6 +1,7 @@
 if (process.env.DEBUG) {
 	localStorage.debug = process.env.DEBUG;
 }
+var _                    = require('underscore');
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 var debug                = require('debug')(process.env.npm_package_name + ':application');
 var Provider             = require('react-redux').Provider;
@@ -13,7 +14,7 @@ var Store  = require('./store');
 
 var state = JSON.parse(document.getElementById('react-state').innerHTML);
 
-global.ga = global.ga || require('debug')(process.env.npm_package_name + ':analytics');
+global.ga = global.ga || _.noop;
 
 ReactDOM.render(
 	<Provider store={Store(state)}>
