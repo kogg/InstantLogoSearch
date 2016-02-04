@@ -12,8 +12,9 @@ var path     = require('path');
 var q        = require('q');
 var svg2png  = require('svg2png');
 
-var app   = require('./application');
-var Logos = require('./services/Logos');
+var app         = require('./application');
+var Logos       = require('./services/Logos');
+var Suggestions = require('./services/Suggestions');
 
 var readFile  = q.denodeify(fs.readFile);
 
@@ -36,7 +37,6 @@ _.chain(logos)
 	.each(function(logo) {
 		app.use('/svg/' + logo.source.shortname, feathers.static(logo.svg.path.directory, { maxage: '365d' }));
 	});
-app.use('/api/logos', Logos);
 app.get('/png', function(req, res, next) {
 	if (!req.query.id) {
 		return next();
@@ -57,6 +57,8 @@ app.get('/png', function(req, res, next) {
 		res.send(png);
 	});
 });
+app.use('/api/logos', Logos);
+app.use('/api/suggestions', Suggestions);
 
 app.all('*', function(req, res, next) {
 	var err = new Error(http.STATUS_CODES[404] + ' - ' + req.url);
