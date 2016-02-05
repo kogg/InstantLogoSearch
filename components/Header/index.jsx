@@ -23,15 +23,15 @@ module.exports = React.createClass({
 	render: function() {
 		return (
 			<div className={classNames({
-				header:          true,
-				header_expanded: this.state.expanded
+				header:           true,
+				header_collapsed: this.state.collapsed
 			})}>
 				<div className="flex-spread">
 					<div className="logo"></div>
 					<div>
-            <a className="social-action" href=""><img className="social-action-icon" src="/svg/logomono/twitter.svg" />tweet</a>
-            <a className="social-action" href=""><img className="social-action-icon" src="/svg/svgporn/facebook.svg" />share</a>
-            <a className="social-action" href=""><img className="social-action-icon" src="/svg/svgporn/github-icon.svg" />star</a>
+						<a className="social-action" href=""><img className="social-action-icon" src="/svg/logomono/twitter.svg" />tweet</a>
+						<a className="social-action" href=""><img className="social-action-icon" src="/svg/svgporn/facebook.svg" />share</a>
+						<a className="social-action" href=""><img className="social-action-icon" src="/svg/svgporn/github-icon.svg" />star</a>
 					</div>
 				</div>
 				<div className="header-content">
@@ -42,13 +42,13 @@ module.exports = React.createClass({
 							<label>
 								<i className="search-icon" onClick={function() {
 									this.refs.search.value = '';
-									this.setState({ expanded: false });
+									this.setState({ collapsed: false });
 									this.props.onFilters([]);
 									this.focus();
 									ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 								}.bind(this)}></i>
 								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
-									this.setState({ expanded: true });
+									this.setState({ collapsed: true });
 									this.props.onFilters(_.chain(this.refs.search.value.trim().split(/\s+/))
 										.invoke('toLowerCase')
 										.invoke('replace', /[.\- ]/gi, '')
