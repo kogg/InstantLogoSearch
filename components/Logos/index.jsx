@@ -15,7 +15,7 @@ module.exports = connect(createStructuredSelector({
 		createSelector(
 			_.property('searching'),
 			function(searching) {
-				return _.chain(searching.split(/\s+/))
+				return _.chain(searching.trim().split(/\s+/))
 					.invoke('toLowerCase')
 					.invoke('replace', /[.\- ]/gi, '')
 					.compact()
@@ -61,7 +61,7 @@ module.exports = connect(createStructuredSelector({
 		ga('send', 'pageview');
 	},
 	componentWillReceiveProps: function(nextProps) {
-		if (this.props.searching === nextProps.searching) {
+		if (this.props.logos === nextProps.logos) {
 			return;
 		}
 		this.setState({ pages: 1 });
@@ -74,7 +74,7 @@ module.exports = connect(createStructuredSelector({
 			})}>
 				<div className="logos-container">
 					<div className="logos-title">
-						<h3>{_.isEmpty(this.props.searching) ? 'Popular Logos' : ('Searching for "' + this.props.searching + '"')}</h3>
+						<h3>{this.props.searching ? 'Search Results' : 'Popular Logos'}</h3>
 					</div>
 					<ul className="flex-grid">
 						{_.first(this.props.logos, this.state.pages * PAGE_SIZE).map(function(logo) {

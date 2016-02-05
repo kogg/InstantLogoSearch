@@ -56,7 +56,7 @@ module.exports = connect(createStructuredSelector({
 								}.bind(this)}></i>
 								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
 									this.setState({ collapsed: true });
-									this.props.dispatch(actions.search(this.refs.search.value.trim()));
+									this.props.dispatch(actions.search(this.refs.search.value));
 								}.bind(this)} />
 							</label>
 						</form>
