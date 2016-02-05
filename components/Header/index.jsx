@@ -7,7 +7,8 @@ var React                    = require('react');
 var actions = require('../../actions');
 
 module.exports = connect(createStructuredSelector({
-	collection: _.property('collection')
+	collection: _.property('collection'),
+	searching:  _.property('searching')
 }))(React.createClass({
 	getInitialState:   _.constant({}),
 	componentDidMount: function() {
@@ -16,7 +17,6 @@ module.exports = connect(createStructuredSelector({
 				return;
 			}
 			e.preventDefault();
-			this.refs.search.value = '';
 			this.props.dispatch(actions.search(''));
 			this.refs.search.select();
 			ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
@@ -47,7 +47,6 @@ module.exports = connect(createStructuredSelector({
 						<form onSubmit={_.partial(_.result, _, 'preventDefault')} >
 							<label>
 								<i className="search-icon" onClick={function() {
-									this.refs.search.value = '';
 									this.setState({ collapsed: false });
 									this.props.dispatch(actions.search(''));
 									this.refs.search.select();
@@ -65,6 +64,9 @@ module.exports = connect(createStructuredSelector({
 		);
 	},
 	componentDidUpdate: function(nextProps) {
+		if (this.refs.search.value !== this.props.searching) {
+			this.refs.search.value = this.props.searching;
+		}
 		if (this.props.collection === nextProps.collection) {
 			return;
 		}

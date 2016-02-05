@@ -15,6 +15,9 @@ module.exports = connect()(React.createClass({
 	mixins:             [FeathersMixin],
 	componentWillMount: function() {
 		this.feathers('logo');
+		if (this.props.location.query.q) {
+			this.props.dispatch(actions.search(this.props.location.query.q));
+		}
 	},
 	render: function() {
 		return (
