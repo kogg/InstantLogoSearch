@@ -1,9 +1,7 @@
-var _                        = require('underscore');
-var connect                  = require('react-redux').connect;
-var createStructuredSelector = require('reselect').createStructuredSelector;
-var FeathersMixin            = require('feathers-react-redux').FeathersMixin;
-var Helmet                   = require('react-helmet');
-var React                    = require('react');
+var connect       = require('react-redux').connect;
+var FeathersMixin = require('feathers-react-redux').FeathersMixin;
+var Helmet        = require('react-helmet');
+var React         = require('react');
 
 var actions    = require('../../actions');
 var app        = require('../../application');
@@ -13,17 +11,10 @@ var Header     = require('../Header');
 FeathersMixin.setFeathersApp(app);
 FeathersMixin.setFeathersActions(actions);
 
-module.exports = connect(createStructuredSelector({
-	logos:       _.property('logos'),
-	collection:  _.property('collection'),
-	considering: _.property('considering')
-}))(React.createClass({
+module.exports = connect()(React.createClass({
 	mixins:             [FeathersMixin],
 	componentWillMount: function() {
 		this.feathers('logo');
-	},
-	componentDidMount: function() {
-		this.props.dispatch(actions.loadCollection());
 	},
 	render: function() {
 		return (
@@ -40,40 +31,8 @@ module.exports = connect(createStructuredSelector({
 					]} />
 				<Header />
 				{this.props.children}
-				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.props.considering}
-					onUncollectLogo={this.uncollectLogo}
-					onDownloadedLogo={this.clearCollection}
-					onDownloadedLogo={function(logo, filetype) {
-						this.clearCollection();
-						this.downloadedLogo(logo, filetype);
-					}.bind(this)}
-					onDownloadedLogos={function(logos, filetype) {
-						this.clearCollection();
-						this.downloadedLogos(logos, filetype);
-					}.bind(this)} />
+				<Collection />
 			</div>
 		);
-	},
-	collectLogo: function(logo) {
-		this.props.dispatch(actions.addToCollection(logo));
-		ga('ec:addProduct', _.pick(logo, 'id', 'name'));
-		ga('ec:setAction', 'add');
-	},
-	uncollectLogo: function(logo) {
-		this.props.dispatch(actions.removeFromCollection(logo));
-		ga('ec:addProduct', _.pick(logo, 'id', 'name'));
-		ga('ec:setAction', 'remove');
-	},
-	downloadedLogo: function(logo, filetype) {
-		return this.downloadedLogos([logo], filetype);
-	},
-	downloadedLogos: function(logos, filetype) {
-		_.each(logos, function(logo) {
-			ga('ec:addProduct', _.chain(logo).pick('id', 'name').extend({ variant: filetype }).value());
-		});
-		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
-	},
-	clearCollection: function() {
-		this.props.dispatch(actions.clearCollection());
 	}
 }));

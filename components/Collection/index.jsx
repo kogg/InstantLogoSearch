@@ -1,13 +1,21 @@
-var _              = require('underscore');
-var axios          = require('axios');
-var classNames     = require('classnames');
-var createSelector = require('reselect').createSelector;
-var error          = require('debug')(process.env.npm_package_name + ':application:error');
-var saveAs         = process.browser && require('filesaverjs').saveAs;
-var JSZip          = require('jszip');
-var React          = require('react');
+var _                        = require('underscore');
+var axios                    = require('axios');
+var classNames               = require('classnames');
+var connect                  = require('react-redux').connect;
+var createSelector           = require('reselect').createSelector;
+var createStructuredSelector = require('reselect').createStructuredSelector;
+var error                    = require('debug')(process.env.npm_package_name + ':application:error');
+var saveAs                   = process.browser && require('filesaverjs').saveAs;
+var JSZip                    = require('jszip');
+var React                    = require('react');
 
-module.exports = React.createClass({
+var actions = require('../../actions');
+
+module.exports = connect(createStructuredSelector({
+	logos:       _.property('logos'),
+	collection:  _.property('collection'),
+	considering: _.property('considering')
+}))(React.createClass({
 	collectedLogos: createSelector(
 		createSelector(
 			_.property('logos'),
@@ -35,6 +43,9 @@ module.exports = React.createClass({
 			return collectedLogos;
 		}
 	),
+	componentDidMount: function() {
+		this.props.dispatch(actions.loadCollection());
+	},
 	render: function() {
 		var collectedLogos = this.collectedLogos(this.props);
 
@@ -56,8 +67,10 @@ module.exports = React.createClass({
 								<div className="collection-delete-item"
 									onClick={function(e) {
 										e.preventDefault();
-										this.props.onUncollectLogo(logo);
+										ga('ec:addProduct', _.pick(logo, 'id', 'name'));
+										ga('ec:setAction', 'remove');
 										ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+										this.props.dispatch(actions.removeFromCollection(logo));
 									}.bind(this)}></div>
 							</li>
 						);
@@ -77,8 +90,8 @@ module.exports = React.createClass({
 						</div>
 					) : (
 						<div className="ctas">
-							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.svg'} onClick={_.partial(this.downloadedLogo, collectedLogos[0], 'svg')}>Download SVG</a>
-							<a href={collectedLogos[0].png} download={collectedLogos[0].id + '.png'} onClick={_.partial(this.downloadedLogo, collectedLogos[0], 'png')}>Download PNG</a>
+							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.svg'} onClick={_.partial(this.downloadedLogos, [collectedLogos[0]], 'svg')}>Download SVG</a>
+							<a href={collectedLogos[0].png} download={collectedLogos[0].id + '.png'} onClick={_.partial(this.downloadedLogos, [collectedLogos[0]], 'png')}>Download PNG</a>
 						</div>
 					))
 				}
@@ -122,12 +135,12 @@ module.exports = React.createClass({
 
 		return promise;
 	},
-	downloadedLogo: function(logo, filetype) {
-		this.props.onDownloadedLogo(logo, filetype);
-		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
-	},
 	downloadedLogos: function(logos, filetype) {
-		this.props.onDownloadedLogos(logos, filetype);
+		_.each(logos, function(logo) {
+			ga('ec:addProduct', _.chain(logo).pick('id', 'name').extend({ variant: filetype }).value());
+		});
+		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+		this.props.dispatch(actions.clearCollection());
 	}
-});
+}));
