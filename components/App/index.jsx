@@ -9,7 +9,6 @@ var actions    = require('../../actions');
 var app        = require('../../application');
 var Collection = require('../Collection');
 var Header     = require('../Header');
-var Logos      = require('../Logos');
 
 FeathersMixin.setFeathersApp(app);
 FeathersMixin.setFeathersActions(actions);
@@ -40,10 +39,7 @@ module.exports = connect(createStructuredSelector({
 						{ name: 'twitter:description', content: process.env.npm_package_description }
 					]} />
 				<Header />
-				<Logos
-					onCollectLogo={this.collectLogo}
-					onUncollectLogo={this.uncollectLogo}
-					onDownloadedLogo={this.downloadedLogo} />
+				{this.props.children}
 				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.props.considering}
 					onUncollectLogo={this.uncollectLogo}
 					onDownloadedLogo={this.clearCollection}

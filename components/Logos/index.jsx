@@ -125,29 +125,32 @@ module.exports = connect(createStructuredSelector({
 		clearTimeout(this.timeout);
 	},
 	considerLogo: function(logo) {
-		this.replaceTimeout(_.partial(_.compose(this.props.dispatch, actions.considerLogo), logo));
+		clearTimeout(this.timeout);
+		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, actions.considerLogo), logo), 50);
 	},
 	unconsiderLogo: function(logo) {
-		this.replaceTimeout(_.partial(_.compose(this.props.dispatch, actions.unconsiderLogo), logo));
+		clearTimeout(this.timeout);
+		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, actions.unconsiderLogo), logo), 50);
 	},
 	collectLogo: function(logo) {
-		clearTimeout(this.timeout);
-		this.props.onCollectLogo(logo);
-		this.props.dispatch(actions.unconsiderLogo(logo));
+		ga('ec:addProduct', _.pick(logo, 'id', 'name'));
+		ga('ec:setAction', 'add');
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+		clearTimeout(this.timeout);
+		this.props.dispatch(actions.addToCollection(logo));
+		this.props.dispatch(actions.unconsiderLogo(logo));
 	},
 	uncollectLogo: function(logo) {
-		clearTimeout(this.timeout);
-		this.props.onUncollectLogo(logo);
-		this.props.dispatch(actions.unconsiderLogo(logo));
+		ga('ec:addProduct', _.pick(logo, 'id', 'name'));
+		ga('ec:setAction', 'remove');
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+		clearTimeout(this.timeout);
+		this.props.dispatch(actions.removeFromCollection(logo));
+		this.props.dispatch(actions.unconsiderLogo(logo));
 	},
 	downloadedLogo: function(logo, filetype) {
-		this.props.onDownloadedLogo(logo, filetype);
+		ga('ec:addProduct', _.chain(logo).pick('id', 'name').extend({ variant: filetype }).value());
+		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
-	},
-	replaceTimeout: function(func) {
-		clearTimeout(this.timeout);
-		this.timeout = setTimeout(func, 50);
 	}
 }));
