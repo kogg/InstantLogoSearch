@@ -15,8 +15,9 @@ FeathersMixin.setFeathersApp(app);
 FeathersMixin.setFeathersActions(actions);
 
 module.exports = connect(createStructuredSelector({
-	logos:      _.property('logos'),
-	collection: _.property('collection')
+	logos:       _.property('logos'),
+	collection:  _.property('collection'),
+	considering: _.property('considering')
 }))(React.createClass({
 	mixins:             [FeathersMixin],
 	getInitialState:    _.constant({ filters: [] }),
@@ -40,13 +41,11 @@ module.exports = connect(createStructuredSelector({
 						{ name: 'twitter:description', content: process.env.npm_package_description }
 					]} />
 				<Header ref="header" onFilters={this.filterLogos} />
-				<Logos logos={this.props.logos} collection={this.props.collection} considering={this.state.considering} filters={this.state.filters}
-					onConsiderCollectingLogo={this.considerCollectingLogo}
-					onUnconsiderCollectingLogo={this.unconsiderCollectingLogo}
+				<Logos filters={this.state.filters}
 					onCollectLogo={this.collectLogo}
 					onUncollectLogo={this.uncollectLogo}
 					onDownloadedLogo={this.downloadedLogo} />
-				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.state.considering}
+				<Collection logos={this.props.logos} collection={this.props.collection} considering={this.props.considering}
 					onUncollectLogo={this.uncollectLogo}
 					onDownloadedLogo={this.clearCollection}
 					onDownloadedLogo={function(logo, filetype) {
@@ -62,15 +61,6 @@ module.exports = connect(createStructuredSelector({
 	},
 	filterLogos: function(filters) {
 		this.setState({ filters: filters });
-	},
-	considerCollectingLogo: function(logo) {
-		this.setState({ considering: logo.id });
-	},
-	unconsiderCollectingLogo: function(logo) {
-		if (this.state.considering !== logo.id) {
-			return;
-		}
-		this.setState({ considering: null });
 	},
 	collectLogo: function(logo) {
 		this.props.dispatch(actions.addToCollection(logo));

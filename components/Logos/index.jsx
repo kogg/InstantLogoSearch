@@ -1,11 +1,19 @@
-var _              = require('underscore');
-var classNames     = require('classnames');
-var createSelector = require('reselect').createSelector;
-var React          = require('react');
+var _                        = require('underscore');
+var classNames               = require('classnames');
+var connect                  = require('react-redux').connect;
+var createSelector           = require('reselect').createSelector;
+var createStructuredSelector = require('reselect').createStructuredSelector;
+var React                    = require('react');
+
+var actions = require('../../actions');
 
 var PAGE_SIZE = 20;
 
-module.exports = React.createClass({
+module.exports = connect(createStructuredSelector({
+	logos:       _.property('logos'),
+	collection:  _.property('collection'),
+	considering: _.property('considering')
+}))(React.createClass({
 	getInitialState: _.constant({ pages: 1 }),
 	logos:           createSelector(
 		_.property('logos'),
@@ -81,8 +89,8 @@ module.exports = React.createClass({
 												e.preventDefault();
 												this[this.props.collection[logo.id] ? 'uncollectLogo' : 'collectLogo'](logo);
 											}.bind(this)}
-											onMouseMove={_.partial(this.replaceTimeout, _.partial(this.props.onConsiderCollectingLogo, logo))}
-											onMouseLeave={_.partial(this.replaceTimeout, _.partial(this.props.onUnconsiderCollectingLogo, logo))}>
+											onMouseMove={_.partial(this.considerLogo, logo)}
+											onMouseLeave={_.partial(this.unconsiderLogo, logo)}>
 											{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Collection
 										</a>
 									</div>
@@ -106,16 +114,22 @@ module.exports = React.createClass({
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout);
 	},
+	considerLogo: function(logo) {
+		this.replaceTimeout(_.partial(_.compose(this.props.dispatch, actions.considerLogo), logo));
+	},
+	unconsiderLogo: function(logo) {
+		this.replaceTimeout(_.partial(_.compose(this.props.dispatch, actions.unconsiderLogo), logo));
+	},
 	collectLogo: function(logo) {
 		clearTimeout(this.timeout);
 		this.props.onCollectLogo(logo);
-		this.props.onUnconsiderCollectingLogo(logo);
+		this.props.dispatch(actions.unconsiderLogo(logo));
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	uncollectLogo: function(logo) {
 		clearTimeout(this.timeout);
 		this.props.onUncollectLogo(logo);
-		this.props.onUnconsiderCollectingLogo(logo);
+		this.props.dispatch(actions.unconsiderLogo(logo));
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	downloadedLogo: function(logo, filetype) {
@@ -126,4 +140,4 @@ module.exports = React.createClass({
 		clearTimeout(this.timeout);
 		this.timeout = setTimeout(func, 50);
 	}
-});
+}));

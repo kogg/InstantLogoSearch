@@ -7,7 +7,9 @@ module.exports = _.extend(
 		loadCollection:       createAction('LOAD_COLLECTION'),
 		clearCollection:      createAction('CLEAR_COLLECTION'),
 		addToCollection:      createAction('ADD_TO_COLLECTION'),
-		removeFromCollection: createAction('REMOVE_FROM_COLLECTION')
+		removeFromCollection: createAction('REMOVE_FROM_COLLECTION'),
+		considerLogo:         createAction('CONSIDER_LOGO'),
+		unconsiderLogo:       createAction('UNCONSIDER_LOGO')
 	},
 	resourcesActions(function() {
 		return require('./application');
