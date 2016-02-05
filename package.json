@@ -64,7 +64,6 @@
   },
   "dependencies": {
     "autoprefixer": "^6.2.2",
-    "axios": "^0.9.1",
     "babel-preset-react": "^6.3.13",
     "babel-register": "^6.3.13",
     "babelify": "^7.2.0",

@@ -1,5 +1,4 @@
 var _                        = require('underscore');
-var axios                    = require('axios');
 var classNames               = require('classnames');
 var connect                  = require('react-redux').connect;
 var createSelector           = require('reselect').createSelector;
@@ -108,11 +107,20 @@ module.exports = connect(createStructuredSelector({
 					}
 					return Promise.resolve(logo[filetype]);
 				})
-				.invoke('then', axios.get)
 				.map(function(promise, i) {
-					return promise.then(function(response) {
-						zip.file(logos[i].id + '.' + filetype, response.data);
-					});
+					return promise
+						.then(fetch)
+						.then(function(response) {
+							if (response.status < 200 || response.status >= 300) {
+								var error = new Error(response.statusText);
+								error.response = response;
+								throw error;
+							}
+							return response.text();
+						})
+						.then(function(data) {
+							zip.file(logos[i].id + '.' + filetype, data);
+						});
 				})
 				.value()
 		).then(function() {
@@ -121,12 +129,7 @@ module.exports = connect(createStructuredSelector({
 
 		promise.catch(function(err) {
 			error(err);
-			if (err instanceof Error) {
-				ga('send', 'exception', { exDescription: err.message, exFatal: true });
-			} else {
-				// Axios rejects promises but not with an Error when falling outside of 2xx
-				ga('send', 'exception', { exDescription: err.status + ' - ' + err.data, exFatal: false });
-			}
+			ga('send', 'exception', { exDescription: err.message, exFatal: true });
 		});
 
 		return promise;
