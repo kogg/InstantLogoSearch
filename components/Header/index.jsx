@@ -1,8 +1,11 @@
 var _          = require('underscore');
+var connect    = require('react-redux').connect;
 var classNames = require('classnames');
 var React      = require('react');
 
-module.exports = React.createClass({
+var actions = require('../../actions');
+
+module.exports = connect()(React.createClass({
 	getInitialState:   _.constant({}),
 	componentDidMount: function() {
 		var keydown = function(e) {
@@ -11,7 +14,7 @@ module.exports = React.createClass({
 			}
 			e.preventDefault();
 			this.refs.search.value = '';
-			this.props.onFilters([]);
+			this.props.dispatch(actions.search(''));
 			this.focus();
 			ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 		}.bind(this);
@@ -43,17 +46,13 @@ module.exports = React.createClass({
 								<i className="search-icon" onClick={function() {
 									this.refs.search.value = '';
 									this.setState({ collapsed: false });
-									this.props.onFilters([]);
+									this.props.dispatch(actions.search(''));
 									this.focus();
 									ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 								}.bind(this)}></i>
 								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
 									this.setState({ collapsed: true });
-									this.props.onFilters(_.chain(this.refs.search.value.trim().split(/\s+/))
-										.invoke('toLowerCase')
-										.invoke('replace', /[.\- ]/gi, '')
-										.compact()
-										.value());
+									this.props.dispatch(actions.search(this.refs.search.value.trim()));
 								}.bind(this)} />
 							</label>
 						</form>
@@ -69,4 +68,4 @@ module.exports = React.createClass({
 		_.each(this.cleanups, _.partial);
 		this.cleanups = [];
 	}
-});
+}));

@@ -12,12 +12,22 @@ var PAGE_SIZE = 20;
 module.exports = connect(createStructuredSelector({
 	logos:       _.property('logos'),
 	collection:  _.property('collection'),
-	considering: _.property('considering')
+	considering: _.property('considering'),
+	searching:   _.property('searching')
 }))(React.createClass({
 	getInitialState: _.constant({ pages: 1 }),
 	logos:           createSelector(
 		_.property('logos'),
-		_.property('filters'),
+		createSelector(
+			_.property('searching'),
+			function(searching) {
+				return _.chain(searching.split(/\s+/))
+					.invoke('toLowerCase')
+					.invoke('replace', /[.\- ]/gi, '')
+					.compact()
+					.value();
+			}
+		),
 		function(logos, filters) {
 			if (_.isEmpty(filters)) {
 				return _.chain(logos)
@@ -52,7 +62,7 @@ module.exports = connect(createStructuredSelector({
 		ga('send', 'pageview');
 	},
 	componentWillReceiveProps: function(nextProps) {
-		if (_.isEqual(nextProps.filters, this.props.filters)) {
+		if (this.props.searching === nextProps.searching) {
 			return;
 		}
 		this.setState({ pages: 1 });
@@ -67,7 +77,7 @@ module.exports = connect(createStructuredSelector({
 			})}>
 				<div className="logos-container">
 					<div className="logos-title">
-						<h3>{_.isEmpty(this.props.filters) ? 'Most Popular Logos' : ('Searching for "' + this.props.filters.join('" and "') + '"')}</h3>
+						<h3>{_.isEmpty(this.props.searching) ? 'Most Popular Logos' : ('Searching for "' + this.props.searching + '"')}</h3>
 					</div>
 					<ul className="flex-grid">
 						{_.first(logos, this.state.pages * PAGE_SIZE).map(function(logo) {

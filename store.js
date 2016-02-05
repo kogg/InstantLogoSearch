@@ -29,15 +29,7 @@ module.exports = function(state) {
 		routing:        routeReducer,
 		server_actions: serverActionsReducer,
 		logos:          resourcesReducer('logo'),
-		considering:    handleActions({
-			CONSIDER_LOGO: function(state, action) {
-				return action.payload.id || state;
-			},
-			UNCONSIDER_LOGO: function(state, action) {
-				return (action.payload.id === state) ? null : state;
-			}
-		}, null),
-		collection: handleActions({
+		collection:     handleActions({
 			LOAD_COLLECTION: function() {
 				return global.localStorage ? JSON.parse(global.localStorage.getItem('collection')) || {} : {};
 			},
@@ -52,7 +44,20 @@ module.exports = function(state) {
 				delete new_state[action.payload.id];
 				return new_state;
 			})
-		}, {})
+		}, {}),
+		considering: handleActions({
+			CONSIDER_LOGO: function(state, action) {
+				return action.payload.id || state;
+			},
+			UNCONSIDER_LOGO: function(state, action) {
+				return (action.payload.id === state) ? null : state;
+			}
+		}, null),
+		searching: handleActions({
+			SEARCH: function(state, action) {
+				return action.payload || '';
+			}
+		}, '')
 	}), state);
 
 	if (process.browser) {

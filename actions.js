@@ -9,7 +9,8 @@ module.exports = _.extend(
 		addToCollection:      createAction('ADD_TO_COLLECTION'),
 		removeFromCollection: createAction('REMOVE_FROM_COLLECTION'),
 		considerLogo:         createAction('CONSIDER_LOGO'),
-		unconsiderLogo:       createAction('UNCONSIDER_LOGO')
+		unconsiderLogo:       createAction('UNCONSIDER_LOGO'),
+		search:               createAction('SEARCH')
 	},
 	resourcesActions(function() {
 		return require('./application');

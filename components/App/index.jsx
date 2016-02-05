@@ -20,7 +20,6 @@ module.exports = connect(createStructuredSelector({
 	considering: _.property('considering')
 }))(React.createClass({
 	mixins:             [FeathersMixin],
-	getInitialState:    _.constant({ filters: [] }),
 	componentWillMount: function() {
 		this.feathers('logo');
 	},
@@ -41,7 +40,7 @@ module.exports = connect(createStructuredSelector({
 						{ name: 'twitter:description', content: process.env.npm_package_description }
 					]} />
 				<Header ref="header" onFilters={this.filterLogos} />
-				<Logos filters={this.state.filters}
+				<Logos
 					onCollectLogo={this.collectLogo}
 					onUncollectLogo={this.uncollectLogo}
 					onDownloadedLogo={this.downloadedLogo} />
@@ -58,9 +57,6 @@ module.exports = connect(createStructuredSelector({
 					}.bind(this)} />
 			</div>
 		);
-	},
-	filterLogos: function(filters) {
-		this.setState({ filters: filters });
 	},
 	collectLogo: function(logo) {
 		this.props.dispatch(actions.addToCollection(logo));
