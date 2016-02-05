@@ -1,11 +1,14 @@
-var _          = require('underscore');
-var connect    = require('react-redux').connect;
-var classNames = require('classnames');
-var React      = require('react');
+var _                        = require('underscore');
+var connect                  = require('react-redux').connect;
+var classNames               = require('classnames');
+var createStructuredSelector = require('reselect').createStructuredSelector;
+var React                    = require('react');
 
 var actions = require('../../actions');
 
-module.exports = connect()(React.createClass({
+module.exports = connect(createStructuredSelector({
+	collection: _.property('collection')
+}))(React.createClass({
 	getInitialState:   _.constant({}),
 	componentDidMount: function() {
 		var keydown = function(e) {
@@ -15,7 +18,7 @@ module.exports = connect()(React.createClass({
 			e.preventDefault();
 			this.refs.search.value = '';
 			this.props.dispatch(actions.search(''));
-			this.focus();
+			this.refs.search.select();
 			ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 		}.bind(this);
 		document.addEventListener('keydown', keydown);
@@ -47,7 +50,7 @@ module.exports = connect()(React.createClass({
 									this.refs.search.value = '';
 									this.setState({ collapsed: false });
 									this.props.dispatch(actions.search(''));
-									this.focus();
+									this.refs.search.select();
 									ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 								}.bind(this)}></i>
 								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
@@ -61,7 +64,10 @@ module.exports = connect()(React.createClass({
 			</div>
 		);
 	},
-	focus: function() {
+	componentDidUpdate: function(nextProps) {
+		if (this.props.collection === nextProps.collection) {
+			return;
+		}
 		this.refs.search.select();
 	},
 	componentWillUnmount: function() {

@@ -39,7 +39,7 @@ module.exports = connect(createStructuredSelector({
 						{ name: 'twitter:title', content: process.env.npm_package_title },
 						{ name: 'twitter:description', content: process.env.npm_package_description }
 					]} />
-				<Header ref="header" onFilters={this.filterLogos} />
+				<Header />
 				<Logos
 					onCollectLogo={this.collectLogo}
 					onUncollectLogo={this.uncollectLogo}
@@ -60,13 +60,11 @@ module.exports = connect(createStructuredSelector({
 	},
 	collectLogo: function(logo) {
 		this.props.dispatch(actions.addToCollection(logo));
-		this.refs.header.focus();
 		ga('ec:addProduct', _.pick(logo, 'id', 'name'));
 		ga('ec:setAction', 'add');
 	},
 	uncollectLogo: function(logo) {
 		this.props.dispatch(actions.removeFromCollection(logo));
-		this.refs.header.focus();
 		ga('ec:addProduct', _.pick(logo, 'id', 'name'));
 		ga('ec:setAction', 'remove');
 	},

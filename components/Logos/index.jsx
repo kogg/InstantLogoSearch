@@ -77,7 +77,7 @@ module.exports = connect(createStructuredSelector({
 			})}>
 				<div className="logos-container">
 					<div className="logos-title">
-						<h3>{_.isEmpty(this.props.searching) ? 'Most Popular Logos' : ('Searching for "' + this.props.searching + '"')}</h3>
+						<h3>{_.isEmpty(this.props.searching) ? 'Popular Logos' : ('Searching for "' + this.props.searching + '"')}</h3>
 					</div>
 					<ul className="flex-grid">
 						{_.first(logos, this.state.pages * PAGE_SIZE).map(function(logo) {
