@@ -10,13 +10,7 @@ var actions = require('../../actions');
 var PAGE_SIZE = 20;
 
 module.exports = connect(createStructuredSelector({
-	logos:       _.property('logos'),
-	collection:  _.property('collection'),
-	considering: _.property('considering'),
-	searching:   _.property('searching')
-}))(React.createClass({
-	getInitialState: _.constant({ pages: 1 }),
-	logos:           createSelector(
+	logos: createSelector(
 		_.property('logos'),
 		createSelector(
 			_.property('searching'),
@@ -58,6 +52,11 @@ module.exports = connect(createStructuredSelector({
 				.value();
 		}
 	),
+	collection:  _.property('collection'),
+	considering: _.property('considering'),
+	searching:   _.property('searching')
+}))(React.createClass({
+	getInitialState:   _.constant({ pages: 1 }),
 	componentDidMount: function() {
 		ga('send', 'pageview');
 	},
@@ -68,8 +67,6 @@ module.exports = connect(createStructuredSelector({
 		this.setState({ pages: 1 });
 	},
 	render: function() {
-		var logos = this.logos(this.props);
-
 		return (
 			<div className={classNames({
 				'logos':              true,
@@ -80,7 +77,7 @@ module.exports = connect(createStructuredSelector({
 						<h3>{_.isEmpty(this.props.searching) ? 'Popular Logos' : ('Searching for "' + this.props.searching + '"')}</h3>
 					</div>
 					<ul className="flex-grid">
-						{_.first(logos, this.state.pages * PAGE_SIZE).map(function(logo) {
+						{_.first(this.props.logos, this.state.pages * PAGE_SIZE).map(function(logo) {
 							return (
 								<li className={classNames({
 									'brand-logo':             true,
@@ -108,7 +105,7 @@ module.exports = connect(createStructuredSelector({
 							);
 						}.bind(this))}
 					</ul>
-					{((this.state.pages * PAGE_SIZE) < logos.length) && (
+					{((this.state.pages * PAGE_SIZE) < this.props.logos.length) && (
 						<div className="load-more">
 							<a href="" className="load-more-cta" onClick={function(e) {
 								e.preventDefault();

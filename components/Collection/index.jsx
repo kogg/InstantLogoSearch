@@ -12,11 +12,7 @@ var React                    = require('react');
 var actions = require('../../actions');
 
 module.exports = connect(createStructuredSelector({
-	logos:       _.property('logos'),
-	collection:  _.property('collection'),
-	considering: _.property('considering')
-}))(React.createClass({
-	collectedLogos: createSelector(
+	logos: createSelector(
 		createSelector(
 			_.property('logos'),
 			createSelector(_.property('collection'), _.keys),
@@ -30,33 +26,33 @@ module.exports = connect(createStructuredSelector({
 		),
 		_.property('logos'),
 		_.property('considering'),
-		function(collectedLogos, logos, considering) {
+		function(logos, originalLogos, considering) {
 			if (_.isEmpty(considering)) {
-				return collectedLogos;
+				return logos;
 			}
-			var index = _.findIndex(collectedLogos, _.matcher({ id: considering }));
+			var index = _.findIndex(logos, _.matcher({ id: considering }));
 			if (index === -1) {
-				return _.union([_.defaults({ considering: 'addition' }, logos[considering].data)], collectedLogos);
+				return _.union([_.defaults({ considering: 'addition' }, originalLogos[considering].data)], logos);
 			}
-			collectedLogos = _.clone(collectedLogos);
-			collectedLogos[index] = _.defaults({ considering: 'removal' }, collectedLogos[index]);
-			return collectedLogos;
+			logos = _.clone(logos);
+			logos[index] = _.defaults({ considering: 'removal' }, logos[index]);
+			return logos;
 		}
 	),
+	considering: _.property('considering')
+}))(React.createClass({
 	componentDidMount: function() {
 		this.props.dispatch(actions.loadCollection());
 	},
 	render: function() {
-		var collectedLogos = this.collectedLogos(this.props);
-
 		return (
 			<div className={classNames({
 				collection:             true,
-				collection_empty:       _.isEmpty(collectedLogos),
+				collection_empty:       _.isEmpty(this.props.logos),
 				collection_untouchable: this.props.considering
 			})}>
 				<ul className="collection-row">
-					{collectedLogos.map(function(logo) {
+					{this.props.logos.map(function(logo) {
 						return (
 							<li key={logo.id} className={classNames({
 								'collection-row-list':                      true,
@@ -76,22 +72,22 @@ module.exports = connect(createStructuredSelector({
 						);
 					}.bind(this))}
 				</ul>
-				{Boolean(collectedLogos.length) && ((collectedLogos.length > 1) ?
+				{Boolean(this.props.logos.length) && ((this.props.logos.length > 1) ?
 					(
 						<div className="ctas">
 							<a href="" download onClick={function(e) {
 								e.preventDefault();
-								this.downloadAndZip(collectedLogos, 'svg').then(_.partial(this.downloadedLogos, collectedLogos, 'svg'));
+								this.downloadAndZip(this.props.logos, 'svg').then(_.partial(this.downloadedLogos, this.props.logos, 'svg'));
 							}.bind(this)}>Download SVGs</a>
 							<a href="" download onClick={function(e) {
 								e.preventDefault();
-								this.downloadAndZip(collectedLogos, 'png').then(_.partial(this.downloadedLogos, collectedLogos, 'png'));
+								this.downloadAndZip(this.props.logos, 'png').then(_.partial(this.downloadedLogos, this.props.logos, 'png'));
 							}.bind(this)}>Download PNGs</a>
 						</div>
 					) : (
 						<div className="ctas">
-							<a href={collectedLogos[0].svg} download={collectedLogos[0].id + '.svg'} onClick={_.partial(this.downloadedLogos, [collectedLogos[0]], 'svg')}>Download SVG</a>
-							<a href={collectedLogos[0].png} download={collectedLogos[0].id + '.png'} onClick={_.partial(this.downloadedLogos, [collectedLogos[0]], 'png')}>Download PNG</a>
+							<a href={this.props.logos[0].svg} download={this.props.logos[0].id + '.svg'} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], 'svg')}>Download SVG</a>
+							<a href={this.props.logos[0].png} download={this.props.logos[0].id + '.png'} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], 'png')}>Download PNG</a>
 						</div>
 					))
 				}
