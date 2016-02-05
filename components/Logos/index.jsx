@@ -3,6 +3,7 @@ var classNames               = require('classnames');
 var connect                  = require('react-redux').connect;
 var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
+var routeActions             = require('react-router-redux').routeActions;
 var React                    = require('react');
 
 var actions = require('../../actions');
@@ -10,7 +11,8 @@ var actions = require('../../actions');
 var PAGE_SIZE = 20;
 
 module.exports = connect(createStructuredSelector({
-	logos: createSelector(
+	routing: _.property('routing'),
+	logos:   createSelector(
 		_.property('logos'),
 		createSelector(
 			_.property('searching'),
@@ -58,7 +60,7 @@ module.exports = connect(createStructuredSelector({
 }))(React.createClass({
 	getInitialState:   _.constant({ pages: 1 }),
 	componentDidMount: function() {
-		ga('send', 'pageview');
+		this.sendPageView();
 	},
 	componentWillReceiveProps: function(nextProps) {
 		if (this.props.logos === nextProps.logos) {
@@ -118,6 +120,11 @@ module.exports = connect(createStructuredSelector({
 			</div>
 		);
 	},
+	componentDidUpdate: function(prevProps) {
+		if (this.props.searching !== prevProps.searching) {
+			this.updatePageView();
+		}
+	},
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout);
 	},
@@ -149,5 +156,24 @@ module.exports = connect(createStructuredSelector({
 		ga('ec:addProduct', _.chain(logo).pick('id', 'name').extend({ variant: filetype }).value());
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+	},
+	updatePageView: _.debounce(function() {
+		this.props.dispatch(routeActions.replace(this.props.routing.location.pathname + (this.props.searching ? '?q=' + this.props.searching : '')));
+		ga('set', { location: document.location.href, title: document.title });
+		this.sendPageView();
+	}, 500),
+	sendPageView: function() {
+		_.chain(this.props.logos)
+			.first(this.state.pages * PAGE_SIZE)
+			.each(function(logo, i) {
+				ga(
+					'ec:addImpression',
+					_.chain(logo)
+						.pick('id', 'name')
+						.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i })
+						.value()
+				);
+			}.bind(this));
+		ga('send', 'pageview');
 	}
 }));

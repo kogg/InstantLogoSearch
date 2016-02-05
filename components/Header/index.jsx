@@ -2,13 +2,11 @@ var _                        = require('underscore');
 var connect                  = require('react-redux').connect;
 var classNames               = require('classnames');
 var createStructuredSelector = require('reselect').createStructuredSelector;
-var routeActions             = require('react-router-redux').routeActions;
 var React                    = require('react');
 
 var actions = require('../../actions');
 
 module.exports = connect(createStructuredSelector({
-	routing:    _.property('routing'),
 	collection: _.property('collection'),
 	searching:  _.property('searching')
 }))(React.createClass({
@@ -72,15 +70,9 @@ module.exports = connect(createStructuredSelector({
 		if (this.props.collection !== prevProps.collection) {
 			this.refs.search.select();
 		}
-		if (this.props.searching !== prevProps.searching) {
-			this.updateQuery();
-		}
 	},
 	componentWillUnmount: function() {
 		_.each(this.cleanups, _.partial);
 		this.cleanups = [];
-	},
-	updateQuery: _.debounce(function() {
-		this.props.dispatch(routeActions.replace(this.props.routing.location.pathname + (this.props.searching ? '?q=' + this.props.searching : '')));
-	}, 500)
+	}
 }));
