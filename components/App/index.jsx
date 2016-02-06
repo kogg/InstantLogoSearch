@@ -6,6 +6,7 @@ var React         = require('react');
 var actions    = require('../../actions');
 var app        = require('../../application');
 var Collection = require('../Collection');
+var Footer     = require('../Footer');
 var Header     = require('../Header');
 
 FeathersMixin.setFeathersApp(app);
@@ -34,6 +35,7 @@ module.exports = connect()(React.createClass({
 					]} />
 				<Header />
 				{this.props.children}
+				<Footer />
 				<Collection />
 			</div>
 		);
