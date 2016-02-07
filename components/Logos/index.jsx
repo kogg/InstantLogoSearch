@@ -156,7 +156,7 @@ module.exports = connect(createStructuredSelector({
 			'ec:addProduct',
 			_.chain(logo)
 				.pick('id', 'name')
-				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i })
+				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i, quantity: 1 })
 				.value()
 		);
 		ga('ec:setAction', 'add');
@@ -170,7 +170,7 @@ module.exports = connect(createStructuredSelector({
 			'ec:addProduct',
 			_.chain(logo)
 				.pick('id', 'name')
-				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i })
+				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i, quantity: 1 })
 				.value()
 		);
 		ga('ec:setAction', 'remove');
@@ -184,7 +184,7 @@ module.exports = connect(createStructuredSelector({
 			'ec:addProduct',
 			_.chain(logo)
 				.pick('id', 'name')
-				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i, variant: filetype })
+				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i, variant: filetype, quantity: 1 })
 				.value()
 		);
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });

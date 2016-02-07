@@ -62,7 +62,13 @@ module.exports = connect(createStructuredSelector({
 								<div className="collection-delete-item"
 									onClick={function(e) {
 										e.preventDefault();
-										ga('ec:addProduct', _.pick(logo, 'id', 'name'));
+										ga(
+											'ec:addProduct',
+											_.chain(logo)
+												.pick('id', 'name')
+												.extend({ quantity: 1 })
+												.value()
+										);
 										ga('ec:setAction', 'remove');
 										ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 										this.props.dispatch(actions.removeFromCollection(logo));
@@ -140,7 +146,7 @@ module.exports = connect(createStructuredSelector({
 				'ec:addProduct',
 				_.chain(logo)
 					.pick('id', 'name')
-					.extend({ variant: filetype })
+					.extend({ variant: filetype, quantity: 1 })
 					.value()
 			);
 		});
