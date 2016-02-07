@@ -8,6 +8,7 @@ var memoize        = require('memoizee');
 var path           = require('path');
 var promisify      = require('es6-promisify');
 var serverRender   = require('feathers-react-redux/serverRender');
+var sm             = require('sitemap');
 var Provider       = require('react-redux').Provider;
 var React          = require('react');
 var RoutingContext = require('react-router').RoutingContext;
@@ -34,6 +35,32 @@ if (process.env.npm_package_feathersjs_socket) {
 app.set('view engine', 'jsx');
 app.set('views', path.join(__dirname, '../components'));
 app.engine('jsx', require('express-react-views').createEngine({ transformViews: false }));
+
+var getSitemapXML = _.once(function() {
+	return app.service('/api/logos').find().then(function(logos) {
+		var sitemap = sm.createSitemap({
+			hostname:  process.env.npm_package_homepage,
+			cacheTime: 60000,
+			urls:      _.chain(logos)
+				.map(function(logo) {
+					return { url: '/' + logo.id };
+				})
+				.unshift({ url: '/', changefreq: 'daily', priority: 1 })
+				.value()
+		});
+
+		return promisify(sitemap.toXML.bind(sitemap))();
+	});
+});
+app.get('/sitemap.xml', function(req, res, next) {
+	getSitemapXML().then(
+		function(xml) {
+			res.header('Content-Type', 'application/xml');
+			res.send(xml);
+		},
+		next
+	);
+});
 
 app.set('page-render', memoize(function(url, redirect) {
 	return promisify(match)({ routes: routes, location: url })
