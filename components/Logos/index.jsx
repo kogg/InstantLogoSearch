@@ -111,8 +111,23 @@ module.exports = connect(createStructuredSelector({
 						<div className="load-more">
 							<a href="" className="load-more-cta" onClick={function(e) {
 								e.preventDefault();
-								this.setState({ pages: this.state.pages + 1 });
+								_.chain(this.props.logos)
+									.rest((this.state.pages + 1) * PAGE_SIZE)
+									.first(PAGE_SIZE)
+									.each(function(logo, i) {
+										ga(
+											'ec:addImpression',
+											_.chain(logo)
+												.pick('id', 'name')
+												.extend({
+													list:     this.props.searching ? 'Search Results' : 'Popular Logos',
+													position: (this.state.pages + 1) * PAGE_SIZE + i + 1
+												})
+												.value()
+										);
+									}.bind(this));
 								ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+								this.setState({ pages: this.state.pages + 1 });
 							}.bind(this)}>Show More</a>
 						</div>
 					)}
