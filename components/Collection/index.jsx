@@ -136,7 +136,13 @@ module.exports = connect(createStructuredSelector({
 	},
 	downloadedLogos: function(logos, filetype) {
 		_.each(logos, function(logo) {
-			ga('ec:addProduct', _.chain(logo).pick('id', 'name').extend({ variant: filetype }).value());
+			ga(
+				'ec:addProduct',
+				_.chain(logo)
+					.pick('id', 'name')
+					.extend({ variant: filetype })
+					.value()
+			);
 		});
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
