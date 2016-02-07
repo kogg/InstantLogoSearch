@@ -36,14 +36,17 @@ app.set('view engine', 'jsx');
 app.set('views', path.join(__dirname, '../components'));
 app.engine('jsx', require('express-react-views').createEngine({ transformViews: false }));
 
-var sitemap;
-app.get('/sitemap.xml', function(req, res, next) {
-	sitemap = sitemap || sm.createSitemap({
+var getSitemapXML = _.once(function() {
+	var sitemap = sm.createSitemap({
 		hostname:  process.env.npm_package_homepage,
 		cacheTime: 60000,
 		urls:      [{ url: '/', priority: 1 }]
 	});
-	promisify(sitemap.toXML.bind(sitemap))().then(
+
+	return promisify(sitemap.toXML.bind(sitemap))();
+});
+app.get('/sitemap.xml', function(req, res, next) {
+	getSitemapXML().then(
 		function(xml) {
 			res.header('Content-Type', 'application/xml');
 			res.send(xml);
