@@ -7,6 +7,7 @@ var match          = require('react-router').match;
 var path           = require('path');
 var promisify      = require('es6-promisify');
 var serverRender   = require('feathers-react-redux/serverRender');
+var sm             = require('sitemap');
 var Provider       = require('react-redux').Provider;
 var React          = require('react');
 var RoutingContext = require('react-router').RoutingContext;
@@ -33,6 +34,22 @@ if (process.env.npm_package_feathersjs_socket) {
 app.set('view engine', 'jsx');
 app.set('views', path.join(__dirname, '../components'));
 app.engine('jsx', require('express-react-views').createEngine({ transformViews: false }));
+
+var sitemap;
+app.get('/sitemap.xml', function(req, res, next) {
+	sitemap = sitemap || sm.createSitemap({
+		hostname:  process.env.npm_package_homepage,
+		cacheTime: 60000,
+		urls:      [{ url: '/', priority: 1 }]
+	});
+	promisify(sitemap.toXML.bind(sitemap))().then(
+		function(xml) {
+			res.header('Content-Type', 'application/xml');
+			res.send(xml);
+		},
+		next
+	);
+});
 
 app.get(/^(?!\/api\/).*$/, function(req, res, next) {
 	promisify(match)({ routes: routes, location: req.url })
