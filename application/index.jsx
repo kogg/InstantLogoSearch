@@ -37,13 +37,20 @@ app.set('views', path.join(__dirname, '../components'));
 app.engine('jsx', require('express-react-views').createEngine({ transformViews: false }));
 
 var getSitemapXML = _.once(function() {
-	var sitemap = sm.createSitemap({
-		hostname:  process.env.npm_package_homepage,
-		cacheTime: 60000,
-		urls:      [{ url: '/', priority: 1 }]
-	});
+	return app.service('/api/logos').find().then(function(logos) {
+		var sitemap = sm.createSitemap({
+			hostname:  process.env.npm_package_homepage,
+			cacheTime: 60000,
+			urls:      _.chain(logos)
+				.map(function(logo) {
+					return { url: '/' + logo.id };
+				})
+				.unshift({ url: '/', changefreq: 'daily', priority: 1 })
+				.value()
+		});
 
-	return promisify(sitemap.toXML.bind(sitemap))();
+		return promisify(sitemap.toXML.bind(sitemap))();
+	});
 });
 app.get('/sitemap.xml', function(req, res, next) {
 	getSitemapXML().then(
