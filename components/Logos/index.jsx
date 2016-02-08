@@ -3,7 +3,7 @@ var classNames               = require('classnames');
 var connect                  = require('react-redux').connect;
 var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
-var routeActions             = require('react-router-redux').routeActions;
+var History                  = require('react-router').History;
 var React                    = require('react');
 
 var actions = require('../../actions');
@@ -57,6 +57,7 @@ module.exports = connect(createStructuredSelector({
 	considering: _.property('considering'),
 	searching:   _.property('searching')
 }))(React.createClass({
+	mixins:            [History],
 	getInitialState:   _.constant({ pages: 1 }),
 	componentDidMount: function() {
 		this.sendPageView();
@@ -213,7 +214,7 @@ module.exports = connect(createStructuredSelector({
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	updatePageView: _.debounce(function() {
-		this.props.dispatch(routeActions.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : '')));
+		this.history.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : ''));
 		ga('set', { location: document.location.href, title: document.title });
 		this.sendPageView();
 	}, 500),
