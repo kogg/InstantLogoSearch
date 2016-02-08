@@ -214,6 +214,9 @@ module.exports = connect(createStructuredSelector({
 		ga('send', 'event', 'Logos', 'Download ' + filetype.toUpperCase(), logo.id, 1);
 	},
 	updatePageView: _.debounce(function() {
+		ga('send', 'event', 'Search', 'Searching', this.props.searching);
+		// The searching "event" happens before we change the page
+		// Plus, I'm not sure if the events flow bridges pageviews, so it makes more sense being part of the flow of the previous "page"
 		this.history.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : ''));
 		ga('set', { location: document.location.href, title: document.title });
 		this.sendPageView();
