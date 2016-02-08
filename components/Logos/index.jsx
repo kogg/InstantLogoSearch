@@ -79,7 +79,7 @@ module.exports = connect(createStructuredSelector({
 						<h3>{this.props.searching ? 'Search Results' : 'Popular Logos'}</h3>
 					</div>
 					<ul>
-						{_.first(this.props.logos, this.state.pages * PAGE_SIZE).map(function(logo) {
+						{_.first(this.props.logos, this.state.pages * PAGE_SIZE).map(function(logo, i) {
 							return (
 								<li className={classNames({
 									'brand-logo':             true,
@@ -92,13 +92,13 @@ module.exports = connect(createStructuredSelector({
 									<div className="brand-logo-ctas">
 										<strong>{logo.name}</strong>
 										<div className="brand-logo-ctas-download">
-											<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.downloadedLogo, logo, 'svg')}>SVG</a>
-											<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.downloadedLogo, logo, 'png')}>PNG</a>
+											<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
+											<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
 										</div>
 										<a className="brand-logo-ctas-collection" href=""
 											onClick={function(e) {
 												e.preventDefault();
-												this[this.props.collection[logo.id] ? 'uncollectLogo' : 'collectLogo'](logo);
+												this[this.props.collection[logo.id] ? 'uncollectLogo' : 'collectLogo'](logo, i);
 											}.bind(this)}
 											onMouseMove={_.partial(this.considerLogo, logo)}
 											onMouseLeave={_.partial(this.unconsiderLogo, logo)}>
@@ -134,8 +134,23 @@ module.exports = connect(createStructuredSelector({
 						<div className="load-more">
 							<a href="" className="load-more-cta" onClick={function(e) {
 								e.preventDefault();
-								this.setState({ pages: this.state.pages + 1 });
+								_.chain(this.props.logos)
+									.rest((this.state.pages + 1) * PAGE_SIZE)
+									.first(PAGE_SIZE)
+									.each(function(logo, i) {
+										ga(
+											'ec:addImpression',
+											_.chain(logo)
+												.pick('id', 'name')
+												.extend({
+													list:     this.props.searching ? 'Search Results' : 'Popular Logos',
+													position: (this.state.pages + 1) * PAGE_SIZE + i + 1
+												})
+												.value()
+										);
+									}.bind(this));
 								ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+								this.setState({ pages: this.state.pages + 1 });
 							}.bind(this)}>Show More</a>
 						</div>
 					)}
@@ -159,24 +174,42 @@ module.exports = connect(createStructuredSelector({
 		clearTimeout(this.timeout);
 		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, actions.unconsiderLogo), logo), 50);
 	},
-	collectLogo: function(logo) {
-		ga('ec:addProduct', _.pick(logo, 'id', 'name'));
+	collectLogo: function(logo, i) {
+		ga(
+			'ec:addProduct',
+			_.chain(logo)
+				.pick('id', 'name')
+				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1, quantity: 1 })
+				.value()
+		);
 		ga('ec:setAction', 'add');
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 		clearTimeout(this.timeout);
 		this.props.dispatch(actions.addToCollection(logo));
 		this.props.dispatch(actions.unconsiderLogo(logo));
 	},
-	uncollectLogo: function(logo) {
-		ga('ec:addProduct', _.pick(logo, 'id', 'name'));
+	uncollectLogo: function(logo, i) {
+		ga(
+			'ec:addProduct',
+			_.chain(logo)
+				.pick('id', 'name')
+				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1, quantity: 1 })
+				.value()
+		);
 		ga('ec:setAction', 'remove');
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 		clearTimeout(this.timeout);
 		this.props.dispatch(actions.removeFromCollection(logo));
 		this.props.dispatch(actions.unconsiderLogo(logo));
 	},
-	downloadedLogo: function(logo, filetype) {
-		ga('ec:addProduct', _.chain(logo).pick('id', 'name').extend({ variant: filetype }).value());
+	downloadedLogo: function(logo, i, filetype) {
+		ga(
+			'ec:addProduct',
+			_.chain(logo)
+				.pick('id', 'name')
+				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1, variant: filetype, quantity: 1 })
+				.value()
+		);
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
@@ -193,7 +226,7 @@ module.exports = connect(createStructuredSelector({
 					'ec:addImpression',
 					_.chain(logo)
 						.pick('id', 'name')
-						.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i })
+						.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1 })
 						.value()
 				);
 			}.bind(this));

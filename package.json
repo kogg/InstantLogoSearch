@@ -1,6 +1,7 @@
 {
   "name": "InstantLogoSearch",
   "title": "Instant Logo Search",
+  "homepage": "http://instantlogosearch.com",
   "version": "1.0.0",
   "description": "The fastest way to find logos from hundreds of brands, startups, and companies",
   "repository": "cameronrohani/InstantLogoSearch",
@@ -81,6 +82,7 @@
     "feathers-react-redux": "^0.4.0",
     "filesaverjs": "^0.2.1",
     "github": "^0.2.4",
+    "googleapis": "^2.1.7",
     "helmet": "^1.1.0",
     "history": "^1.17.0",
     "instant-logos": "kogg/instant-logos",
@@ -104,6 +106,7 @@
     "redux-actions": "^0.9.1",
     "redux-thunk": "^1.0.3",
     "reselect": "^2.0.2",
+    "sitemap": "^1.5.0",
     "socket.io": "^1.4.0",
     "svg2png": "^3.0.0",
     "uglify-js": "^2.6.1",
