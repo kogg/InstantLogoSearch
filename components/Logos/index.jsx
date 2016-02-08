@@ -78,7 +78,7 @@ module.exports = connect(createStructuredSelector({
 					<div className="logos-title">
 						<h3>{this.props.searching ? 'Search Results' : 'Popular Logos'}</h3>
 					</div>
-					<ul className="flex-grid">
+					<ul>
 						{_.first(this.props.logos, this.state.pages * PAGE_SIZE).map(function(logo) {
 							return (
 								<li className={classNames({
@@ -91,21 +91,44 @@ module.exports = connect(createStructuredSelector({
 									</div>
 									<div className="brand-logo-ctas">
 										<strong>{logo.name}</strong>
-										<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.downloadedLogo, logo, 'svg')}>Download SVG</a>
-										<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.downloadedLogo, logo, 'png')}>Download PNG</a>
-										<a href=""
+										<div className="brand-logo-ctas-download">
+											<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.downloadedLogo, logo, 'svg')}>SVG</a>
+											<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.downloadedLogo, logo, 'png')}>PNG</a>
+										</div>
+										<a className="brand-logo-ctas-collection" href=""
 											onClick={function(e) {
 												e.preventDefault();
 												this[this.props.collection[logo.id] ? 'uncollectLogo' : 'collectLogo'](logo);
 											}.bind(this)}
 											onMouseMove={_.partial(this.considerLogo, logo)}
 											onMouseLeave={_.partial(this.unconsiderLogo, logo)}>
-											{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Collection
+											{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Bucket
 										</a>
 									</div>
 								</li>
 							);
 						}.bind(this))}
+						<li className="brand-logo missing-logo">
+							<div className="brand-logo-image"></div>
+							<div className="pop-over">
+								<div className="suggest">
+									<form action="">
+										<input type="text" defaultValue="Reddit"/>
+										<input type="file" name="pic" accept="image/" />
+										<input type="submit" />
+									</form>
+								</div>
+							</div>
+							<div className="flex-center">
+								<div className="">
+									<span>Can't find quite what you're looking for? </span>
+									<u>Suggest</u>
+									<span> a logo or </span>
+									<u>upload</u>
+									<span> something yourself!</span>
+								</div>
+							</div>
+						</li>
 					</ul>
 					{((this.state.pages * PAGE_SIZE) < this.props.logos.length) && (
 						<div className="load-more">

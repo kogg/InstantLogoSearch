@@ -8,12 +8,7 @@
 }
 
 .header_expanded + .logos {
-  max-height: calc(100vh - 73px);
   overflow: auto;
-
-  &_extra-bottom {
-    max-height: calc(100vh - 173px);
-  }
 }
 
 .logos-title {
@@ -92,35 +87,56 @@
       text-decoration: none;
       font-size: 15px;
       display: block;
-      padding: 4px 12px;
+      padding: 6px 0;
       cursor: pointer;
       color: black;
-      opacity: .6;
+    }
 
-      &:not(:last-of-type) {
-        background: url('downarrow106.svg');
-        background-size: 19px;
-        background-position: right 12px center;
-        background-repeat: no-repeat;
-      }
-
-      &:last-of-type {
-        background: url('plus84.svg');
-        background-size: 19px;
-        background-position: right 12px center;
-        background-repeat: no-repeat;
-      }
-
-      .brand-logo_collected &:last-of-type {
-        background: url('check.svg');
-        background-size: 19px;
-        background-position: right 12px center;
-        background-repeat: no-repeat;
-      }
+    &-download {
+      background: url('downarrow106.svg');
+      background-size: 19px;
+      background-position: left 12px center;
+      background-repeat: no-repeat;
+      padding-left: 40px;
+      opacity: .5;
 
       &:hover {
         opacity: 1;
-        background-color: rgba(0, 0, 0, .02);
+      }
+
+      &:hover a {
+        color: rgba(0, 0, 0, .5);
+      }
+
+      a {
+        display: inline-block;
+        margin-right: 8px;
+        padding: 8px 0;
+        border-radius: 3px;
+      }
+
+      a:hover {
+        color: rgba(0, 0, 0, 1);
+      }
+    }
+
+    &-collection {
+      background: url('plus84.svg');
+      background-size: 19px;
+      background-position: left 12px center;
+      background-repeat: no-repeat;
+      text-indent: 40px;
+      opacity: .5;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      .brand-logo_collected & {
+        background: url('check.svg');
+        background-size: 19px;
+        background-position: left 12px center;
+        background-repeat: no-repeat;
       }
     }
   }
@@ -146,4 +162,48 @@
       border-color: rgba(0, 0, 0, 0.3);
     }
   }
+}
+
+.missing-logo {
+  height: 249px;
+  position: relative;
+  border: 1px dashed rgba(0, 0, 0, .14);
+}
+
+.missing-logo .brand-logo-image {
+  background: transparent;
+  background-image: url('empty.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto 80%;
+  opacity: .1;
+}
+
+.missing-logo .flex-center {
+  padding: 12px;
+  height: calc(100% - 140px);
+  text-align: center;
+}
+
+.missing-logo u,
+.missing-logo span {
+  opacity: .4;
+  font-size: 14px;
+}
+
+.missing-logo b {
+  text-decoration: underline;
+}
+
+.pop-over {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  background: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 0 1px rgba(0, 0, 0, 0.35);
+  width: calc(100% + 2px);
+  height: calc(100% - 60px);
+  z-index: 2;
+  padding: 12px;
+  border-radius: 4px;
 }
