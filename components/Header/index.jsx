@@ -19,7 +19,7 @@ module.exports = connect(createStructuredSelector({
 			e.preventDefault();
 			this.props.dispatch(actions.search(''));
 			this.refs.search.select();
-			ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+			ga('send', 'event', 'Search', 'Clear', 'Esc');
 		}.bind(this);
 		document.addEventListener('keydown', keydown);
 		this.cleanups = _.union([function() {
@@ -50,7 +50,7 @@ module.exports = connect(createStructuredSelector({
 									this.setState({ collapsed: false });
 									this.props.dispatch(actions.search(''));
 									this.refs.search.select();
-									ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+									ga('send', 'event', 'Search', 'Clear', 'Search Icon');
 								}.bind(this)}></i>
 								<input className="search-input" placeholder="What logo are you looking for?" ref="search" type="text" autoFocus onChange={function() {
 									this.setState({ collapsed: true });

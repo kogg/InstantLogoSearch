@@ -126,7 +126,7 @@ module.exports = connect(createStructuredSelector({
 												.value()
 										);
 									}.bind(this));
-								ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+								ga('send', 'event', 'Logos', 'Load More', null, this.state.pages + 1);
 								this.setState({ pages: this.state.pages + 1 });
 							}.bind(this)}>Show More</a>
 						</div>
@@ -160,7 +160,7 @@ module.exports = connect(createStructuredSelector({
 				.value()
 		);
 		ga('ec:setAction', 'add');
-		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+		ga('send', 'event', 'Logos', 'Add to Collection', logo.id);
 		clearTimeout(this.timeout);
 		this.props.dispatch(actions.addToCollection(logo));
 		this.props.dispatch(actions.unconsiderLogo(logo));
@@ -174,7 +174,7 @@ module.exports = connect(createStructuredSelector({
 				.value()
 		);
 		ga('ec:setAction', 'remove');
-		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+		ga('send', 'event', 'Logos', 'Remove from Collection', logo.id);
 		clearTimeout(this.timeout);
 		this.props.dispatch(actions.removeFromCollection(logo));
 		this.props.dispatch(actions.unconsiderLogo(logo));
@@ -188,7 +188,7 @@ module.exports = connect(createStructuredSelector({
 				.value()
 		);
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
-		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+		ga('send', 'event', 'Logos', 'Download', logo.id, 1);
 	},
 	updatePageView: _.debounce(function() {
 		this.props.dispatch(routeActions.replace(this.props.routing.location.pathname + (this.props.searching ? '?q=' + this.props.searching : '')));
