@@ -149,7 +149,7 @@ module.exports = connect(createStructuredSelector({
 												.value()
 										);
 									}.bind(this));
-								ga('send', 'event', 'Logos', 'Load More', null, this.state.pages + 1);
+								ga('send', 'event', 'Logos', 'Load More', 'CTA', this.state.pages + 1);
 								this.setState({ pages: this.state.pages + 1 });
 							}.bind(this)}>Show More</a>
 						</div>
