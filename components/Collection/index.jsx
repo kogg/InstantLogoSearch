@@ -151,7 +151,7 @@ module.exports = connect(createStructuredSelector({
 			);
 		});
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
-		ga('send', 'event', 'Collection', 'Download', null, logos.length);
+		ga('send', 'event', 'Collection', 'Download ' + filetype.toUpperCase(), null, logos.length);
 		this.props.dispatch(actions.clearCollection());
 	}
 }));

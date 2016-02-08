@@ -211,7 +211,7 @@ module.exports = connect(createStructuredSelector({
 				.value()
 		);
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
-		ga('send', 'event', 'Logos', 'Download', logo.id, 1);
+		ga('send', 'event', 'Logos', 'Download ' + filetype.toUpperCase(), logo.id, 1);
 	},
 	updatePageView: _.debounce(function() {
 		this.history.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : ''));
