@@ -70,7 +70,7 @@ module.exports = connect(createStructuredSelector({
 												.value()
 										);
 										ga('ec:setAction', 'remove');
-										ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+										ga('send', 'event', 'Collection', 'Remove from Collection', logo.id);
 										this.props.dispatch(actions.removeFromCollection(logo));
 									}.bind(this)}></div>
 							</li>
@@ -151,7 +151,7 @@ module.exports = connect(createStructuredSelector({
 			);
 		});
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
-		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+		ga('send', 'event', 'Collection', 'Download ' + filetype.toUpperCase(), null, logos.length);
 		this.props.dispatch(actions.clearCollection());
 	}
 }));

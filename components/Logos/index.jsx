@@ -149,7 +149,7 @@ module.exports = connect(createStructuredSelector({
 												.value()
 										);
 									}.bind(this));
-								ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+								ga('send', 'event', 'Logos', 'Load More', 'CTA', this.state.pages + 1);
 								this.setState({ pages: this.state.pages + 1 });
 							}.bind(this)}>Show More</a>
 						</div>
@@ -183,7 +183,7 @@ module.exports = connect(createStructuredSelector({
 				.value()
 		);
 		ga('ec:setAction', 'add');
-		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+		ga('send', 'event', 'Logos', 'Add to Collection', logo.id);
 		clearTimeout(this.timeout);
 		this.props.dispatch(actions.addToCollection(logo));
 		this.props.dispatch(actions.unconsiderLogo(logo));
@@ -197,7 +197,7 @@ module.exports = connect(createStructuredSelector({
 				.value()
 		);
 		ga('ec:setAction', 'remove');
-		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+		ga('send', 'event', 'Logos', 'Remove from Collection', logo.id);
 		clearTimeout(this.timeout);
 		this.props.dispatch(actions.removeFromCollection(logo));
 		this.props.dispatch(actions.unconsiderLogo(logo));
@@ -211,9 +211,12 @@ module.exports = connect(createStructuredSelector({
 				.value()
 		);
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
-		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
+		ga('send', 'event', 'Logos', 'Download ' + filetype.toUpperCase(), logo.id, 1);
 	},
 	updatePageView: _.debounce(function() {
+		ga('send', 'event', 'Search', 'Searching', this.props.searching);
+		// The searching "event" happens before we change the page
+		// Plus, I'm not sure if the events flow bridges pageviews, so it makes more sense being part of the flow of the previous "page"
 		this.history.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : ''));
 		ga('set', { location: document.location.href, title: document.title });
 		this.sendPageView();
