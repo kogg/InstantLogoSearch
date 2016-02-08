@@ -11,8 +11,7 @@ var actions = require('../../actions');
 var PAGE_SIZE = 20;
 
 module.exports = connect(createStructuredSelector({
-	routing: _.property('routing'),
-	logos:   createSelector(
+	logos: createSelector(
 		_.property('logos'),
 		createSelector(
 			_.property('searching'),
@@ -214,7 +213,7 @@ module.exports = connect(createStructuredSelector({
 		ga('send', 'event', 'Dummy', 'Dummy', 'Dummy'); // FIXME
 	},
 	updatePageView: _.debounce(function() {
-		this.props.dispatch(routeActions.replace(this.props.routing.location.pathname + (this.props.searching ? '?q=' + this.props.searching : '')));
+		this.props.dispatch(routeActions.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : '')));
 		ga('set', { location: document.location.href, title: document.title });
 		this.sendPageView();
 	}, 500),
