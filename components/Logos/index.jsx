@@ -82,7 +82,7 @@ module.exports = connect(createStructuredSelector({
 									'brand-logo_considering': _.isEmpty(this.props.collection) && (this.props.considering === logo.id)
 								})} key={logo.id}>
 									<div className="brand-logo-image flex-center">
-										<img src={logo.svg} />
+										<img src={logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
 									</div>
 									<div className="brand-logo-ctas">
 										<strong>{logo.name}</strong>

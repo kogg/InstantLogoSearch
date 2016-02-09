@@ -55,7 +55,7 @@ module.exports = connect(createStructuredSelector({
 								'collection-row-list_considering_addition': logo.considering === 'addition',
 								'collection-row-list_considering_removal':  logo.considering === 'removal'
 							})}>
-								<img src={logo.svg} />
+								<img src={logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
 								<div className="collection-delete-item"
 									onClick={function(e) {
 										e.preventDefault();
