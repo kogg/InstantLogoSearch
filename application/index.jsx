@@ -42,8 +42,9 @@ var getSitemapXML = _.once(function() {
 			hostname:  process.env.npm_package_homepage,
 			cacheTime: 60000,
 			urls:      _.chain(logos)
+				.uniq(false, 'searchable')
 				.map(function(logo) {
-					return { url: '/' + logo.id };
+					return { url: '/' + logo.searchable };
 				})
 				.unshift({ url: '/', changefreq: 'daily', priority: 1 })
 				.value()

@@ -17,7 +17,7 @@ module.exports = connect(createStructuredSelector({
 		createSelector(
 			_.property('searching'),
 			function(searching) {
-				return _.chain(searching.trim().toLowerCase().replace(/[.\-]/gi, '').split(/\s+/))
+				return _.chain(searching.trim().toLowerCase().replace(/[.\-()]/gi, '').split(/\s+/))
 					.compact()
 					.sortBy(function(filter) {
 						return -filter.length; // The longer the word, the more likely it won't match anything
@@ -88,7 +88,7 @@ module.exports = connect(createStructuredSelector({
 											<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
 											<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
 										</div>
-										<a className="brand-logo-ctas-collection" href={'/' + logo.id}
+										<a className="brand-logo-ctas-collection" href={'/' + logo.searchable}
 											onClick={function(e) {
 												e.preventDefault();
 												this.toggleCollected(logo, i);
