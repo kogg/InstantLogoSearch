@@ -26,10 +26,10 @@ module.exports = connect(createStructuredSelector({
 		function(logos, filters) {
 			if (_.isEmpty(filters)) {
 				return _.chain(logos)
-					.pluck('data')
 					.sortBy(function(logo) {
-						return -logo.downloads;
+						return -logo.data.downloads;
 					})
+					.pluck('data')
 					.value();
 			}
 			return _.chain(logos)
@@ -57,11 +57,8 @@ module.exports = connect(createStructuredSelector({
 	considering: _.property('considering'),
 	searching:   _.property('searching')
 }))(React.createClass({
-	mixins:            [History],
-	getInitialState:   _.constant({ pages: 1, infinite: false }),
-	componentDidMount: function() {
-		this.sendPageView();
-	},
+	mixins:                    [History],
+	getInitialState:           _.constant({ pages: 1, infinite: false }),
 	componentWillReceiveProps: function(nextProps) {
 		if (_.isEqual(this.props.logos, nextProps.logos)) {
 			return;
@@ -157,6 +154,9 @@ module.exports = connect(createStructuredSelector({
 				</div>
 			</div>
 		);
+	},
+	componentDidMount: function() {
+		this.sendPageView();
 	},
 	componentDidUpdate: function(prevProps, prevState) {
 		if (this.props.searching !== prevProps.searching) {
