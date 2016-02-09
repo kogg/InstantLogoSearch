@@ -19,7 +19,8 @@ var STATUS_MESSAGES = _.invert(http.STATUS_CODES);
 function issue_to_suggestion(issue) {
 	return {
 		id:   issue.number,
-		name: issue.title
+		name: issue.title,
+		url:  'https://github.com/kogg/instant-logos/issues/' + issue.number
 	};
 }
 

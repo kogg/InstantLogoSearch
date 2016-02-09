@@ -3,6 +3,7 @@ var classNames               = require('classnames');
 var connect                  = require('react-redux').connect;
 var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
+var error                    = require('debug')(process.env.npm_package_name + ':application:error');
 var History                  = require('react-router').History;
 var React                    = require('react');
 
@@ -109,9 +110,14 @@ module.exports = connect(createStructuredSelector({
 							<div className="brand-logo-image"></div>
 							<div className="pop-over">
 								<div className="suggest">
-									<form action="">
-										<input type="text" defaultValue="Reddit"/>
-										<input type="file" name="pic" accept="image/" />
+									<form onSubmit={function(e) {
+										e.preventDefault();
+										this.suggestLogo(this.refs.suggest_name.value).then(function() {
+											this.refs.suggest_name.value = '';
+										}.bind(this));
+									}.bind(this)}>
+										<input type="text" ref="suggest_name" defaultValue="Reddit"/>
+										<input type="file" ref="suggest_file" accept="image/" />
 										<input type="submit" />
 									</form>
 								</div>
@@ -145,6 +151,9 @@ module.exports = connect(createStructuredSelector({
 	componentDidUpdate: function(prevProps, prevState) {
 		if (this.props.searching !== prevProps.searching) {
 			this.updatePageView();
+			if (this.refs.suggest_name) {
+				this.refs.suggest_name.value = this.props.searching;
+			}
 		}
 		if (this.state.infinite !== prevState.infinite) {
 			if (this.state.infinite) {
@@ -217,7 +226,17 @@ module.exports = connect(createStructuredSelector({
 		};
 	},
 	stopInfiniteScroll: _.noop,
-	toggleCollected:    function(logo, i) {
+	suggestLogo:        function(name) {
+		var promise = this.props.dispatch(actions.createSuggestion({ name: name }, {}));
+
+		promise.catch(function(err) {
+			error(err);
+			ga('send', 'exception', { exDescription: err.message, exFatal: true });
+		});
+
+		return promise;
+	},
+	toggleCollected: function(logo, i) {
 		ga(
 			'ec:addProduct',
 			_.chain(logo)
@@ -244,7 +263,9 @@ module.exports = connect(createStructuredSelector({
 		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, consider ? actions.considerLogo : actions.unconsiderLogo), logo), 50);
 	},
 	updatePageView: _.debounce(function() {
-		ga('send', 'event', 'Search', 'Searching', this.props.searching);
+		if (this.props.searching) {
+			ga('send', 'event', 'Search', 'Searching', this.props.searching);
+		}
 		// The searching "event" happens before we change the page
 		// Plus, I'm not sure if the events flow bridges pageviews, so it makes more sense being part of the flow of the previous "page"
 		this.history.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : ''));

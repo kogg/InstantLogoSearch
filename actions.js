@@ -2,6 +2,10 @@ var _                = require('underscore');
 var createAction     = require('redux-actions').createAction;
 var resourcesActions = require('feathers-react-redux').resourcesActions;
 
+var getApplication = function() {
+	return require('./application');
+};
+
 module.exports = _.extend(
 	{
 		loadCollection:       createAction('LOAD_COLLECTION'),
@@ -12,7 +16,6 @@ module.exports = _.extend(
 		unconsiderLogo:       createAction('UNCONSIDER_LOGO'),
 		search:               createAction('SEARCH')
 	},
-	resourcesActions(function() {
-		return require('./application');
-	}, 'logo')
+	resourcesActions(getApplication, 'logo'),
+	resourcesActions(getApplication, 'suggestion')
 );
