@@ -29,7 +29,7 @@ module.exports = connect(createStructuredSelector({
 					<h1>{process.env.npm_package_title}</h1>
 					<h2>{process.env.npm_package_description}</h2>
 					<div className="search-container">
-						<form onSubmit={_.partial(_.result, _, 'preventDefault')} >
+						<form method="GET" onSubmit={_.partial(_.result, _, 'preventDefault')} >
 							<label>
 								<i className="search-icon" onClick={function() {
 									this.setState({ collapsed: false });
@@ -37,7 +37,7 @@ module.exports = connect(createStructuredSelector({
 									this.refs.search.select();
 									ga('send', 'event', 'Search', 'Clear', 'Search Icon');
 								}.bind(this)}></i>
-								<input className="search-input" defaultValue={this.props.searching} ref="search" type="text" autoFocus placeholder="What logo are you looking for?"
+								<input className="search-input" defaultValue={this.props.searching} ref="search" type="text" autoFocus placeholder="What logo are you looking for?" name="q"
 									onChange={function() {
 										this.setState({ collapsed: true });
 										this.props.dispatch(actions.search(this.refs.search.value));
