@@ -90,7 +90,7 @@ module.exports = connect(createStructuredSelector({
 											<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
 											<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
 										</div>
-										<a className="brand-logo-ctas-collection" href=""
+										<a className="brand-logo-ctas-collection" href={'/' + logo.id}
 											onClick={function(e) {
 												e.preventDefault();
 												this.toggleCollected(logo, i);
