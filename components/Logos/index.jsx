@@ -4,6 +4,7 @@ var connect                  = require('react-redux').connect;
 var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
 var error                    = require('debug')(process.env.npm_package_name + ':application:error');
+var levenshtein              = require('fast-levenshtein');
 var History                  = require('react-router').History;
 var React                    = require('react');
 
@@ -17,10 +18,11 @@ module.exports = connect(createStructuredSelector({
 		createSelector(
 			_.property('searching'),
 			function(searching) {
-				return _.chain(searching.trim().split(/\s+/))
-					.invoke('toLowerCase')
-					.invoke('replace', /[.\- ]/gi, '')
+				return _.chain(searching.trim().toLowerCase().replace(/[.\-]/gi, '').split(/\s+/))
 					.compact()
+					.sortBy(function(filter) {
+						return -filter.length; // The longer the word, the more likely it won't match anything
+					})
 					.value();
 			}
 		),
@@ -34,21 +36,16 @@ module.exports = connect(createStructuredSelector({
 					.value();
 			}
 			return _.chain(logos)
-				.map(function(logo) {
-					var name = logo.data.name.toLowerCase().replace(/[.\- ]/gi, '');
-
-					return _.defaults({
-						pos: _.chain(filters)
-							.map(function(filter) {
-								return name.indexOf(filter, 0);
-							})
-							.min()
-							.value()
-					}, logo);
+				.reject(function(logo) {
+					return _.some(filters, function(filter) {
+						return logo.data.searchable.indexOf(filter) === -1;
+					});
 				})
-				.reject(_.matcher({ pos: -1 }))
 				.sortBy(function(logo) {
-					return 1000 * logo.pos - logo.data.downloads;
+					return _.chain(filters)
+						.map(_.partial(levenshtein.get, logo.data.searchable))
+						.max()
+						.value();
 				})
 				.pluck('data')
 				.value();

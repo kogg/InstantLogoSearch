@@ -12,8 +12,9 @@ logos = _.map(logos, function(logo) {
 	return _.chain(logo)
 		.pick('id', 'name')
 		.defaults({
-			svg: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
-			png: '/png?id=' + logo.id
+			searchable: logo.name.toLowerCase().replace(/[.\- ]/gi, ''),
+			svg:        '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
+			png:        '/png?id=' + logo.id
 		})
 		.value();
 });
