@@ -59,9 +59,9 @@ module.exports = connect(createStructuredSelector({
 			ga('send', 'event', 'Search', 'Clear', 'Esc');
 		}.bind(this);
 		document.addEventListener('keydown', keydown);
-		this.cleanups = _.union([function() {
+		this.cleanup = function() {
 			document.removeEventListener('keydown', keydown);
-		}], this.cleanups);
+		};
 	},
 	componentDidUpdate: function(prevProps) {
 		if (this.refs.search.value !== this.props.searching) {
@@ -72,7 +72,6 @@ module.exports = connect(createStructuredSelector({
 		}
 	},
 	componentWillUnmount: function() {
-		_.each(this.cleanups, _.partial);
-		this.cleanups = [];
+		this.cleanup();
 	}
 }));

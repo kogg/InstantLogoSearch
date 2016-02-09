@@ -173,14 +173,6 @@ module.exports = connect(createStructuredSelector({
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout);
 	},
-	considerLogo: function(logo) {
-		clearTimeout(this.timeout);
-		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, actions.considerLogo), logo), 50);
-	},
-	unconsiderLogo: function(logo) {
-		clearTimeout(this.timeout);
-		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, actions.unconsiderLogo), logo), 50);
-	},
 	collectLogo: function(logo, i) {
 		ga(
 			'ec:addProduct',
@@ -195,19 +187,9 @@ module.exports = connect(createStructuredSelector({
 		this.props.dispatch(actions.addToCollection(logo));
 		this.props.dispatch(actions.unconsiderLogo(logo));
 	},
-	uncollectLogo: function(logo, i) {
-		ga(
-			'ec:addProduct',
-			_.chain(logo)
-				.pick('id', 'name')
-				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1, quantity: 1 })
-				.value()
-		);
-		ga('ec:setAction', 'remove');
-		ga('send', 'event', 'Logos', 'Remove from Collection', logo.id);
+	considerLogo: function(logo) {
 		clearTimeout(this.timeout);
-		this.props.dispatch(actions.removeFromCollection(logo));
-		this.props.dispatch(actions.unconsiderLogo(logo));
+		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, actions.considerLogo), logo), 50);
 	},
 	downloadedLogo: function(logo, i, filetype) {
 		ga(
@@ -220,14 +202,6 @@ module.exports = connect(createStructuredSelector({
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Logos', 'Download ' + filetype.toUpperCase(), logo.id, 1);
 	},
-	updatePageView: _.debounce(function() {
-		ga('send', 'event', 'Search', 'Searching', this.props.searching);
-		// The searching "event" happens before we change the page
-		// Plus, I'm not sure if the events flow bridges pageviews, so it makes more sense being part of the flow of the previous "page"
-		this.history.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : ''));
-		ga('set', { location: document.location.href, title: document.title });
-		this.sendPageView();
-	}, 500),
 	sendPageView: function() {
 		_.chain(this.props.logos)
 			.first(this.state.pages * PAGE_SIZE)
@@ -273,5 +247,31 @@ module.exports = connect(createStructuredSelector({
 			window.removeEventListener('resize', listener);
 		};
 	},
-	stopInfiniteScroll: _.noop
+	stopInfiniteScroll: _.noop,
+	uncollectLogo:      function(logo, i) {
+		ga(
+			'ec:addProduct',
+			_.chain(logo)
+				.pick('id', 'name')
+				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1, quantity: 1 })
+				.value()
+		);
+		ga('ec:setAction', 'remove');
+		ga('send', 'event', 'Logos', 'Remove from Collection', logo.id);
+		clearTimeout(this.timeout);
+		this.props.dispatch(actions.removeFromCollection(logo));
+		this.props.dispatch(actions.unconsiderLogo(logo));
+	},
+	unconsiderLogo: function(logo) {
+		clearTimeout(this.timeout);
+		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, actions.unconsiderLogo), logo), 50);
+	},
+	updatePageView: _.debounce(function() {
+		ga('send', 'event', 'Search', 'Searching', this.props.searching);
+		// The searching "event" happens before we change the page
+		// Plus, I'm not sure if the events flow bridges pageviews, so it makes more sense being part of the flow of the previous "page"
+		this.history.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : ''));
+		ga('set', { location: document.location.href, title: document.title });
+		this.sendPageView();
+	}, 500)
 }));
