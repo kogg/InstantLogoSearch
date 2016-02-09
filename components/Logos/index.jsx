@@ -95,10 +95,10 @@ module.exports = connect(createStructuredSelector({
 										<a className="brand-logo-ctas-collection" href=""
 											onClick={function(e) {
 												e.preventDefault();
-												this[this.props.collection[logo.id] ? 'uncollectLogo' : 'collectLogo'](logo, i);
+												this.toggleCollected(logo, i);
 											}.bind(this)}
-											onMouseMove={_.partial(this.considerLogo, logo)}
-											onMouseLeave={_.partial(this.unconsiderLogo, logo)}>
+											onMouseMove={_.partial(this.toggleConsiderLogo, logo, true)}
+											onMouseLeave={_.partial(this.toggleConsiderLogo, logo, false)}>
 											{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Bucket
 										</a>
 									</div>
@@ -131,23 +131,7 @@ module.exports = connect(createStructuredSelector({
 						<div className="load-more">
 							<a href="" className="load-more-cta" onClick={function(e) {
 								e.preventDefault();
-								_.chain(this.props.logos)
-									.rest((this.state.pages + 1) * PAGE_SIZE)
-									.first(PAGE_SIZE)
-									.each(function(logo, i) {
-										ga(
-											'ec:addImpression',
-											_.chain(logo)
-												.pick('id', 'name')
-												.extend({
-													list:     this.props.searching ? 'Search Results' : 'Popular Logos',
-													position: (this.state.pages + 1) * PAGE_SIZE + i + 1
-												})
-												.value()
-										);
-									}.bind(this));
-								ga('send', 'event', 'Logos', 'Load More', 'CTA', this.state.pages + 1);
-								this.setState({ pages: this.state.pages + 1, infinite: true });
+								this.loadMore('CTA');
 							}.bind(this)}>Show More</a>
 						</div>
 					)}
@@ -173,24 +157,6 @@ module.exports = connect(createStructuredSelector({
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout);
 	},
-	collectLogo: function(logo, i) {
-		ga(
-			'ec:addProduct',
-			_.chain(logo)
-				.pick('id', 'name')
-				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1, quantity: 1 })
-				.value()
-		);
-		ga('ec:setAction', 'add');
-		ga('send', 'event', 'Logos', 'Add to Collection', logo.id);
-		clearTimeout(this.timeout);
-		this.props.dispatch(actions.addToCollection(logo));
-		this.props.dispatch(actions.unconsiderLogo(logo));
-	},
-	considerLogo: function(logo) {
-		clearTimeout(this.timeout);
-		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, actions.considerLogo), logo), 50);
-	},
 	downloadedLogo: function(logo, i, filetype) {
 		ga(
 			'ec:addProduct',
@@ -201,6 +167,25 @@ module.exports = connect(createStructuredSelector({
 		);
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Logos', 'Download ' + filetype.toUpperCase(), logo.id, 1);
+	},
+	loadMore: function(how) {
+		_.chain(this.props.logos)
+			.rest((this.state.pages + 1) * PAGE_SIZE)
+			.first(PAGE_SIZE)
+			.each(function(logo, i) {
+				ga(
+					'ec:addImpression',
+					_.chain(logo)
+						.pick('id', 'name')
+						.extend({
+							list:     this.props.searching ? 'Search Results' : 'Popular Logos',
+							position: (this.state.pages + 1) * PAGE_SIZE + i + 1
+						})
+						.value()
+				);
+			}.bind(this));
+		ga('send', 'event', 'Logos', 'Load More', how || null, this.state.pages + 1);
+		this.setState({ pages: this.state.pages + 1, infinite: true });
 	},
 	sendPageView: function() {
 		_.chain(this.props.logos)
@@ -221,23 +206,7 @@ module.exports = connect(createStructuredSelector({
 			if (document.body.scrollTop + window.innerHeight + 20 < document.body.scrollHeight) {
 				return;
 			}
-			_.chain(this.props.logos)
-				.rest((this.state.pages + 1) * PAGE_SIZE)
-				.first(PAGE_SIZE)
-				.each(function(logo, i) {
-					ga(
-						'ec:addImpression',
-						_.chain(logo)
-							.pick('id', 'name')
-							.extend({
-								list:     this.props.searching ? 'Search Results' : 'Popular Logos',
-								position: (this.state.pages + 1) * PAGE_SIZE + i + 1
-							})
-							.value()
-					);
-				}.bind(this));
-			ga('send', 'event', 'Logos', 'Load More', 'Infinite Scroll', this.state.pages + 1);
-			this.setState({ pages: this.state.pages + 1, infinite: true });
+			this.loadMore('Infinite Scroll');
 		}.bind(this), 500);
 		window.addEventListener('scroll', listener);
 		window.addEventListener('resize', listener);
@@ -248,7 +217,7 @@ module.exports = connect(createStructuredSelector({
 		};
 	},
 	stopInfiniteScroll: _.noop,
-	uncollectLogo:      function(logo, i) {
+	toggleCollected:    function(logo, i) {
 		ga(
 			'ec:addProduct',
 			_.chain(logo)
@@ -256,15 +225,23 @@ module.exports = connect(createStructuredSelector({
 				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1, quantity: 1 })
 				.value()
 		);
-		ga('ec:setAction', 'remove');
-		ga('send', 'event', 'Logos', 'Remove from Collection', logo.id);
-		clearTimeout(this.timeout);
-		this.props.dispatch(actions.removeFromCollection(logo));
-		this.props.dispatch(actions.unconsiderLogo(logo));
+		if (this.props.collection[logo.id]) {
+			ga('ec:setAction', 'remove');
+			ga('send', 'event', 'Logos', 'Remove from Collection', logo.id);
+			this.props.dispatch(actions.removeFromCollection(logo));
+		} else {
+			ga('ec:setAction', 'add');
+			ga('send', 'event', 'Logos', 'Add to Collection', logo.id);
+			this.props.dispatch(actions.addToCollection(logo));
+		}
+		this.toggleConsiderLogo(logo, false);
 	},
-	unconsiderLogo: function(logo) {
+	toggleConsiderLogo: function(logo, consider) {
+		if (consider && (this.props.considering === logo.id)) {
+			return;
+		}
 		clearTimeout(this.timeout);
-		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, actions.unconsiderLogo), logo), 50);
+		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, consider ? actions.considerLogo : actions.unconsiderLogo), logo), 50);
 	},
 	updatePageView: _.debounce(function() {
 		ga('send', 'event', 'Search', 'Searching', this.props.searching);
