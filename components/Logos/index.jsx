@@ -37,12 +37,12 @@ module.exports = connect(createStructuredSelector({
 			return _.chain(logos)
 				.reject(function(logo) {
 					return _.some(filters, function(filter) {
-						return logo.data.searchable.indexOf(filter) === -1;
+						return logo.data.shortname.indexOf(filter) === -1;
 					});
 				})
 				.sortBy(function(logo) {
 					return _.chain(filters)
-						.map(_.partial(levenshtein.get, logo.data.searchable))
+						.map(_.partial(levenshtein.get, logo.data.shortname))
 						.max()
 						.value();
 				})
@@ -88,7 +88,7 @@ module.exports = connect(createStructuredSelector({
 											<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
 											<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
 										</div>
-										<a className="brand-logo-ctas-collection" href={'/' + logo.searchable}
+										<a className="brand-logo-ctas-collection" href={'/' + logo.shortname}
 											onClick={function(e) {
 												e.preventDefault();
 												this.toggleCollected(logo, i);
