@@ -58,15 +58,15 @@ module.exports = connect(createStructuredSelector({
 	searching:   _.property('searching')
 }))(React.createClass({
 	mixins:            [History],
-	getInitialState:   _.constant({ pages: 1 }),
+	getInitialState:   _.constant({ pages: 1, infinite: false }),
 	componentDidMount: function() {
 		this.sendPageView();
 	},
 	componentWillReceiveProps: function(nextProps) {
-		if (this.props.logos === nextProps.logos) {
+		if (_.isEqual(this.props.logos, nextProps.logos)) {
 			return;
 		}
-		this.setState({ pages: 1 });
+		this.setState({ pages: 1, infinite: false });
 	},
 	render: function() {
 		return (
@@ -130,7 +130,7 @@ module.exports = connect(createStructuredSelector({
 							</div>
 						</li>
 					</ul>
-					{((this.state.pages * PAGE_SIZE) < this.props.logos.length) && (
+					{!this.state.infinite && ((this.state.pages * PAGE_SIZE) < this.props.logos.length) && (
 						<div className="load-more">
 							<a href="" className="load-more-cta" onClick={function(e) {
 								e.preventDefault();
@@ -150,7 +150,7 @@ module.exports = connect(createStructuredSelector({
 										);
 									}.bind(this));
 								ga('send', 'event', 'Logos', 'Load More', 'CTA', this.state.pages + 1);
-								this.setState({ pages: this.state.pages + 1 });
+								this.setState({ pages: this.state.pages + 1, infinite: true });
 							}.bind(this)}>Show More</a>
 						</div>
 					)}
@@ -158,9 +158,16 @@ module.exports = connect(createStructuredSelector({
 			</div>
 		);
 	},
-	componentDidUpdate: function(prevProps) {
+	componentDidUpdate: function(prevProps, prevState) {
 		if (this.props.searching !== prevProps.searching) {
 			this.updatePageView();
+		}
+		if (this.state.infinite !== prevState.infinite) {
+			if (this.state.infinite) {
+				this.startInfiniteScroll();
+			} else {
+				this.stopInfiniteScroll();
+			}
 		}
 	},
 	componentWillUnmount: function() {
@@ -234,5 +241,37 @@ module.exports = connect(createStructuredSelector({
 				);
 			}.bind(this));
 		ga('send', 'pageview');
-	}
+	},
+	startInfiniteScroll: function() {
+		var listener = _.throttle(function() {
+			if (document.body.scrollTop + window.innerHeight + 20 < document.body.scrollHeight) {
+				return;
+			}
+			_.chain(this.props.logos)
+				.rest((this.state.pages + 1) * PAGE_SIZE)
+				.first(PAGE_SIZE)
+				.each(function(logo, i) {
+					ga(
+						'ec:addImpression',
+						_.chain(logo)
+							.pick('id', 'name')
+							.extend({
+								list:     this.props.searching ? 'Search Results' : 'Popular Logos',
+								position: (this.state.pages + 1) * PAGE_SIZE + i + 1
+							})
+							.value()
+					);
+				}.bind(this));
+			ga('send', 'event', 'Logos', 'Load More', 'Infinite Scroll', this.state.pages + 1);
+			this.setState({ pages: this.state.pages + 1, infinite: true });
+		}.bind(this), 500);
+		window.addEventListener('scroll', listener);
+		window.addEventListener('resize', listener);
+		this.stopInfiniteScroll = function() {
+			this.stopInfiniteScroll = _.noop;
+			window.removeEventListener('scroll', listener);
+			window.removeEventListener('resize', listener);
+		};
+	},
+	stopInfiniteScroll: _.noop
 }));
