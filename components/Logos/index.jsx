@@ -106,33 +106,35 @@ module.exports = connect(createStructuredSelector({
 								</li>
 							);
 						}.bind(this))}
-						<li className="brand-logo missing-logo">
-							<div className="brand-logo-image"></div>
-							<div className="pop-over">
-								<div className="suggest">
-									<form onSubmit={function(e) {
-										e.preventDefault();
-										ga('send', 'event', 'Logos', 'Suggest Logo', this.refs.suggest_name.value);
-										this.suggestLogo(this.refs.suggest_name.value).then(function() {
-											this.refs.suggest_name.value = '';
-										}.bind(this));
-									}.bind(this)}>
-										<input type="text" ref="suggest_name" defaultValue={this.props.searching}/>
-										<input type="file" ref="suggest_file" accept="image/" />
-										<input type="submit" />
-									</form>
+						{((this.state.pages * PAGE_SIZE) > this.props.logos.length) && (
+							<li className="brand-logo missing-logo">
+								<div className="brand-logo-image"></div>
+								<div className="pop-over">
+									<div className="suggest">
+										<form onSubmit={function(e) {
+											e.preventDefault();
+											ga('send', 'event', 'Logos', 'Suggest Logo', this.refs.suggest_name.value);
+											this.suggestLogo(this.refs.suggest_name.value).then(function() {
+												this.refs.suggest_name.value = '';
+											}.bind(this));
+										}.bind(this)}>
+											<input type="text" ref="suggest_name" defaultValue={this.props.searching}/>
+											<input type="file" ref="suggest_file" accept="image/" />
+											<input type="submit" />
+										</form>
+									</div>
 								</div>
-							</div>
-							<div className="flex-center">
-								<div className="">
-									<span>Can't find quite what you're looking for? </span>
-									<u>Suggest</u>
-									<span> a logo or </span>
-									<u>upload</u>
-									<span> something yourself!</span>
+								<div className="flex-center">
+									<div className="">
+										<span>Can't find quite what you're looking for? </span>
+										<u>Suggest</u>
+										<span> a logo or </span>
+										<u>upload</u>
+										<span> something yourself!</span>
+									</div>
 								</div>
-							</div>
-						</li>
+							</li>
+						)}
 					</ul>
 					{!this.state.infinite && ((this.state.pages * PAGE_SIZE) < this.props.logos.length) && (
 						<div className="load-more">
