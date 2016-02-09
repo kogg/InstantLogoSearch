@@ -193,7 +193,7 @@ module.exports = connect(createStructuredSelector({
 						.value()
 				);
 			}.bind(this));
-		ga('send', 'event', 'Logos', 'Load More', how || null, this.state.pages + 1);
+		ga('send', 'event', 'Logos', 'Load More', how || null, (this.state.pages + 1) * PAGE_SIZE);
 		this.setState({ pages: this.state.pages + 1, infinite: true });
 	},
 	sendPageView: function() {
