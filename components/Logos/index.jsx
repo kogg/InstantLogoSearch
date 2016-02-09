@@ -116,7 +116,7 @@ module.exports = connect(createStructuredSelector({
 											this.refs.suggest_name.value = '';
 										}.bind(this));
 									}.bind(this)}>
-										<input type="text" ref="suggest_name" defaultValue="Reddit"/>
+										<input type="text" ref="suggest_name" defaultValue={this.props.searching}/>
 										<input type="file" ref="suggest_file" accept="image/" />
 										<input type="submit" />
 									</form>
