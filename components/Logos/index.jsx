@@ -112,6 +112,7 @@ module.exports = connect(createStructuredSelector({
 								<div className="suggest">
 									<form onSubmit={function(e) {
 										e.preventDefault();
+										ga('send', 'event', 'Logos', 'Suggest', this.refs.suggest_name.value);
 										this.suggestLogo(this.refs.suggest_name.value).then(function() {
 											this.refs.suggest_name.value = '';
 										}.bind(this));
