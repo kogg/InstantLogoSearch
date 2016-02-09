@@ -40,9 +40,6 @@ module.exports = connect(createStructuredSelector({
 	),
 	considering: _.property('considering')
 }))(React.createClass({
-	componentDidMount: function() {
-		this.props.dispatch(actions.loadCollection());
-	},
 	render: function() {
 		return (
 			<div className={classNames({
@@ -98,6 +95,9 @@ module.exports = connect(createStructuredSelector({
 				}
 			</div>
 		);
+	},
+	componentDidMount: function() {
+		this.props.dispatch(actions.loadCollection());
 	},
 	downloadAndZip: function(logos, filetype) {
 		var zip = new JSZip();

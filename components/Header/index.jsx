@@ -10,23 +10,8 @@ module.exports = connect(createStructuredSelector({
 	collection: _.property('collection'),
 	searching:  _.property('searching')
 }))(React.createClass({
-	getInitialState:   _.constant({}),
-	componentDidMount: function() {
-		var keydown = function(e) {
-			if (e.keyCode !== 27 && this.refs.search !== '') {
-				return;
-			}
-			e.preventDefault();
-			this.props.dispatch(actions.search(''));
-			this.refs.search.select();
-			ga('send', 'event', 'Search', 'Clear', 'Esc');
-		}.bind(this);
-		document.addEventListener('keydown', keydown);
-		this.cleanups = _.union([function() {
-			document.removeEventListener('keydown', keydown);
-		}], this.cleanups);
-	},
-	render: function() {
+	getInitialState: _.constant({}),
+	render:          function() {
 		return (
 			<div className={classNames({
 				header:           true,
@@ -63,6 +48,21 @@ module.exports = connect(createStructuredSelector({
 			</div>
 		);
 	},
+	componentDidMount: function() {
+		var keydown = function(e) {
+			if (e.keyCode !== 27 && this.refs.search !== '') {
+				return;
+			}
+			e.preventDefault();
+			this.props.dispatch(actions.search(''));
+			this.refs.search.select();
+			ga('send', 'event', 'Search', 'Clear', 'Esc');
+		}.bind(this);
+		document.addEventListener('keydown', keydown);
+		this.cleanup = function() {
+			document.removeEventListener('keydown', keydown);
+		};
+	},
 	componentDidUpdate: function(prevProps) {
 		if (this.refs.search.value !== this.props.searching) {
 			this.refs.search.value = this.props.searching;
@@ -72,7 +72,6 @@ module.exports = connect(createStructuredSelector({
 		}
 	},
 	componentWillUnmount: function() {
-		_.each(this.cleanups, _.partial);
-		this.cleanups = [];
+		this.cleanup();
 	}
 }));
