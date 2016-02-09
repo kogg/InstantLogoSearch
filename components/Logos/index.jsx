@@ -5,7 +5,6 @@ var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
 var error                    = require('debug')(process.env.npm_package_name + ':application:error');
 var levenshtein              = require('fast-levenshtein');
-var History                  = require('react-router').History;
 var React                    = require('react');
 
 var actions = require('../../actions');
@@ -55,7 +54,6 @@ module.exports = connect(createStructuredSelector({
 	considering: _.property('considering'),
 	searching:   _.property('searching')
 }))(React.createClass({
-	mixins:                    [History],
 	getInitialState:           _.constant({ pages: 1, infinite: false }),
 	componentWillReceiveProps: function(nextProps) {
 		if (_.isEqual(this.props.logos, nextProps.logos)) {
@@ -268,7 +266,7 @@ module.exports = connect(createStructuredSelector({
 		}
 		// The searching "event" happens before we change the page
 		// Plus, I'm not sure if the events flow bridges pageviews, so it makes more sense being part of the flow of the previous "page"
-		this.history.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : ''));
+		this.props.history.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : ''));
 		ga('set', { location: document.location.href, title: document.title });
 		this.sendPageView();
 	}, 500)
