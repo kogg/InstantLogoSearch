@@ -7,6 +7,8 @@ var React                    = require('react');
 
 var Logos = require('../Logos');
 
+var PAGE_SIZE = 20;
+
 module.exports = connect(createStructuredSelector({
 	logos: createSelector(
 		_.property('logos'),
@@ -45,9 +47,75 @@ module.exports = connect(createStructuredSelector({
 				.pluck('data')
 				.value();
 		}
-	)
+	),
+	searching: _.property('searching')
 }))(React.createClass({
+	getInitialState:           _.constant({ pages: 1 }),
+	componentWillReceiveProps: function(nextProps) {
+		if (_.isEqual(this.props.logos, nextProps.logos)) {
+			return;
+		}
+		this.setState({ pages: 1 });
+	},
 	render: function() {
-		return <Logos logos={this.props.logos} history={this.props.history} />;
-	}
+		var numlogos = this.state.pages * PAGE_SIZE;
+		var loadmore = (numlogos < this.props.logos.length) && ((this.state.pages === 1) ? 'cta' : 'infinite');
+
+		return (
+			<Logos heading={this.heading()}
+				logos={_.first(this.props.logos, numlogos)}
+				suggest={(Math.max(0, numlogos - this.props.logos.length) > 0) && this.props.searching}
+				loadmore={loadmore}
+				onLoadMore={function(how) {
+					this.addImpressions(
+						this.heading(),
+						_.chain(this.props.logos)
+							.rest(this.state.pages * PAGE_SIZE)
+							.first(PAGE_SIZE)
+							.value(),
+						this.state.pages * PAGE_SIZE
+					);
+					ga('send', 'event', 'Logos', 'Load More', how || '', (this.state.pages + 1) * PAGE_SIZE);
+					this.setState({ pages: this.state.pages + 1 });
+				}.bind(this)}
+				/>
+		);
+	},
+	componentDidMount: function() {
+		this.sendPageView();
+	},
+	componentDidUpdate: function(prevProps) {
+		if (this.props.searching !== prevProps.searching) {
+			this.updatePageView();
+		}
+	},
+	addImpressions: function(list, logos, position_offset) {
+		position_offset = position_offset || 0;
+		_.each(logos, function(logo, i) {
+			ga(
+				'ec:addImpression',
+				_.chain(logo)
+					.pick('id', 'name')
+					.extend({ list: list, position: position_offset + i + 1 })
+					.value()
+			);
+		});
+	},
+	heading: function() {
+		return this.props.searching ? 'Search Results' : 'Popular Logos';
+	},
+	sendPageView: function() {
+		this.addImpressions(this.heading(), _.first(this.props.logos, this.state.pages * PAGE_SIZE), 0);
+		ga('send', 'pageview');
+	},
+	updatePageView: _.debounce(function() {
+		if (this.props.searching) {
+			ga('send', 'event', 'Search', 'Searching', this.props.searching);
+		}
+		// The searching "event" happens before we change the page
+		// Plus, I'm not sure if the events flow bridges pageviews, so it makes more sense being part of the flow of the previous "page"
+		this.props.history.replace('/' + (this.props.searching ? '?q=' + this.props.searching : ''));
+		ga('set', { location: document.location.href, title: document.title });
+		this.sendPageView();
+	}, 500)
 }));

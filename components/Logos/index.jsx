@@ -7,37 +7,29 @@ var React                    = require('react');
 
 var actions = require('../../actions');
 
-var PAGE_SIZE = 20;
-
 module.exports = connect(createStructuredSelector({
-	collection:  _.property('collection'),
-	considering: _.property('considering'),
-	searching:   _.property('searching')
+	collection: _.property('collection')
 }))(React.createClass({
-	getInitialState:           _.constant({ pages: 1, infinite: false }),
-	componentWillReceiveProps: function(nextProps) {
-		if (_.isEqual(this.props.logos, nextProps.logos)) {
-			return;
-		}
-		this.setState({ pages: 1, infinite: false });
-	},
-	render: function() {
+	getInitialState: _.constant({ considering: null }),
+	render:          function() {
 		return (
 			<div className={classNames({
 				'logos':              true,
 				'logos_extra-bottom': !_.isEmpty(this.props.collection)
 			})}>
 				<div className="logos-container">
-					<div className="logos-title">
-						<h3>{this.props.searching ? 'Search Results' : 'Popular Logos'}</h3>
-					</div>
+					{this.props.heading && (
+						<div className="logos-title">
+							<h3>{this.props.heading}</h3>
+						</div>
+					)}
 					<ul>
-						{_.first(this.props.logos, this.state.pages * PAGE_SIZE).map(function(logo, i) {
+						{_.map(this.props.logos, function(logo, i) {
 							return (
 								<li className={classNames({
 									'brand-logo':             true,
 									'brand-logo_collected':   this.props.collection[logo.id],
-									'brand-logo_considering': _.isEmpty(this.props.collection) && (this.props.considering === logo.id)
+									'brand-logo_considering': _.isEmpty(this.props.collection) && (this.state.considering === logo.id)
 								})} key={logo.id}>
 									<div className="brand-logo-image flex-center">
 										<img src={logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
@@ -61,7 +53,7 @@ module.exports = connect(createStructuredSelector({
 								</li>
 							);
 						}.bind(this))}
-						{((this.state.pages * PAGE_SIZE) > this.props.logos.length) && (
+						{this.props.suggest && (
 							<li className="brand-logo missing-logo">
 								<div className="brand-logo-image"></div>
 								<div className="pop-over">
@@ -73,7 +65,7 @@ module.exports = connect(createStructuredSelector({
 												this.refs.suggest_name.value = '';
 											}.bind(this));
 										}.bind(this)}>
-											<input type="text" ref="suggest_name" defaultValue={this.props.searching}/>
+											<input type="text" ref="suggest_name" defaultValue={this.props.suggest}/>
 											<input type="file" ref="suggest_file" accept="image/" />
 											<input type="submit" />
 										</form>
@@ -91,11 +83,11 @@ module.exports = connect(createStructuredSelector({
 							</li>
 						)}
 					</ul>
-					{!this.state.infinite && ((this.state.pages * PAGE_SIZE) < this.props.logos.length) && (
+					{(this.props.loadmore === 'cta') && (
 						<div className="load-more">
 							<a href="" className="load-more-cta" onClick={function(e) {
 								e.preventDefault();
-								this.loadMore('CTA');
+								this.props.onLoadMore('CTA');
 							}.bind(this)}>Show More</a>
 						</div>
 					)}
@@ -104,17 +96,16 @@ module.exports = connect(createStructuredSelector({
 		);
 	},
 	componentDidMount: function() {
-		this.sendPageView();
-	},
-	componentDidUpdate: function(prevProps, prevState) {
-		if (this.props.searching !== prevProps.searching) {
-			this.updatePageView();
-			if (this.refs.suggest_name) {
-				this.refs.suggest_name.value = this.props.searching;
-			}
+		if (this.props.loadmore === 'infinite') {
+			this.startInfiniteScroll();
 		}
-		if (this.state.infinite !== prevState.infinite) {
-			if (this.state.infinite) {
+	},
+	componentDidUpdate: function(prevProps) {
+		if ((this.props.suggest !== prevProps.suggest) && this.refs.suggest_name) {
+			this.refs.suggest_name.value = this.props.suggest;
+		}
+		if ((this.props.loadmore === 'infinite') !== (this.props.prevProps === 'infinite')) {
+			if (this.props.loadmore === 'infinite') {
 				this.startInfiniteScroll();
 			} else {
 				this.stopInfiniteScroll();
@@ -129,51 +120,18 @@ module.exports = connect(createStructuredSelector({
 			'ec:addProduct',
 			_.chain(logo)
 				.pick('id', 'name')
-				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1, variant: filetype, quantity: 1 })
+				.extend({ list: this.props.heading, position: i + 1, variant: filetype, quantity: 1 })
 				.value()
 		);
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Logos', 'Download ' + filetype.toUpperCase(), logo.id, 1);
-	},
-	loadMore: function(how) {
-		_.chain(this.props.logos)
-			.rest((this.state.pages + 1) * PAGE_SIZE)
-			.first(PAGE_SIZE)
-			.each(function(logo, i) {
-				ga(
-					'ec:addImpression',
-					_.chain(logo)
-						.pick('id', 'name')
-						.extend({
-							list:     this.props.searching ? 'Search Results' : 'Popular Logos',
-							position: (this.state.pages + 1) * PAGE_SIZE + i + 1
-						})
-						.value()
-				);
-			}.bind(this));
-		ga('send', 'event', 'Logos', 'Load More', how || null, (this.state.pages + 1) * PAGE_SIZE);
-		this.setState({ pages: this.state.pages + 1, infinite: true });
-	},
-	sendPageView: function() {
-		_.chain(this.props.logos)
-			.first(this.state.pages * PAGE_SIZE)
-			.each(function(logo, i) {
-				ga(
-					'ec:addImpression',
-					_.chain(logo)
-						.pick('id', 'name')
-						.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1 })
-						.value()
-				);
-			}.bind(this));
-		ga('send', 'pageview');
 	},
 	startInfiniteScroll: function() {
 		var listener = _.throttle(function() {
 			if (document.body.scrollTop + window.innerHeight + 20 < document.body.scrollHeight) {
 				return;
 			}
-			this.loadMore('Infinite Scroll');
+			this.props.onLoadMore('Infinite Scroll');
 		}.bind(this), 500);
 		window.addEventListener('scroll', listener);
 		window.addEventListener('resize', listener);
@@ -199,7 +157,7 @@ module.exports = connect(createStructuredSelector({
 			'ec:addProduct',
 			_.chain(logo)
 				.pick('id', 'name')
-				.extend({ list: this.props.searching ? 'Search Results' : 'Popular Logos', position: i + 1, quantity: 1 })
+				.extend({ list: this.props.heading, position: i + 1, quantity: 1 })
 				.value()
 		);
 		if (this.props.collection[logo.id]) {
@@ -214,20 +172,20 @@ module.exports = connect(createStructuredSelector({
 		this.toggleConsiderLogo(logo, false);
 	},
 	toggleConsiderLogo: function(logo, consider) {
-		if (consider && (this.props.considering === logo.id)) {
+		if (consider && (this.state.considering === logo.id)) {
 			return;
 		}
 		clearTimeout(this.timeout);
-		this.timeout = setTimeout(_.partial(_.compose(this.props.dispatch, consider ? actions.considerLogo : actions.unconsiderLogo), logo), 50);
-	},
-	updatePageView: _.debounce(function() {
-		if (this.props.searching) {
-			ga('send', 'event', 'Search', 'Searching', this.props.searching);
+		if (consider) {
+			this.timeout = setTimeout(function() {
+				this.setState({ considering: logo.id });
+				this.props.dispatch(actions.considerLogo(logo));
+			}.bind(this), 50);
+		} else {
+			this.timeout = setTimeout(function() {
+				this.setState({ considering: null });
+				this.props.dispatch(actions.unconsiderLogo(logo));
+			}.bind(this), 50);
 		}
-		// The searching "event" happens before we change the page
-		// Plus, I'm not sure if the events flow bridges pageviews, so it makes more sense being part of the flow of the previous "page"
-		this.props.history.replace(document.location.pathname + (this.props.searching ? '?q=' + this.props.searching : ''));
-		ga('set', { location: document.location.href, title: document.title });
-		this.sendPageView();
-	}, 500)
+	}
 }));
