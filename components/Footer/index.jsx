@@ -11,9 +11,9 @@ module.exports = React.createClass({
 					<div className="flex">
 						<div className="contributors">
 							<span>Contributors: </span>
-							<a>svg porn</a>
-							<a>LogoMono</a>
-							<a>flag-icon</a>
+							<a href="#">svg porn</a>
+							<a href="#">LogoMono</a>
+							<a href="#">flag-icon</a>
 						</div>
 						<div>
 							<a className="social-icon social-icon-twitter"></a>

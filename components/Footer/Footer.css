@@ -54,18 +54,12 @@
   a {
     font-weight: 600;
     margin-right: 4px;
+    color: rgba(0, 0, 0, .6);
+    text-decoration: none;
   }
 
-  .red {
-    color: red;
-  }
-
-  .blue {
-    color: #456;
-  }
-
-  .green {
-    color: #0d6632;
+  a:hover {
+    color: black;
   }
 
   @media (max-width: 700px) {
