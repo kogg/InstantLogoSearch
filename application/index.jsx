@@ -1,16 +1,16 @@
-var _              = require('underscore');
-var bodyParser     = require('body-parser');
-var compression    = require('compression');
-var feathers       = require('feathers');
-var helmet         = require('helmet');
-var match          = require('react-router').match;
-var path           = require('path');
-var promisify      = require('es6-promisify');
-var serverRender   = require('feathers-react-redux/serverRender');
-var sm             = require('sitemap');
-var Provider       = require('react-redux').Provider;
-var React          = require('react');
-var RoutingContext = require('react-router').RoutingContext;
+var _             = require('underscore');
+var bodyParser    = require('body-parser');
+var compression   = require('compression');
+var feathers      = require('feathers');
+var helmet        = require('helmet');
+var match         = require('react-router').match;
+var path          = require('path');
+var promisify     = require('es6-promisify');
+var serverRender  = require('feathers-react-redux/serverRender');
+var sm            = require('sitemap');
+var Provider      = require('react-redux').Provider;
+var React         = require('react');
+var RouterContext = require('react-router').RouterContext;
 
 var actions = require('../actions');
 var routes  = require('../components/routes');
@@ -65,7 +65,7 @@ app.get(/^(?!\/api\/).*$/, function(req, res, next) {
 			}
 
 			var store = Store();
-			return serverRender(<Provider store={store}><RoutingContext {...response[1]} /></Provider>, store, actions).then(function(locals) {
+			return serverRender(<Provider store={store}><RouterContext {...response[1]} /></Provider>, store, actions).then(function(locals) {
 				res.render('index', _.extend(locals, { state: store.getState() }));
 			});
 		})
