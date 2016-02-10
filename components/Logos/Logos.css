@@ -3,8 +3,8 @@
   overflow: auto;
 }
 
-.logos_extra-bottom {
-  margin-bottom: 100px;
+.header_collapsed + .logos {
+  min-height: calc(100vh - 172px);
 }
 
 .header_expanded + .logos {
