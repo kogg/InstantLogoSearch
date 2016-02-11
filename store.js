@@ -24,6 +24,7 @@ module.exports = function(state) {
 	var store = createStore(combineReducers({
 		server_actions: serverActionsReducer,
 		logos:          resourcesReducer('logo'),
+		sources:        resourcesReducer('source'),
 		collection:     handleActions({
 			LOAD_COLLECTION: function() {
 				return global.localStorage ? JSON.parse(global.localStorage.getItem('collection')) || {} : {};

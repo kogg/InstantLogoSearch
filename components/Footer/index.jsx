@@ -1,7 +1,22 @@
-var React = require('react');
+var _                        = require('underscore');
+var connect                  = require('react-redux').connect;
+var createSelector           = require('reselect').createSelector;
+var createStructuredSelector = require('reselect').createStructuredSelector;
+var FeathersMixin            = require('feathers-react-redux').FeathersMixin;
+var React                    = require('react');
 
-module.exports = React.createClass({
+module.exports = connect(createStructuredSelector({
+	sources: createSelector(
+		_.property('sources'),
+		_.partial(_.pluck, _, 'data')
+	)
+}))(React.createClass({
+	mixins:             [FeathersMixin],
+	componentWillMount: function() {
+		this.feathers('source');
+	},
 	render: function() {
+		console.log(this.props.sources);
 		return (
 			<div className="footer">
 				<div className="footer-top flex-spread">
@@ -11,9 +26,11 @@ module.exports = React.createClass({
 					<div className="flex">
 						<div className="contributors">
 							<span>Contributors: </span>
-							<a href="#">svg porn</a>
-							<a href="#">LogoMono</a>
-							<a href="#">flag-icon</a>
+							{this.props.sources.map(function(source) {
+								return (
+									<a href={source.url} key={source.id}>{source.name || source.shortname}</a>
+								);
+							})}
 						</div>
 						<div>
 							<a className="social-icon social-icon-twitter"></a>
@@ -32,4 +49,4 @@ module.exports = React.createClass({
 			</div>
 		);
 	}
-});
+}));
