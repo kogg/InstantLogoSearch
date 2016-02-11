@@ -13,7 +13,7 @@ module.exports = React.createClass({
 	},
 	render: function() {
 		return (
-			<li className="brand-logo missing-logo">
+			<li className="brand-logo brand-logo_missing">
 				<div className="brand-logo-image"></div>
 				{this.state.popover && (
 					<div className="pop-over">

@@ -164,37 +164,6 @@
   }
 }
 
-.missing-logo {
-  height: 249px;
-  position: relative;
-  border: 1px dashed rgba(0, 0, 0, .14);
-}
-
-.missing-logo .brand-logo-image {
-  background: transparent;
-  background-image: url('empty.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: auto 80%;
-  opacity: .1;
-}
-
-.missing-logo .flex-center {
-  padding: 12px;
-  height: calc(100% - 140px);
-  text-align: center;
-}
-
-.missing-logo u,
-.missing-logo span {
-  opacity: .4;
-  font-size: 14px;
-}
-
-.missing-logo b {
-  text-decoration: underline;
-}
-
 .pop-over {
   position: absolute;
   top: -1px;

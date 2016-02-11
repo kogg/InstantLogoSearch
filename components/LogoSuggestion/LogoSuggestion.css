@@ -1,0 +1,30 @@
+.brand-logo_missing {
+  height: 249px;
+  position: relative;
+  border: 1px dashed rgba(0, 0, 0, .14);
+
+  .brand-logo-image {
+    background: transparent;
+    background-image: url('empty.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto 80%;
+    opacity: .1;
+  }
+
+  .flex-center {
+    padding: 12px;
+    height: calc(100% - 140px);
+    text-align: center;
+  }
+
+  u,
+  span {
+    opacity: .4;
+    font-size: 14px;
+  }
+
+  b {
+    text-decoration: underline;
+  }
+}
