@@ -1,7 +1,10 @@
 var _         = require('underscore');
+var fs        = require('fs');
 var http      = require('http');
 var memoize   = require('memoizee');
+var path      = require('path');
 var promisify = require('es6-promisify');
+var Git       = require('nodegit');
 var GitHubApi = require('github');
 
 var github = new GitHubApi({ version: '3.0.0' });
@@ -13,6 +16,22 @@ if (process.env.GITHUB_USERNAME && process.env.GITHUB_PERSONAL_ACCESS_TOKEN) {
 		password: process.env.GITHUB_PERSONAL_ACCESS_TOKEN
 	});
 }
+
+var getRepo = Git.Repository.open('.tmp').catch(function() {
+	return Git.Clone('git@github.com:kogg/instant-logos.git', '.tmp', {
+		checkoutBranch: 'develop',
+		fetchOpts:      {
+			callbacks: {
+				certificateCheck: function() {
+					return 1;
+				},
+				credentials: function(url, userName) {
+					return Git.Cred.sshKeyFromAgent(userName);
+				}
+			}
+		}
+	});
+});
 
 var STATUS_MESSAGES = _.invert(http.STATUS_CODES);
 
@@ -80,7 +99,65 @@ module.exports = {
 						labels: ['suggestion']
 					});
 				}
-				return Promise.reject(new Error('Can\'t handle files, yet')); // FIXME
+				var _getRepo = getRepo;
+				var promise  = _getRepo.then(function(repo) {
+					var randomstring = _.times(5, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._', null)).join('');
+					var branch       = data.name.replace(/[/:]/g, '_') + '-' + randomstring;
+					var filename     = data.name.replace(/[/:]/g, '_') + ' (' + randomstring + ').svg';
+					return repo.getBranchCommit('develop')
+						.then(function(develop_commit) {
+							return repo.createBranch(branch, develop_commit);
+						})
+						.then(function(ref) {
+							return repo.checkoutBranch(ref);
+						})
+						.then(function() {
+							return promisify(fs.writeFile)(path.join(repo.workdir(), 'logos', filename), data.file);
+						})
+						.then(function() {
+							return repo.index();
+						})
+						.then(function(index) {
+							index.addByPath(path.join('logos', filename));
+							index.write();
+							return index.writeTree();
+						})
+						.then(function(oid) {
+							return Git.Reference.nameToId(repo, 'HEAD')
+								.then(function(head) {
+									return repo.getCommit(head);
+								})
+								.then(function(parent) {
+									var signature = Git.Signature.now('Saiichi Hashimoto', 'saiichihashimoto@gmail.com');
+									return repo.createCommit('HEAD', signature, signature, 'message', oid, [parent]);
+								});
+						})
+						.then(function() {
+							return repo.getRemote('origin');
+						})
+						.then(function(remote) {
+							return remote.push(['refs/heads/' + branch + ':refs/heads/' + branch], {
+								callbacks: {
+									certificateCheck: function() {
+										return 1;
+									},
+									credentials: function(url, userName) {
+										return Git.Cred.sshKeyFromAgent(userName);
+									}
+								}
+							});
+						});
+				});
+				getRepo = promise
+					.catch(_.noop)
+					.then(function() {
+						return _getRepo;
+					});
+				return promise;
+			})
+			.then(function(thing) {
+				console.log('whatever', thing);
+				return Promise.reject(new Error('whatever'));
 			})
 			.then(issue_to_suggestion);
 	}

@@ -105,7 +105,7 @@ module.exports = React.createClass({
 						reject(reader.error);
 					};
 
-					reader.readAsBinaryString(file);
+					reader.readAsText(file);
 				});
 			})
 			.then(function(data) {
