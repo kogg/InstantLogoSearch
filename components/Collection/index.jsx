@@ -141,7 +141,7 @@ module.exports = connect(createStructuredSelector({
 					.value()
 			);
 		});
-		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.=+/@#$%^&*_', null)).join('') });
+		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Collection', 'Download ' + filetype.toUpperCase(), null, logos.length);
 		this.props.dispatch(actions.clearCollection());
 	},
