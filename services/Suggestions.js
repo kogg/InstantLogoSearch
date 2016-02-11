@@ -39,7 +39,7 @@ function issue_to_suggestion(issue) {
 	return {
 		id:   issue.number,
 		name: issue.title,
-		url:  'https://github.com/kogg/instant-logos/issues/' + issue.number
+		url:  'https://github.com/kogg/instant-logos/' + (issue.pull_request ? 'pull' : 'issues') + '/' + issue.number
 	};
 }
 
@@ -72,9 +72,15 @@ module.exports = {
 			state:    'open',
 			sort:     'created',
 			per_page: 100
-		}).then(function(issues) {
-			return _.map(issues, issue_to_suggestion);
-		});
+		}).then(
+			function(issues) {
+				return _.map(issues, issue_to_suggestion);
+			},
+			function(err) {
+				err.status = err.code || STATUS_MESSAGES[err.message] || STATUS_MESSAGES[JSON.parse(err.message).message];
+				return Promise.reject(err);
+			}
+		);
 	}, { maxAge: 5000, preFetch: true }),
 	create: function(data) {
 		if (!_.result(data, 'name')) {
@@ -91,19 +97,20 @@ module.exports = {
 				}
 			})
 			.then(function() {
-				if (!data.file) {
-					return promisify(github.issues.create)({
-						user:   'kogg',
-						repo:   'instant-logos',
-						title:  data.name,
-						labels: ['suggestion']
-					});
-				}
-				var _getRepo = getRepo;
-				var promise  = _getRepo.then(function(repo) {
-					var randomstring = _.times(5, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._', null)).join('');
-					var branch       = data.name.replace(/[/:]/g, '_') + '-' + randomstring;
-					var filename     = data.name.replace(/[/:]/g, '_') + ' (' + randomstring + ').svg';
+				return promisify(github.issues.create)({
+					user:   'kogg',
+					repo:   'instant-logos',
+					title:  data.name,
+					labels: ['logo-suggestion']
+				});
+			})
+			.then(function(issue) {
+				var _getRepo     = getRepo;
+				var randomstring = _.times(10, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._', null)).join('');
+				var branch       = data.name.replace(/[/:]/g, '_') + '-' + randomstring;
+
+				var promise = _getRepo.then(function(repo) {
+					var filename = data.name.replace(/[/:]/g, '_') + ' (' + randomstring + ').svg';
 					return repo.getBranchCommit('develop')
 						.then(function(develop_commit) {
 							return repo.createBranch(branch, develop_commit);
@@ -129,7 +136,7 @@ module.exports = {
 								})
 								.then(function(parent) {
 									var signature = Git.Signature.now('Saiichi Hashimoto', 'saiichihashimoto@gmail.com');
-									return repo.createCommit('HEAD', signature, signature, 'message', oid, [parent]);
+									return repo.createCommit('HEAD', signature, signature, 'Adding logo file ' + filename, oid, [parent]);
 								});
 						})
 						.then(function() {
@@ -146,18 +153,34 @@ module.exports = {
 									}
 								}
 							});
+						})
+						.then(function() {
+							return repo.getBranch('develop');
+						})
+						.then(function(ref) {
+							return repo.checkoutBranch(ref);
 						});
 				});
-				getRepo = promise
-					.catch(_.noop)
+
+				getRepo = promise.then(_.constant(_getRepo), _.constant(_getRepo));
+
+				return promise
+					.then(_.constant(_getRepo))
+					.then(function(repo) {
+						return repo.getBranch(branch);
+					})
+					.then(function(ref) {
+						return Git.Branch.delete(ref);
+					})
 					.then(function() {
-						return _getRepo;
+						return promisify(github.pullRequests.createFromIssue)({
+							user:  'kogg',
+							repo:  'instant-logos',
+							issue: issue.number,
+							base:  'develop',
+							head:  branch
+						});
 					});
-				return promise;
-			})
-			.then(function(thing) {
-				console.log('whatever', thing);
-				return Promise.reject(new Error('whatever'));
 			})
 			.then(issue_to_suggestion);
 	}
