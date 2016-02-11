@@ -4,7 +4,8 @@ var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
 var React                    = require('react');
 
-var Logos = require('../Logos');
+var actions = require('../../actions');
+var Logos   = require('../Logos');
 
 var PAGE_SIZE = 20;
 
@@ -42,6 +43,7 @@ module.exports = connect(createStructuredSelector({
 					onLoadMore={function(how) {
 						ga('send', 'event', 'Logos', 'Load More', how || '', PAGE_SIZE);
 						this.context.router.replace('/');
+						this.props.dispatch(actions.search(''));
 					}.bind(this)} />
 			</div>
 		);
