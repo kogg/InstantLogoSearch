@@ -20,9 +20,9 @@ module.exports = connect(createStructuredSelector({
 				<div className="flex-spread">
 					<div className="logo"></div>
 					<div>
-						<a className="social-action" href=""><img className="social-action-icon" src="/svg/logomono/twitter.svg" />tweet</a>
-						<a className="social-action" href=""><img className="social-action-icon" src="/svg/svgporn/facebook.svg" />share</a>
-						<a className="social-action" href=""><img className="social-action-icon" src="/svg/svgporn/github-icon.svg" />star</a>
+						<a className="social-action social-action-twitter" href="">tweet</a>
+						<a className="social-action social-action-facebook" href="">share</a>
+						<a className="social-action social-action-github" href="">star</a>
 					</div>
 				</div>
 				<div className="header-content">
