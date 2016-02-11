@@ -27,7 +27,7 @@ module.exports = connect(createStructuredSelector({
 							<span>Contributors: </span>
 							{this.props.sources.map(function(source) {
 								return (
-									<a href={source.url} key={source.id}>{source.name || source.shortname}</a>
+									<a href={source.url} key={source.id} target="_blank">{source.name || source.shortname}</a>
 								);
 							})}
 						</div>
