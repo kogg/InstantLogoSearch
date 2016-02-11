@@ -112,12 +112,8 @@ module.exports = {
 				var promise = _getRepo.then(function(repo) {
 					var filename = data.name.replace(/[/:]/g, '_') + ' (' + randomstring + ').svg';
 					return repo.getBranchCommit('develop')
-						.then(function(develop_commit) {
-							return repo.createBranch(branch, develop_commit);
-						})
-						.then(function(ref) {
-							return repo.checkoutBranch(ref);
-						})
+						.then(_.bind(repo.createBranch, repo, branch))
+						.then(_.bind(repo.checkoutBranch, repo))
 						.then(function() {
 							return promisify(fs.writeFile)(path.join(repo.workdir(), 'logos', filename), data.file);
 						})
@@ -131,9 +127,7 @@ module.exports = {
 						})
 						.then(function(oid) {
 							return Git.Reference.nameToId(repo, 'HEAD')
-								.then(function(head) {
-									return repo.getCommit(head);
-								})
+								.then(_.bind(repo.getCommit, repo))
 								.then(function(parent) {
 									var signature = Git.Signature.now('Saiichi Hashimoto', 'saiichihashimoto@gmail.com');
 									return repo.createCommit('HEAD', signature, signature, 'Adding logo file ' + filename, oid, [parent]);
@@ -157,9 +151,7 @@ module.exports = {
 						.then(function() {
 							return repo.getBranch('develop');
 						})
-						.then(function(ref) {
-							return repo.checkoutBranch(ref);
-						});
+						.then(_.bind(repo.checkoutBranch, repo));
 				});
 
 				getRepo = promise.then(_.constant(_getRepo), _.constant(_getRepo));
@@ -169,9 +161,7 @@ module.exports = {
 					.then(function(repo) {
 						return repo.getBranch(branch);
 					})
-					.then(function(ref) {
-						return Git.Branch.delete(ref);
-					})
+					.then(_.bind(Git.Branch.delete, Git.Branch))
 					.then(function() {
 						return promisify(github.pullRequests.createFromIssue)({
 							user:  'kogg',
