@@ -2,10 +2,10 @@ var _                        = require('underscore');
 var classNames               = require('classnames');
 var connect                  = require('react-redux').connect;
 var createStructuredSelector = require('reselect').createStructuredSelector;
-var error                    = require('debug')(process.env.npm_package_name + ':application:error');
 var React                    = require('react');
 
-var actions = require('../../actions');
+var actions        = require('../../actions');
+var LogoSuggestion = require('../LogoSuggestion');
 
 module.exports = connect(createStructuredSelector({
 	collection: _.property('collection')
@@ -53,51 +53,7 @@ module.exports = connect(createStructuredSelector({
 								</li>
 							);
 						}.bind(this))}
-						{this.props.suggest && (
-							<li className="brand-logo missing-logo">
-								<div className="brand-logo-image"></div>
-								<div className="pop-over">
-									<div className="suggest">
-										<strong>Suggest or Upload a logo</strong>
-										<p>What logo or logo variation were you wanting?</p>
-										<form className="submit-logo-form" onSubmit={function(e) {
-											e.preventDefault();
-											ga('send', 'event', 'Logos', 'Suggest Logo', this.refs.suggest_name.value);
-											this.suggestLogo(this.refs.suggest_name.value).then(function() {
-												this.refs.suggest_name.value = '';
-											}.bind(this));
-										}.bind(this)}>
-											<input className="submit-logo-form-input" placeholder="i.e: facebook circle" type="text" ref="suggest_name" defaultValue={this.props.suggest}/>
-											<label htmlFor="file-upload" className="custom-file-upload">Upload SVG*</label>
-											<input className="file-upload" id="file-upload" type="file" ref="suggest_file" accept="image/" />
-											<input className="submit-logo submit-logo-success" type="submit" />
-											<span className="footnote">*Optional but appreciated 😇</span>
-										</form>
-									</div>
-									<div className="success">
-										<strong>Success!</strong>
-										<p>Thank you so much! We will quickly review your request and try to get something up later today!</p>
-										<span className="emoji">😍</span>
-										<a className="another-one">submit another one</a>
-									</div>
-									<div className="error">
-										<strong>Error! Error!</strong>
-										<p>We're sorry but something went terribly wrong something about what went wrong!</p>
-										<span className="emoji">😓</span>
-										<a className="another-one">let's try again!</a>
-									</div>
-								</div>
-								<div className="flex-center">
-									<div className="">
-										<span>Can't find quite what you're looking for? </span>
-										<u className="activate-pop-over">Suggest</u>
-										<span> a logo or </span>
-										<u className="activate-pop-over">upload</u>
-										<span> something yourself!</span>
-									</div>
-								</div>
-							</li>
-						)}
+						{this.props.suggest && <LogoSuggestion value={this.props.suggest} dispatch={this.props.dispatch} />}
 					</ul>
 					{(this.props.loadmore === 'cta') && (
 						<div className="load-more">
@@ -117,10 +73,7 @@ module.exports = connect(createStructuredSelector({
 		}
 	},
 	componentDidUpdate: function(prevProps) {
-		if ((this.props.suggest !== prevProps.suggest) && this.refs.suggest_name) {
-			this.refs.suggest_name.value = this.props.suggest;
-		}
-		if ((this.props.loadmore === 'infinite') !== (this.props.prevProps === 'infinite')) {
+		if ((this.props.loadmore === 'infinite') !== (prevProps.loadmore === 'infinite')) {
 			if (this.props.loadmore === 'infinite') {
 				this.startInfiniteScroll();
 			} else {
@@ -158,17 +111,7 @@ module.exports = connect(createStructuredSelector({
 		};
 	},
 	stopInfiniteScroll: _.noop,
-	suggestLogo:        function(name) {
-		var promise = this.props.dispatch(actions.createSuggestion({ name: name }, {}));
-
-		promise.catch(function(err) {
-			error(err);
-			ga('send', 'exception', { exDescription: err.message, exFatal: true });
-		});
-
-		return promise;
-	},
-	toggleCollected: function(logo, i) {
+	toggleCollected:    function(logo, i) {
 		ga(
 			'ec:addProduct',
 			_.chain(logo)
