@@ -13,7 +13,7 @@ module.exports = React.createClass({
 	},
 	render: function() {
 		return (
-			<li className="brand-logo missing-logo">
+			<li className="brand-logo brand-logo_missing">
 				<div className="brand-logo-image"></div>
 				{this.state.popover && (
 					<div className="pop-over">
@@ -32,7 +32,7 @@ module.exports = React.createClass({
 										}.bind(this)
 									);
 								}.bind(this)}>
-									<input className="submit-logo-form-input" placeholder="i.e: facebook circle" type="text" ref="suggest_name" defaultValue={this.props.value}/>
+									<input className="submit-logo-form__input" placeholder="i.e: facebook circle" type="text" ref="suggest_name" defaultValue={this.props.value}/>
 									<label htmlFor="file-upload" className="custom-file-upload">Upload SVG*</label>
 									<input className="file-upload" id="file-upload" type="file" ref="suggest_file" accept="image/" />
 									<input className="submit-logo submit-logo-success" type="submit" />
