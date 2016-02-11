@@ -16,7 +16,6 @@ module.exports = connect(createStructuredSelector({
 		this.feathers('source');
 	},
 	render: function() {
-		console.log(this.props.sources);
 		return (
 			<div className="footer">
 				<div className="footer-top flex-spread">

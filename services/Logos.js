@@ -54,7 +54,7 @@ module.exports = {
 				});
 			},
 			function(err) {
-				console.log(err);
+				console.log(err); // TODO
 				return logos;
 			}
 		);
