@@ -8,7 +8,14 @@ var React                    = require('react');
 module.exports = connect(createStructuredSelector({
 	sources: createSelector(
 		_.property('sources'),
-		_.partial(_.pluck, _, 'data')
+		function(sources) {
+			return _.chain(sources)
+				.pluck('data')
+				.sortBy(function(source) {
+					return -source.count;
+				})
+				.value();
+		}
 	)
 }))(React.createClass({
 	mixins:             [FeathersMixin],
