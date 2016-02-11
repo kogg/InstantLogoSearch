@@ -127,8 +127,3 @@
 .activate-pop-over {
   cursor: pointer;
 }
-
-.success,
-.error {
-  display: none;
-}
