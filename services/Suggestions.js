@@ -72,12 +72,15 @@ module.exports = {
 				}
 			})
 			.then(function() {
-				return promisify(github.issues.create)({
-					user:   'kogg',
-					repo:   'instant-logos',
-					title:  data.name,
-					labels: ['suggestion']
-				});
+				if (!data.file) {
+					return promisify(github.issues.create)({
+						user:   'kogg',
+						repo:   'instant-logos',
+						title:  data.name,
+						labels: ['suggestion']
+					});
+				}
+				return Promise.reject(new Error('Can\'t handle files, yet')); // FIXME
 			})
 			.then(issue_to_suggestion);
 	}

@@ -23,7 +23,7 @@ module.exports = React.createClass({
 								<p>What logo or logo variation were you wanting?</p>
 								<form className="submit-logo-form" onSubmit={function(e) {
 									e.preventDefault();
-									this.suggestLogo(this.refs.suggest_name.value).then(
+									this.suggestLogo(this.refs.suggest_name.value, this.refs.suggest_file.files[0]).then(
 										function() {
 											this.setState({ success: true });
 										}.bind(this),
@@ -34,7 +34,7 @@ module.exports = React.createClass({
 								}.bind(this)}>
 									<input className="submit-logo-form__input" placeholder="i.e: facebook circle" type="text" ref="suggest_name" defaultValue={this.props.value}/>
 									<label htmlFor="file-upload" className="custom-file-upload">Upload SVG*</label>
-									<input className="file-upload" id="file-upload" type="file" ref="suggest_file" accept="image/" />
+									<input className="file-upload" id="file-upload" type="file" ref="suggest_file" accept=".svg" />
 									<input className="submit-logo submit-logo-success" type="submit" />
 									<span className="footnote">*Optional but appreciated 😇</span>
 								</form>
@@ -87,12 +87,34 @@ module.exports = React.createClass({
 			this.refs.suggest_name.value = this.props.value;
 		}
 	},
-	suggestLogo: function(name) {
+	suggestLogo: function(name, file) {
 		ga('send', 'event', 'Logos', 'Suggest Logo', name);
-		return this.props.dispatch(actions.createSuggestion({ name: name }, {})).catch(function(err) {
-			error(err);
-			ga('send', 'exception', { exDescription: err.message, exFatal: true });
-			throw err;
-		});
+		return Promise.resolve(file)
+			.then(function(file) {
+				if (!file) {
+					return null;
+				}
+				return new Promise(function(resolve, reject) {
+					var reader = new FileReader();
+
+					reader.onloadend = function() {
+						resolve(reader.result);
+					};
+
+					reader.onerror = function() {
+						reject(reader.error);
+					};
+
+					reader.readAsBinaryString(file);
+				});
+			})
+			.then(function(data) {
+				return this.props.dispatch(actions.createSuggestion({ name: name, file: data }, {}));
+			}.bind(this))
+			.catch(function(err) {
+				error(err);
+				ga('send', 'exception', { exDescription: err.message, exFatal: true });
+				throw err;
+			});
 	}
 });
