@@ -12,8 +12,9 @@ module.exports = connect(createStructuredSelector({
 }))(React.createClass({
 	getInitialState:    _.constant({}),
 	componentWillMount: function() {
-		if (this.props.location.query.q) {
-			this.props.dispatch(actions.search(this.props.location.query.q));
+		var searching = this.props.location.pathname.slice(1) || this.props.location.query.q;
+		if (searching) {
+			this.props.dispatch(actions.search(searching));
 		}
 	},
 	render: function() {
