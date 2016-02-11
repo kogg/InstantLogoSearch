@@ -50,6 +50,9 @@ module.exports = connect(createStructuredSelector({
 	),
 	searching: _.property('searching')
 }))(React.createClass({
+	contextTypes: {
+		router: React.PropTypes.object.isRequired
+	},
 	getInitialState:           _.constant({ pages: 1 }),
 	componentWillReceiveProps: function(nextProps) {
 		if (_.isEqual(this.props.logos, nextProps.logos)) {
@@ -114,7 +117,8 @@ module.exports = connect(createStructuredSelector({
 		}
 		// The searching "event" happens before we change the page
 		// Plus, I'm not sure if the events flow bridges pageviews, so it makes more sense being part of the flow of the previous "page"
-		this.props.history.replace('/' + (this.props.searching ? '?q=' + this.props.searching : ''));
+		console.log('hey', this);
+		this.context.router.replace('/' + (this.props.searching ? '?q=' + this.props.searching : ''));
 		ga('set', { location: document.location.href, title: document.title });
 		this.sendPageView();
 	}, 500)
