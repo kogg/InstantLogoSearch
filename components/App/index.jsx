@@ -16,9 +16,6 @@ module.exports = connect()(React.createClass({
 	mixins:             [FeathersMixin],
 	componentWillMount: function() {
 		this.feathers('logo');
-		if (this.props.location.query.q) {
-			this.props.dispatch(actions.search(this.props.location.query.q));
-		}
 	},
 	render: function() {
 		return (
@@ -33,7 +30,7 @@ module.exports = connect()(React.createClass({
 						{ name: 'twitter:title', content: process.env.npm_package_title },
 						{ name: 'twitter:description', content: process.env.npm_package_description }
 					]} />
-				<Header />
+				<Header location={this.props.location} />
 				{this.props.children}
 				<Footer />
 				<Collection />

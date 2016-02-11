@@ -55,10 +55,12 @@ module.exports = connect(createStructuredSelector({
 	},
 	getInitialState:           _.constant({ pages: 1 }),
 	componentWillReceiveProps: function(nextProps) {
-		if (_.isEqual(this.props.logos, nextProps.logos)) {
-			return;
+		if (!_.isEqual(this.props.logos, nextProps.logos)) {
+			this.setState({ pages: 1 });
 		}
-		this.setState({ pages: 1 });
+		if (this.props.searching !== nextProps.searching) {
+			this.updatePageView();
+		}
 	},
 	render: function() {
 		var numlogos = this.state.pages * PAGE_SIZE;
@@ -86,11 +88,6 @@ module.exports = connect(createStructuredSelector({
 	},
 	componentDidMount: function() {
 		this.sendPageView();
-	},
-	componentDidUpdate: function(prevProps) {
-		if (this.props.searching !== prevProps.searching) {
-			this.updatePageView();
-		}
 	},
 	addImpressions: function(list, logos, position_offset) {
 		position_offset = position_offset || 0;

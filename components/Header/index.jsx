@@ -10,8 +10,13 @@ module.exports = connect(createStructuredSelector({
 	collection: _.property('collection'),
 	searching:  _.property('searching')
 }))(React.createClass({
-	getInitialState: _.constant({}),
-	render:          function() {
+	getInitialState:    _.constant({}),
+	componentWillMount: function() {
+		if (this.props.location.query.q) {
+			this.props.dispatch(actions.search(this.props.location.query.q));
+		}
+	},
+	render: function() {
 		return (
 			<div className={classNames({
 				header:           true,
