@@ -11,6 +11,9 @@ module.exports = connect(createStructuredSelector({
 		function(sources) {
 			return _.chain(sources)
 				.pluck('data')
+				.reject(function(source) {
+					return source.id === 'instantlogosearch';
+				})
 				.sortBy(function(source) {
 					return -source.count;
 				})
