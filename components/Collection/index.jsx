@@ -87,9 +87,6 @@ module.exports = connect(createStructuredSelector({
 			</div>
 		);
 	},
-	componentDidMount: function() {
-		this.props.dispatch(actions.loadCollection());
-	},
 	downloadAndZip: function(logos, filetype) {
 		var zip = new JSZip();
 
