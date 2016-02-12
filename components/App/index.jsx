@@ -19,7 +19,7 @@ module.exports = connect()(React.createClass({
 	},
 	render: function() {
 		return (
-			<div className="hero">
+			<div>
 				<Helmet
 					title={process.env.npm_package_title}
 					meta={[
