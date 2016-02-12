@@ -47,16 +47,16 @@ module.exports = connect(createStructuredSelector({
 				collection_empty:       _.isEmpty(this.props.logos),
 				collection_untouchable: this.props.considering
 			})}>
-				<ul className="collection-row">
+				<ul className="collection__logos">
 					{this.props.logos.map(function(logo) {
 						return (
 							<li key={logo.id} className={classNames({
-								'collection-row-list':                      true,
-								'collection-row-list_considering_addition': logo.considering === 'addition',
-								'collection-row-list_considering_removal':  logo.considering === 'removal'
+								collection__logo:                      true,
+								collection__logo_considering_addition: logo.considering === 'addition',
+								collection__logo_considering_removal:  logo.considering === 'removal'
 							})}>
 								<img src={logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
-								<div className="collection-delete-item"
+								<div className="collection__delete-logo"
 									onClick={function(e) {
 										e.preventDefault();
 										this.uncollectLogo(logo);
@@ -67,7 +67,7 @@ module.exports = connect(createStructuredSelector({
 				</ul>
 				{Boolean(this.props.logos.length) && ((this.props.logos.length > 1) ?
 					(
-						<div className="ctas">
+						<div className="collection__ctas">
 							<a href="" download onClick={function(e) {
 								e.preventDefault();
 								this.downloadAndZip(this.props.logos, 'svg').then(_.partial(this.downloadedLogos, this.props.logos, 'svg'));
@@ -78,7 +78,7 @@ module.exports = connect(createStructuredSelector({
 							}.bind(this)}>Download PNGs</a>
 						</div>
 					) : (
-						<div className="ctas">
+						<div className="collection__ctas">
 							<a href={this.props.logos[0].svg} download={this.props.logos[0].id + '.svg'} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], 'svg')}>Download SVG</a>
 							<a href={this.props.logos[0].png} download={this.props.logos[0].id + '.png'} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], 'png')}>Download PNG</a>
 						</div>
