@@ -6,7 +6,6 @@ module.exports = {
 			'postcss-import-url',
 			'postcss-import',
 			'postcss-nested',
-			'postcss-custom-media',
 			'autoprefixer',
 			'postcss-url',
 			'postcss-cachebuster'
