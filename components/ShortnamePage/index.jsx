@@ -42,7 +42,10 @@ module.exports = connect(createStructuredSelector({
 					title={name + ' | ' + process.env.npm_package_title}
 					meta={[
 						{ property: 'og:title', content: name },
-						{ name: 'twitter:title', content: name + ' | ' + process.env.npm_package_title }
+						{ name: 'twitter:title', content: name + ' | ' + process.env.npm_package_title },
+						{ name: 'totalResults', content: shortname_logos.length },
+						{ name: 'startIndex', content: 0 },
+						{ name: 'itemsPerPage', content: Math.min(shortname_logos.length, 5) }
 					]} />
 				<Logos heading={name} logos={shortname_logos} />
 				<Logos heading="Popular Logos"

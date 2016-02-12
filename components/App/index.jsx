@@ -1,7 +1,9 @@
-var connect       = require('react-redux').connect;
-var FeathersMixin = require('feathers-react-redux').FeathersMixin;
-var Helmet        = require('react-helmet');
-var React         = require('react');
+var _                        = require('underscore');
+var connect                  = require('react-redux').connect;
+var createStructuredSelector = require('reselect').createStructuredSelector;
+var FeathersMixin            = require('feathers-react-redux').FeathersMixin;
+var Helmet                   = require('react-helmet');
+var React                    = require('react');
 
 var actions    = require('../../actions');
 var app        = require('../../application');
@@ -12,7 +14,9 @@ var Header     = require('../Header');
 FeathersMixin.setFeathersApp(app);
 FeathersMixin.setFeathersActions(actions);
 
-module.exports = connect()(React.createClass({
+module.exports = connect(createStructuredSelector({
+	collection: _.property('collection')
+}))(React.createClass({
 	mixins:             [FeathersMixin],
 	componentWillMount: function() {
 		this.feathers('logo');
@@ -33,8 +37,11 @@ module.exports = connect()(React.createClass({
 				<Header location={this.props.location} />
 				{this.props.children}
 				<Footer />
-				<Collection />
+				{this.props.collection && <Collection />}
 			</div>
 		);
+	},
+	componentDidMount: function() {
+		this.props.dispatch(actions.loadCollection());
 	}
 }));

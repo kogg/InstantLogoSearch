@@ -3,6 +3,7 @@ var connect                  = require('react-redux').connect;
 var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
 var levenshtein              = require('fast-levenshtein');
+var Helmet                   = require('react-helmet');
 var React                    = require('react');
 
 var Logos = require('../Logos');
@@ -67,23 +68,31 @@ module.exports = connect(createStructuredSelector({
 		var loadmore = (numlogos < this.props.logos.length) && ((this.state.pages === 1) ? 'cta' : 'infinite');
 
 		return (
-			<Logos heading={this.heading()}
-				logos={_.first(this.props.logos, numlogos)}
-				suggest={(Math.max(0, numlogos - this.props.logos.length) > 0) && this.props.searching}
-				loadmore={loadmore}
-				onLoadMore={function(how) {
-					this.addImpressions(
-						this.heading(),
-						_.chain(this.props.logos)
-							.rest(this.state.pages * PAGE_SIZE)
-							.first(PAGE_SIZE)
-							.value(),
-						this.state.pages * PAGE_SIZE
-					);
-					ga('send', 'event', 'Logos', 'Load More', how || '', (this.state.pages + 1) * PAGE_SIZE);
-					this.setState({ pages: this.state.pages + 1 });
-				}.bind(this)}
-				/>
+			<div>
+				<Helmet
+					meta={[
+						{ name: 'totalResults', content: this.props.logos.length },
+						{ name: 'startIndex', content: 0 },
+						{ name: 'itemsPerPage', content: Math.min(this.props.logos.length, numlogos) }
+					]} />
+				<Logos heading={this.heading()}
+					logos={_.first(this.props.logos, numlogos)}
+					suggest={(Math.max(0, numlogos - this.props.logos.length) > 0) && this.props.searching}
+					loadmore={loadmore}
+					onLoadMore={function(how) {
+						this.addImpressions(
+							this.heading(),
+							_.chain(this.props.logos)
+								.rest(numlogos)
+								.first(PAGE_SIZE)
+								.value(),
+							numlogos
+						);
+						ga('send', 'event', 'Logos', 'Load More', how || '', numlogos + PAGE_SIZE);
+						this.setState({ pages: this.state.pages + 1 });
+					}.bind(this)}
+					/>
+			</div>
 		);
 	},
 	componentDidMount: function() {

@@ -26,21 +26,21 @@ module.exports = function(state) {
 		logos:          resourcesReducer('logo'),
 		sources:        resourcesReducer('source'),
 		collection:     handleActions({
-			LOAD_COLLECTION: function() {
-				return global.localStorage ? JSON.parse(global.localStorage.getItem('collection')) || {} : {};
+			LOAD_COLLECTION: function(state) {
+				return global.localStorage ? JSON.parse(global.localStorage.getItem('collection')) || state || {} : state;
 			},
 			CLEAR_COLLECTION:  reduceToStorage('collection', _.constant({})),
 			ADD_TO_COLLECTION: reduceToStorage('collection', function(state, action) {
-				var new_state = _.clone(state);
+				var new_state = _.clone(state || {});
 				new_state[action.payload.id] = true;
 				return new_state;
 			}),
 			REMOVE_FROM_COLLECTION: reduceToStorage('collection', function(state, action) {
-				var new_state = _.clone(state);
+				var new_state = _.clone(state || {});
 				delete new_state[action.payload.id];
 				return new_state;
 			})
-		}, {}),
+		}, null),
 		considering: handleActions({
 			CONSIDER_LOGO: function(state, action) {
 				return action.payload.id || state;
