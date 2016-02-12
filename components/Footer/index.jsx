@@ -28,12 +28,12 @@ module.exports = connect(createStructuredSelector({
 	render: function() {
 		return (
 			<div className="footer">
-				<div className="footer-top flex-spread">
+				<div className="footer__top flex-spread">
 					<div>
 						<h4>Instant Logo Search</h4>
 					</div>
 					<div className="flex">
-						<div className="contributors">
+						<div className="footer__contributors">
 							<span>Contributors: </span>
 							{this.props.sources.map(function(source) {
 								return (
@@ -42,12 +42,12 @@ module.exports = connect(createStructuredSelector({
 							})}
 						</div>
 						<div>
-							<a className="social-icon social-icon-twitter"></a>
-							<a className="social-icon social-icon-github"></a>
+							<a className="footer__social-icon footer__social-icon_twitter"></a>
+							<a className="footer__social-icon footer__social-icon_github"></a>
 						</div>
 					</div>
 				</div>
-				<div className="footer-bottom flex-spread">
+				<div className="footer__bottom flex-spread">
 					<div>
 						<span>copyright 2016</span>
 					</div>
