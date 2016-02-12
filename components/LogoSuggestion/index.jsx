@@ -14,7 +14,7 @@ module.exports = React.createClass({
 	render: function() {
 		return (
 			<li className="brand-logo suggestion">
-				<div className="brand-logo-image suggestion__image"></div>
+				<div className="brand-logo__image suggestion__image"></div>
 				{this.state.popover && (
 					<div className="suggestion__popover">
 						{!this.state.success && !this.state.failure && (

@@ -13,13 +13,10 @@ module.exports = connect(createStructuredSelector({
 	getInitialState: _.constant({ considering: null }),
 	render:          function() {
 		return (
-			<div className={classNames({
-				'logos':              true,
-				'logos_extra-bottom': !_.isEmpty(this.props.collection)
-			})}>
-				<div className="logos-container">
+			<div className="logos">
+				<div>
 					{this.props.heading && (
-						<div className="logos-title">
+						<div className="logos__title">
 							<h3>{this.props.heading}</h3>
 						</div>
 					)}
@@ -31,16 +28,16 @@ module.exports = connect(createStructuredSelector({
 									'brand-logo_collected':   this.props.collection[logo.id],
 									'brand-logo_considering': _.isEmpty(this.props.collection) && (this.state.considering === logo.id)
 								})} key={logo.id}>
-									<div className="brand-logo-image flex-center">
+									<div className="brand-logo__image flex-center">
 										<img src={logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
 									</div>
-									<div className="brand-logo-ctas">
+									<div className="brand-logo__ctas">
 										<strong>{logo.name}</strong>
-										<div className="brand-logo-ctas-download">
+										<div className="brand-logo__download-ctas">
 											<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
 											<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
 										</div>
-										<a className="brand-logo-ctas-collection" href={'/' + logo.shortname}
+										<a className="brand-logo__collection-ctas" href={'/' + logo.shortname}
 											onClick={function(e) {
 												e.preventDefault();
 												this.toggleCollected(logo, i);
@@ -56,8 +53,8 @@ module.exports = connect(createStructuredSelector({
 						{this.props.suggest && <LogoSuggestion value={this.props.suggest} dispatch={this.props.dispatch} />}
 					</ul>
 					{(this.props.loadmore === 'cta') && (
-						<div className="load-more">
-							<a href="" className="load-more-cta" onClick={function(e) {
+						<div className="logos__load-more">
+							<a href="" className="logos__load-more-cta" onClick={function(e) {
 								e.preventDefault();
 								this.props.onLoadMore('CTA');
 							}.bind(this)}>Show More</a>

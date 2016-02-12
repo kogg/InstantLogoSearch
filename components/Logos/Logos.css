@@ -1,18 +1,40 @@
 .logos {
   padding: 30px 10px 10px 30px;
   overflow: auto;
-}
 
-.header_collapsed + .logos {
-  min-height: calc(100vh - 172px);
-}
+  .header_collapsed + & {
+    min-height: calc(100vh - 172px);
+  }
 
-.header_expanded + .logos {
-  overflow: auto;
-}
+  .header_expanded + & {
+    overflow: auto;
+  }
 
-.logos-title {
-  margin: 0 20px 20px 0;
+  &__title {
+    margin: 0 20px 20px 0;
+  }
+
+  &__load-more {
+    text-align: center;
+    margin: 40px 0;
+
+    &-cta {
+      line-height: 120px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 1px solid rgba(0, 0, 0, .15);
+      color: rgba(0, 0, 0, 0.44);
+      cursor: pointer;
+      text-decoration: none;
+
+      &:hover {
+        color: rgba(0, 0, 0, 0.6);
+        border-color: rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
 }
 
 .brand-logo {
@@ -57,7 +79,7 @@
   width: calc(100% - 20px);
   }
 
-  &-image {
+  &__image {
     background: #f2f2f2;
     padding: 12px;
     height: 140px;
@@ -71,7 +93,7 @@
     }
   }
 
-  &-ctas {
+  &__ctas {
     background: white;
     padding: 12px 0 8px;
 
@@ -91,75 +113,53 @@
       cursor: pointer;
       color: black;
     }
-
-    &-download {
-      background: url('downarrow106.svg');
-      background-size: 19px;
-      background-position: left 12px center;
-      background-repeat: no-repeat;
-      padding-left: 40px;
-      opacity: .5;
-
-      &:hover {
-        opacity: 1;
-      }
-
-      &:hover a {
-        color: rgba(0, 0, 0, .5);
-      }
-
-      a {
-        display: inline-block;
-        margin-right: 8px;
-        padding: 8px 0;
-        border-radius: 3px;
-      }
-
-      a:hover {
-        color: rgba(0, 0, 0, 1);
-      }
-    }
-
-    &-collection {
-      background: url('plus84.svg');
-      background-size: 19px;
-      background-position: left 12px center;
-      background-repeat: no-repeat;
-      text-indent: 40px;
-      opacity: .5;
-
-      &:hover {
-        opacity: 1;
-      }
-
-      .brand-logo_collected & {
-        background: url('check.svg');
-        background-size: 19px;
-        background-position: left 12px center;
-        background-repeat: no-repeat;
-      }
-    }
   }
-}
 
-.load-more {
-  text-align: center;
-  margin: 40px 0;
-
-  &-cta {
-    line-height: 120px;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    display: inline-block;
-    border: 1px solid rgba(0, 0, 0, .15);
-    color: rgba(0, 0, 0, 0.44);
-    cursor: pointer;
-    text-decoration: none;
+  &__download-ctas {
+    background: url('downarrow106.svg');
+    background-size: 19px;
+    background-position: left 12px center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    opacity: .5;
 
     &:hover {
-      color: rgba(0, 0, 0, 0.6);
-      border-color: rgba(0, 0, 0, 0.3);
+      opacity: 1;
+    }
+
+    &:hover a {
+      color: rgba(0, 0, 0, .5);
+    }
+
+    a {
+      display: inline-block;
+      margin-right: 8px;
+      padding: 8px 0;
+      border-radius: 3px;
+    }
+
+    a:hover {
+      color: rgba(0, 0, 0, 1);
+    }
+  }
+
+  &__collection-ctas {
+    background: url('plus84.svg');
+    background-size: 19px;
+    background-position: left 12px center;
+    background-repeat: no-repeat;
+    text-indent: 40px;
+    opacity: .5;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    .brand-logo_collected & {
+      background: url('check.svg');
+      background-size: 19px;
+      background-position: left 12px center;
+      background-repeat: no-repeat;
     }
   }
 }
