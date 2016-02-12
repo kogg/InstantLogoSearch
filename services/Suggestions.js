@@ -51,7 +51,7 @@ module.exports = {
 			repo:   'instant-logos'
 		}).then(
 			function(issue) {
-				if (issue.state !== 'open' || !_.findWhere(issue.labels, { name: 'suggestion' })) {
+				if (issue.state !== 'open' || !_.findWhere(issue.labels, { name: 'logo-suggestion' })) {
 					var err = new Error(http.STATUS_CODES[404]);
 					err.status = 404;
 					return Promise.reject(err);
@@ -68,7 +68,7 @@ module.exports = {
 		return promisify(github.issues.repoIssues)({
 			user:     'kogg',
 			repo:     'instant-logos',
-			labels:   'suggestion',
+			labels:   'logo-suggestion',
 			state:    'open',
 			sort:     'created',
 			per_page: 100
