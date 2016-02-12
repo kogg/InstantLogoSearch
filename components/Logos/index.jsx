@@ -25,7 +25,7 @@ module.exports = connect(createStructuredSelector({
 							return (
 								<li className={classNames({
 									'brand-logo':             true,
-									'brand-logo_collected':   this.props.collection[logo.id],
+									'brand-logo_collected':   this.props.collection && this.props.collection[logo.id],
 									'brand-logo_considering': _.isEmpty(this.props.collection) && (this.state.considering === logo.id)
 								})} key={logo.id}>
 									<div className="brand-logo__image flex-center">
@@ -37,15 +37,17 @@ module.exports = connect(createStructuredSelector({
 											<a href={logo.svg} download={logo.id + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
 											<a href={logo.png} download={logo.id + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
 										</div>
-										<a className="brand-logo__collection-ctas" href={'/' + logo.shortname}
-											onClick={function(e) {
-												e.preventDefault();
-												this.toggleCollected(logo, i);
-											}.bind(this)}
-											onMouseMove={_.partial(this.toggleConsiderLogo, logo, true)}
-											onMouseLeave={_.partial(this.toggleConsiderLogo, logo, false)}>
-											{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Bucket
-										</a>
+										{this.props.collection && (
+											<a className="brand-logo__collection-ctas" href={'/' + logo.shortname}
+												onClick={function(e) {
+													e.preventDefault();
+													this.toggleCollected(logo, i);
+												}.bind(this)}
+												onMouseMove={_.partial(this.toggleConsiderLogo, logo, true)}
+												onMouseLeave={_.partial(this.toggleConsiderLogo, logo, false)}>
+												{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Bucket
+											</a>
+										)}
 									</div>
 								</li>
 							);
