@@ -38,14 +38,12 @@ module.exports = connect(createStructuredSelector({
 
 		return (
 			<div>
-				{name && (
-					<Helmet
-						title={name + ' | ' + process.env.npm_package_title}
-						meta={[
-							{ property: 'og:title', content: name },
-							{ name: 'twitter:title', content: name + ' | ' + process.env.npm_package_title }
-						]} />
-				)}
+				<Helmet
+					title={name + ' | ' + process.env.npm_package_title}
+					meta={[
+						{ property: 'og:title', content: name },
+						{ name: 'twitter:title', content: name + ' | ' + process.env.npm_package_title }
+					]} />
 				<Logos heading={name} logos={shortname_logos} />
 				<Logos heading="Popular Logos"
 					logos={_.first(this.props.logos, 5)}
