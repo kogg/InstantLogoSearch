@@ -26,6 +26,7 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(feathers.static(path.join(__dirname, '../assets'), { maxage: '365d' }));
 app.use(feathers.static(path.join(__dirname, '../dist'), { maxage: '365d' }));
 app.configure(feathers.rest());
 if (process.env.npm_package_feathersjs_socket) {
