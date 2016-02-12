@@ -2,6 +2,7 @@ var _                        = require('underscore');
 var connect                  = require('react-redux').connect;
 var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
+var Helmet                   = require('react-helmet');
 var React                    = require('react');
 
 var actions = require('../../actions');
@@ -33,10 +34,19 @@ module.exports = connect(createStructuredSelector({
 	},
 	render: function() {
 		var shortname_logos = _.where(this.props.logos, { shortname: this.props.params.shortname });
+		var name            = (_.first(shortname_logos) || {}).name;
 
 		return (
 			<div>
-				<Logos heading={(_.first(shortname_logos) || {}).name} logos={shortname_logos} />
+				{name && (
+					<Helmet
+						title={name + ' | ' + process.env.npm_package_title}
+						meta={[
+							{ property: 'og:title', content: name },
+							{ name: 'twitter:title', content: name + ' | ' + process.env.npm_package_title }
+						]} />
+				)}
+				<Logos heading={name} logos={shortname_logos} />
 				<Logos heading="Popular Logos"
 					logos={_.first(this.props.logos, 5)}
 					loadmore="cta"
