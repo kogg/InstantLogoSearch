@@ -43,7 +43,7 @@ module.exports = connect(createStructuredSelector({
 									this.refs.search.select();
 									ga('send', 'event', 'Search', 'Clear', 'Search Icon');
 								}.bind(this)}></i>
-								<input className="search-input" defaultValue={this.props.searching} ref="search" type="text" autoFocus placeholder="What logo are you looking for?" name="q"
+								<input className="search-input" defaultValue={this.props.searching} ref="search" type="text" autoFocus autoComplete="off" placeholder="What logo are you looking for?" name="q"
 									onChange={function() {
 										this.setState({ collapsed: true });
 										this.props.dispatch(actions.search(this.refs.search.value));
