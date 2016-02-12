@@ -5,18 +5,21 @@ var memoize   = require('memoizee');
 var path      = require('path');
 var promisify = require('es6-promisify');
 
-logos = _.map(logos, function(logo) {
-	if (!logo.svg || !logo.svg.path) {
-		return _.pick(logo, 'id', 'name');
-	}
-	return _.chain(logo)
-		.pick('id', 'name', 'shortname')
-		.defaults({
-			svg: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
-			png: '/png?id=' + logo.id
-		})
-		.value();
-});
+logos = _.chain(logos)
+	.map(function(logo) {
+		if (!logo.svg || !logo.svg.path) {
+			return _.pick(logo, 'id', 'name');
+		}
+		return _.chain(logo)
+			.pick('id', 'name', 'shortname')
+			.defaults({
+				svg: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
+				png: '/png?id=' + logo.id
+			})
+			.value();
+	})
+	.sortBy('name')
+	.value();
 
 var analytics = google.analytics({
 	version: 'v3',
@@ -49,9 +52,14 @@ module.exports = {
 	find: function() {
 		return getUniquePurchases().then(
 			function(uniquePurchases) {
-				return _.map(logos, function(logo) {
-					return _.defaults({ downloads: uniquePurchases[logo.id] || 0 }, logo);
-				});
+				return _.chain(logos)
+					.map(function(logo) {
+						return _.defaults({ downloads: uniquePurchases[logo.id] || 0 }, logo);
+					})
+					.sortBy(function(logo) {
+						return -logo.downloads;
+					})
+					.value();
 			},
 			function(err) {
 				console.log(err); // TODO
