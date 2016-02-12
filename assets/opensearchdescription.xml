@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<OpenSearchDescription>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
 	<ShortName>Instant Logos</ShortName>
 	<LongName>Instant Logo Search</LongName>
 	<Description>Search for Logos on Instant Logo Search</Description>
