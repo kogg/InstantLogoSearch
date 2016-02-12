@@ -2,11 +2,11 @@
   padding: 30px 10px 10px 30px;
   overflow: auto;
 
-  .header_collapsed + & {
+  .header_collapsed + div & {
     min-height: calc(100vh - 172px);
   }
 
-  .header_expanded + & {
+  .header_expanded + div & {
     overflow: auto;
   }
 
