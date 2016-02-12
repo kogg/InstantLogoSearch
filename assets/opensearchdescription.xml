@@ -4,6 +4,7 @@
 	<LongName>Instant Logo Search</LongName>
 	<Description>Search for Logos on Instant Logo Search</Description>
 	<Contact>teamkogg@gmail.com</Contact>
-	<Url type="text/html" template="http://instantlogosearch.com/?q={searchTerms}"/>
+	<Url type="text/html" rel="results" template="http://instantlogosearch.com/?q={searchTerms}"/>
+	<Url type="application/opensearchdescription+xml" rel="self" template="http://instantlogosearch.com/opensearchdescription.xml" />
 	<Query role="example" searchTerms="facebook" />
 </OpenSearchDescription>
