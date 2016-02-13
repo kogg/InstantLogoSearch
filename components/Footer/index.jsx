@@ -2,15 +2,23 @@ var _                        = require('underscore');
 var connect                  = require('react-redux').connect;
 var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
-var FeathersMixin            = require('feathers-react-redux').FeathersMixin;
 var React                    = require('react');
 
 module.exports = connect(createStructuredSelector({
 	sources: createSelector(
-		_.property('sources'),
-		function(sources) {
-			return _.chain(sources)
+		_.property('logos'),
+		function(logos) {
+			var logos_count_by_source = _.countBy(logos, function(logo) {
+				return logo.data.source.shortname;
+			});
+			return _.chain(logos)
 				.pluck('data')
+				.pluck('source')
+				.uniq(false, 'shortname')
+				.each(function(source) {
+					source.id = source.shortname;
+					source.count = logos_count_by_source[source.shortname];
+				})
 				.reject(function(source) {
 					return source.id === 'instantlogosearch';
 				})
@@ -21,10 +29,6 @@ module.exports = connect(createStructuredSelector({
 		}
 	)
 }))(React.createClass({
-	mixins:             [FeathersMixin],
-	componentWillMount: function() {
-		this.feathers('source');
-	},
 	render: function() {
 		return (
 			<div className="footer">

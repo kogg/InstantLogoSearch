@@ -17,6 +17,5 @@ module.exports = _.extend(
 		search:               createAction('SEARCH')
 	},
 	resourcesActions(getApplication, 'logo'),
-	resourcesActions(getApplication, 'suggestion'),
-	resourcesActions(getApplication, 'source')
+	resourcesActions(getApplication, 'suggestion')
 );
