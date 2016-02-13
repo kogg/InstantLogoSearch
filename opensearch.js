@@ -9,9 +9,11 @@ module.exports = {
 			{ LongName: process.env.npm_package_title },
 			{ Description: 'Search for ' + process.env.npm_package_title },
 			{ Contact: process.env.npm_package_author_email },
-			{ Url: { _attr: { type: 'text/html', template: process.env.npm_package_homepage + '/?q={searchTerms}' } } },
-			{ Url: { _attr: { type: 'application/atom+xml', template: process.env.npm_package_homepage + '/api/logos.xml/?format=atom&q={searchTerms}' } } },
-			{ Url: { _attr: { type: 'application/rss+xml', template: process.env.npm_package_homepage + '/api/logos.xml/?format=rss&q={searchTerms}' } } },
+			{ Url: { _attr: { type: 'text/html', template: process.env.npm_package_homepage + '?q={searchTerms}' } } },
+			{ Url: { _attr: { type: 'application/atom+xml', template: process.env.npm_package_homepage + '/api/logos.xml?format=atom&q={searchTerms}' } } },
+			{ Url: { _attr: { type: 'application/rss+xml', template: process.env.npm_package_homepage + '/api/logos.xml?format=rss&q={searchTerms}' } } },
+			{ Url: { _attr: { type: 'application/json', rel: 'suggestions', template: process.env.npm_package_homepage + '/api/logo_suggestions?q={searchTerms}' } } },
+			{ Url: { _attr: { type: 'application/x-suggestions+json', template: process.env.npm_package_homepage + '/api/logo_suggestions?q={searchTerms}' } } },
 			{ Query: { _attr: { role: 'example', searchTerms: 'facebook' } } }
 		]
 	}, { declaration: true }),
