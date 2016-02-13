@@ -67,7 +67,7 @@ app.get('/api/logos.xml', function(req, res, next) {
 	if (!_.contains(['atom', 'rss'], req.query.format)) {
 		return next();
 	}
-	var terms = (req.query.q || '').trim().replace(/[.\-()]/gi, '').split(/\s+/);
+	var terms = (req.query.q || '').trim().replace(/[.\-()]/gi, '').toLowerCase().split(/\s+/);
 	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
 		function(results) {
 			res.header('Content-Type', 'application/xml');
@@ -99,7 +99,7 @@ app.get('/api/logo_suggestions', function(req, res, next) {
 	if (!req.query.q) {
 		return res.send(['', [], [], []]);
 	}
-	var terms = (req.query.q || '').trim().replace(/[.\-()]/gi, '').split(/\s+/);
+	var terms = (req.query.q || '').trim().replace(/[.\-()]/gi, '').toLowerCase().split(/\s+/);
 	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
 		function(results) {
 			results = _.chain(results)

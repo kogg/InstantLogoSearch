@@ -75,7 +75,7 @@ module.exports = {
 								return;
 							}
 							chain = chain.filter(function(logo) {
-								return _.some(query, function(queryterm) {
+								return _.every(query, function(queryterm) {
 									return (querytype === '$in') === (logo[key].indexOf(queryterm) !== -1);
 								});
 							});
