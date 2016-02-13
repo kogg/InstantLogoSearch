@@ -15,13 +15,25 @@ body {
 h1 {
   font-weight: 900;
   font-size: 3.5rem;
+
+  @media (max-width: 680px) {
+  font-size: 8.5vw;
+  }
 }
 
 h2 {
   font-weight: 400;
   font-size: 1.5rem;
-  line-height: 1.75rem;
-  margin: 6px 0;
+  line-height: 1.75;
+
+  @media (max-width: 680px) {
+  font-size: 4vw;
+  }
+
+  @media (max-width: 480px) {
+  font-size: 3.7vw;
+  margin-top: 6px;
+  }
 }
 
 h3 {

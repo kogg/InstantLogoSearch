@@ -24,11 +24,17 @@ module.exports = connect(createStructuredSelector({
 				header_collapsed: this.state.collapsed
 			})}>
 				<div className="flex-spread">
-					<div className="logo"></div>
+					<a href="/" className="logo"></a>
 					<div>
-						<a className="social-action social-action-twitter" href="">tweet</a>
-						<a className="social-action social-action-facebook" href="">share</a>
-						<a className="social-action social-action-github" href="">star</a>
+						<a className="social-action social-action-twitter" href="">
+							<span>tweet</span>
+						</a>
+						<a className="social-action social-action-facebook" href="">
+							<span>share</span>
+						</a>
+						<a className="social-action social-action-github" href="">
+							<span>star</span>
+						</a>
 					</div>
 				</div>
 				<div className="header-content">

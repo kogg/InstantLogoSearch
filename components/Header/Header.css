@@ -2,11 +2,15 @@
   background-color: #fff;
   background-image: url('desk14.svg');
   background-size: cover;
-  background-position: center bottom;
+  background-position: center;
   padding: 30px;
   text-align: center;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 680px) {
+  background-position: center right;
+  }
 }
 
 .logo {
@@ -60,7 +64,22 @@
   }
 
   @media (max-width: 740px) {
-  display: none;
+    & span {
+      display: none;
+    }
+
+    & {
+      height: 36px;
+      width: 36px;
+      padding: 0;
+    }
+
+    &:before {
+      left: 0;
+      top: 0;
+      width: 34px;
+      height: 34px;
+    }
   }
 }
 
@@ -134,45 +153,51 @@
   align-items: center;
   background: #fff;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
-}
 
-.header_collapsed .search-icon {
-  background: url('logo.svg');
-  background-repeat: no-repeat;
-  top: -4px;
-  height: 33px;
-  width: 38px;
-  background-size: 30px;
-  opacity: .4;
-  cursor: pointer;
-}
+  & .search-icon {
+    background: url('logo.svg');
+    background-repeat: no-repeat;
+    top: -4px;
+    height: 33px;
+    width: 38px;
+    background-size: 30px;
+    opacity: .4;
+    cursor: pointer;
+  }
 
-.header_collapsed .search-icon:hover {
-  opacity: .6;
-}
+  & .search-icon:hover {
+    opacity: .6;
+  }
 
-.header_collapsed .search-input {
-  width: calc(100% - 38px);
-}
+  & .search-input {
+    width: calc(100% - 38px);
+  }
 
-.header_collapsed .header-content {
-  padding: 0px;
-}
+  & .header-content {
+    padding: 0px;
+  }
 
-.header_collapsed .logo,
-.header_collapsed h1,
-.header_collapsed h2 {
-  display: none;
-}
+  & .logo,
+  & h1,
+  & h2 {
+    display: none;
+  }
 
-.header_collapsed .search-container {
-  margin: 0;
-  box-shadow: none;
-  width: calc(100vw - 400px);
-}
+  & .search-container {
+    margin: 0;
+    box-shadow: none;
+    width: calc(100vw - 400px);
+  }
 
-@media (max-width: 740px) {
-  .header_collapsed .search-container {
-    width: 100%;
+  @media (max-width: 740px) {
+    & .search-container {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 460px) {
+    & .social-action {
+      display: none;
+    }
   }
 }
