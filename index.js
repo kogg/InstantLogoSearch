@@ -67,7 +67,7 @@ app.get('/api/logos.xml', function(req, res, next) {
 	if (!_.contains(['atom', 'rss'], req.query.format)) {
 		return next();
 	}
-	var terms = (req.query.q || '').replace(/[.\-()]/gi, '').split(/\s+/);
+	var terms = (req.query.q || '').trim().replace(/[.\-()]/gi, '').split(/\s+/);
 	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
 		function(results) {
 			res.header('Content-Type', 'application/xml');
@@ -76,12 +76,17 @@ app.get('/api/logos.xml', function(req, res, next) {
 				domain,
 				terms,
 				_.chain(results)
-					.uniq(false, 'shortname')
+					.groupBy('shortname')
+					.sortBy(function(logos) {
+						return -_.reduce(logos, function(memo, logo) {
+							return memo + logo.downloads;
+						}, 0);
+					})
+					.map(function(logos) {
+						return _.first(logos);
+					})
 					.map(function(logo) {
 						return _.defaults({ url: domain + '/' + logo.shortname }, logo);
-					})
-					.sortBy(function(logo) {
-						return -logo.downloads;
 					})
 					.value()
 			));
@@ -94,13 +99,10 @@ app.get('/api/logo_suggestions', function(req, res, next) {
 	if (!req.query.q) {
 		return res.send(['', [], [], []]);
 	}
-	var q = req.query.q.replace(/[.\-()]/gi, '');
-	app.service('/api/logos').find().then(
+	var terms = (req.query.q || '').trim().replace(/[.\-()]/gi, '').split(/\s+/);
+	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
 		function(results) {
 			results = _.chain(results)
-				.filter(function(logo) {
-					return logo.shortname.indexOf(q) === 0;
-				})
 				.groupBy('shortname')
 				.sortBy(function(logos) {
 					return -_.reduce(logos, function(memo, logo) {
@@ -114,7 +116,7 @@ app.get('/api/logo_suggestions', function(req, res, next) {
 			var domain = req.protocol + '://' + (req.get('origin') || req.get('host'));
 			res.json([
 				req.query.q,
-				_.pluck(results, 'shortname'),
+				_.pluck(results, 'name'),
 				_.pluck(results, 'name'),
 				_.map(results, function(logo) {
 					return domain + '/' + logo.shortname;
