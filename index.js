@@ -61,11 +61,17 @@ app.use('/api/sources', Sources);
 app.use('/api/suggestions', Suggestions);
 
 app.get('/api/logos.xml', function(req, res, next) {
+	if (!req.query.format) {
+		req.query.format = 'atom';
+	}
+	if (!_.contains(['atom', 'rss'], req.query.format)) {
+		return next();
+	}
 	var terms = (req.query.q || '').split(/\s+/);
 	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
 		function(results) {
 			res.header('Content-Type', 'application/xml');
-			res.send(opensearch.xml(
+			res.send(opensearch[req.query.format](
 				terms,
 				_.chain(results)
 					.uniq(false, 'shortname')
