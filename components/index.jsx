@@ -19,7 +19,7 @@ var HTMLDoc = React.createClass({
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					{this.props.head.meta.toComponent()}
 					<link rel="stylesheet" type="text/css" href={HTMLDoc.cacheBuster('css/main.css')} />
-					<link rel="search" type="application/opensearchdescription+xml" href={process.env.npm_package_homepage + '/opensearchdescription.xml'} title={'Seach ' + process.env.npm_package_title} />
+					<link rel="search" type="application/opensearchdescription+xml" href={this.props.domain + '/opensearchdescription.xml'} title={'Seach ' + process.env.npm_package_title} />
 					{this.props.head.link.toComponent()}
 					{process.env.GOOGLE_ANALYTICS_ID && <script type="text/javascript" dangerouslySetInnerHTML={{
 						__html: '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){' +

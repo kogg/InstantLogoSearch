@@ -67,10 +67,10 @@ app.get('/sitemap.xml', function(req, res, next) {
 
 app.get('/opensearchdescription.xml', function(req, res) {
 	res.header('Content-Type', 'application/xml');
-	res.send(opensearch.description);
+	res.send(opensearch.description(req.protocol + '://' + (req.get('origin') || req.get('host'))));
 });
 
-app.set('page-render', memoize(function(url, redirect) {
+app.set('page-render', memoize(function(url, domain, redirect) {
 	return promisify(match)({ routes: routes, location: url })
 		.then(function(response) { // Correlates with redirectLocation, renderProps
 			if (response[0]) {
@@ -84,16 +84,16 @@ app.set('page-render', memoize(function(url, redirect) {
 			var store = Store();
 			return serverRender(<Provider store={store}><RouterContext {...response[1]} /></Provider>, store, actions)
 				.then(function(locals) {
-					return promisify(app.render).bind(app)('index', _.extend(locals, { state: store.getState() }));
+					return promisify(app.render).bind(app)('index', _.extend(locals, { state: store.getState(), domain: domain }));
 				})
 				.then(function(html) {
 					return { html: html, date: (new Date()).toUTCString() };
 				});
 		});
-}, { length: 1 })); // TODO Won't this cache actions performed in serverRender forever?
+}, { length: 2 })); // TODO Won't this cache actions performed in serverRender forever?
 
 app.get(/^(?!\/(?:(?:api|svg)\/|png))[^.]*$/, function(req, res, next) {
-	app.get('page-render')(req.url, res.redirect.bind(res)).then(
+	app.get('page-render')(req.url, req.protocol + '://' + (req.get('origin') || req.get('host')), res.redirect.bind(res)).then(
 		function(render) {
 			if (!render) {
 				return;

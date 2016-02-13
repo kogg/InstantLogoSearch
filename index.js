@@ -71,12 +71,14 @@ app.get('/api/logos.xml', function(req, res, next) {
 	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
 		function(results) {
 			res.header('Content-Type', 'application/xml');
+			var domain = req.protocol + '://' + (req.get('origin') || req.get('host'));
 			res.send(opensearch[req.query.format](
+				domain,
 				terms,
 				_.chain(results)
 					.uniq(false, 'shortname')
 					.map(function(logo) {
-						return _.defaults({ url: process.env.npm_package_homepage + '/' + logo.shortname }, logo);
+						return _.defaults({ url: domain + '/' + logo.shortname }, logo);
 					})
 					.sortBy(function(logo) {
 						return -logo.downloads;
@@ -109,12 +111,13 @@ app.get('/api/logo_suggestions', function(req, res, next) {
 					return _.first(logos);
 				})
 				.value();
+			var domain = req.protocol + '://' + (req.get('origin') || req.get('host'));
 			res.json([
 				req.query.q,
 				_.pluck(results, 'shortname'),
 				_.pluck(results, 'name'),
 				_.map(results, function(logo) {
-					return process.env.npm_package_homepage + '/' + logo.shortname;
+					return domain + '/' + logo.shortname;
 				})
 			]);
 		},
