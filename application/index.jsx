@@ -9,6 +9,7 @@ var path          = require('path');
 var promisify     = require('es6-promisify');
 var serverRender  = require('feathers-react-redux/serverRender');
 var sm            = require('sitemap');
+var xml           = require('xml');
 var Provider      = require('react-redux').Provider;
 var React         = require('react');
 var RouterContext = require('react-router').RouterContext;
@@ -62,6 +63,22 @@ app.get('/sitemap.xml', function(req, res, next) {
 		},
 		next
 	);
+});
+
+var opensearchxml = xml({
+	OpenSearchDescription: [
+		{ _attr: { xmlns: 'http://a9.com/-/spec/opensearch/1.1/' } },
+		{ ShortName: 'Instant Logo' },
+		{ LongName: process.env.npm_package_title },
+		{ Description: 'Search for ' + process.env.npm_package_title },
+		{ Contact: process.env.npm_package_author_email },
+		{ Url: { _attr: { type: 'text/html', template: process.env.npm_package_homepage + '/?q={searchTerms}' } } },
+		{ Query: { _attr: { role: 'example', searchTerms: 'facebook' } } }
+	]
+}, { declaration: true });
+app.get('/opensearchdescription.xml', function(req, res) {
+	res.header('Content-Type', 'application/xml');
+	res.send(opensearchxml);
 });
 
 app.set('page-render', memoize(function(url, redirect) {
