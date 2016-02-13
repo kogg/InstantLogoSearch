@@ -7,9 +7,7 @@ var logos_count_by_source = _.countBy(logos, function(logo) {
 
 var sources = _.chain(logos)
 	.pluck('source')
-	.uniq(false, function(source) {
-		return source.shortname;
-	})
+	.uniq(false, 'shortname')
 	.each(function(source) {
 		source.id = source.shortname;
 		source.count = logos_count_by_source[source.shortname];

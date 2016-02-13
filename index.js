@@ -12,6 +12,7 @@ var promisify = require('es6-promisify');
 var svg2png   = require('svg2png');
 
 var app         = require('./application');
+var opensearch  = require('./opensearch');
 var Logos       = require('./services/Logos');
 var Sources     = require('./services/Sources');
 var Suggestions = require('./services/Suggestions');
@@ -58,6 +59,34 @@ app.get('/png', function(req, res, next) {
 app.use('/api/logos', Logos);
 app.use('/api/sources', Sources);
 app.use('/api/suggestions', Suggestions);
+
+app.get('/api/logos.xml', function(req, res, next) {
+	if (!req.query.format) {
+		req.query.format = 'atom';
+	}
+	if (!_.contains(['atom', 'rss'], req.query.format)) {
+		return next();
+	}
+	var terms = (req.query.q || '').split(/\s+/);
+	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
+		function(results) {
+			res.header('Content-Type', 'application/xml');
+			res.send(opensearch[req.query.format](
+				terms,
+				_.chain(results)
+					.uniq(false, 'shortname')
+					.map(function(logo) {
+						return _.defaults({ url: process.env.npm_package_homepage + '/' + logo.shortname }, logo);
+					})
+					.sortBy(function(logo) {
+						return -logo.downloads;
+					})
+					.value()
+			));
+		},
+		next
+	);
+});
 
 app.all('*', function(req, res) {
 	res.status(404).send('Not Found');

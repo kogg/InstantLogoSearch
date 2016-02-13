@@ -13,9 +13,10 @@ var Provider      = require('react-redux').Provider;
 var React         = require('react');
 var RouterContext = require('react-router').RouterContext;
 
-var actions = require('../actions');
-var routes  = require('../components/routes');
-var Store   = require('../store');
+var actions    = require('../actions');
+var opensearch = require('../opensearch');
+var routes     = require('../components/routes');
+var Store      = require('../store');
 
 var app = feathers();
 
@@ -62,6 +63,11 @@ app.get('/sitemap.xml', function(req, res, next) {
 		},
 		next
 	);
+});
+
+app.get('/opensearchdescription.xml', function(req, res) {
+	res.header('Content-Type', 'application/xml');
+	res.send(opensearch.description);
 });
 
 app.set('page-render', memoize(function(url, redirect) {
