@@ -11,13 +11,15 @@ var HTMLDoc = React.createClass({
 	render: function() {
 		return (
 			<html>
-				<head>
+				{/* Once https://github.com/facebook/react/issues/6029 is resolved, we can get rid of is="head" */}
+				<head is="head" profile="http://a9.com/-/spec/opensearch/1.1/">
 					{this.props.head.base.toComponent()}
 					{this.props.head.title.toComponent()}
 					<meta charSet="utf-8" />
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					{this.props.head.meta.toComponent()}
 					<link rel="stylesheet" type="text/css" href={HTMLDoc.cacheBuster('css/main.css')} />
+					<link rel="search" type="application/opensearchdescription+xml" href={this.props.domain + '/opensearchdescription.xml'} title={'Seach ' + process.env.npm_package_title} />
 					{this.props.head.link.toComponent()}
 					{process.env.GOOGLE_ANALYTICS_ID && <script type="text/javascript" dangerouslySetInnerHTML={{
 						__html: '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){' +

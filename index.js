@@ -12,6 +12,7 @@ var promisify = require('es6-promisify');
 var svg2png   = require('svg2png');
 
 var app         = require('./application');
+var opensearch  = require('./opensearch');
 var Logos       = require('./services/Logos');
 var Sources     = require('./services/Sources');
 var Suggestions = require('./services/Suggestions');
@@ -58,6 +59,73 @@ app.get('/png', function(req, res, next) {
 app.use('/api/logos', Logos);
 app.use('/api/sources', Sources);
 app.use('/api/suggestions', Suggestions);
+
+app.get('/api/logos.xml', function(req, res, next) {
+	if (!req.query.format) {
+		req.query.format = 'atom';
+	}
+	if (!_.contains(['atom', 'rss'], req.query.format)) {
+		return next();
+	}
+	var terms = (req.query.q || '').trim().replace(/[.\-()]/gi, '').toLowerCase().split(/\s+/);
+	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
+		function(results) {
+			res.header('Content-Type', 'application/xml');
+			var domain = req.protocol + '://' + (req.get('origin') || req.get('host'));
+			res.send(opensearch[req.query.format](
+				domain,
+				terms,
+				_.chain(results)
+					.groupBy('shortname')
+					.sortBy(function(logos) {
+						return -_.reduce(logos, function(memo, logo) {
+							return memo + logo.downloads;
+						}, 0);
+					})
+					.map(function(logos) {
+						return _.first(logos);
+					})
+					.map(function(logo) {
+						return _.defaults({ url: domain + '/' + logo.shortname }, logo);
+					})
+					.value()
+			));
+		},
+		next
+	);
+});
+
+app.get('/api/logo_suggestions', function(req, res, next) {
+	if (!req.query.q) {
+		return res.send(['', [], [], []]);
+	}
+	var terms = (req.query.q || '').trim().replace(/[.\-()]/gi, '').toLowerCase().split(/\s+/);
+	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
+		function(results) {
+			results = _.chain(results)
+				.groupBy('shortname')
+				.sortBy(function(logos) {
+					return -_.reduce(logos, function(memo, logo) {
+						return memo + logo.downloads;
+					}, 0);
+				})
+				.map(function(logos) {
+					return _.first(logos);
+				})
+				.value();
+			var domain = req.protocol + '://' + (req.get('origin') || req.get('host'));
+			res.json([
+				req.query.q,
+				_.pluck(results, 'name'),
+				_.pluck(results, 'name'),
+				_.map(results, function(logo) {
+					return domain + '/' + logo.shortname;
+				})
+			]);
+		},
+		next
+	);
+});
 
 app.all('*', function(req, res) {
 	res.status(404).send('Not Found');
