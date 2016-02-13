@@ -38,7 +38,7 @@ module.exports = {
 					{ link: result.url }
 				] };
 			})).value()
-		}, true);
+		}, { declaration: true });
 	},
 	rss: function(terms, results) {
 		return xml({
@@ -53,7 +53,7 @@ module.exports = {
 					{ link: { _attr: { href: process.env.npm_package_homepage + '/?q=' + terms.join('+') } } },
 					{ 'opensearch:totalResults': results.length },
 					{ 'opensearch:Query': { _attr: { role: 'request', searchTerms: terms.join(' '), startPage: 1 } } },
-					{ link: { _attr: {
+					{ 'atom:link': { _attr: {
 						rel:   'search',
 						type:  'application/opensearchdescription+xml',
 						href:  process.env.npm_package_homepage + '/opensearchdescription.xml',
@@ -66,6 +66,6 @@ module.exports = {
 					] };
 				})).value() }
 			]
-		}, true);
+		}, { declaration: true });
 	}
 };
