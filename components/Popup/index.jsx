@@ -23,7 +23,7 @@ module.exports = React.createClass({
 						<div className="popup__messaging">
 							{this.props.children}
 							<div>
-								<strong>Wow! Thank you for using Instant Logo Search</strong>
+								<strong>Wow! Thank you for using {process.env.npm_package_title}</strong>
 							</div>
 							<span>You should share us with your friends (but like no pressure)</span>
 							<ShareButtons />
