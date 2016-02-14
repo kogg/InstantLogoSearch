@@ -11,7 +11,7 @@ logos = _.chain(logos)
 			return _.pick(logo, 'id', 'name');
 		}
 		return _.chain(logo)
-			.pick('id', 'name', 'shortname')
+			.pick('id', 'name', 'shortname', 'source')
 			.defaults({
 				svg: '/' + path.join('svg', logo.source.shortname, logo.svg.path.filename),
 				png: '/png?id=' + logo.id

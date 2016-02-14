@@ -17,17 +17,12 @@ var HTMLDoc = React.createClass({
 					{this.props.head.title.toComponent()}
 					<meta charSet="utf-8" />
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
+					<meta name="msapplication-TileColor" content="#ffffff" />
+					<meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
+					<meta name="theme-color" content="#ffffff" />
 					{this.props.head.meta.toComponent()}
 					<link rel="stylesheet" type="text/css" href={HTMLDoc.cacheBuster('css/main.css')} />
 					<link rel="search" type="application/opensearchdescription+xml" href={this.props.domain + '/opensearchdescription.xml'} title={'Seach ' + process.env.npm_package_title} />
-					{this.props.head.link.toComponent()}
-					{process.env.GOOGLE_ANALYTICS_ID && <script type="text/javascript" dangerouslySetInnerHTML={{
-						__html: '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){' +
-							'(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),' +
-							'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)' +
-							'})(window,document,\'script\',\'//www.google-analytics.com/analytics.js\',\'ga\');' +
-							'ga(\'create\', \'' + process.env.GOOGLE_ANALYTICS_ID + '\', \'auto\');'
-					}} />}
 					<link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
 					<link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
 					<link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
@@ -42,9 +37,14 @@ var HTMLDoc = React.createClass({
 					<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
 					<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 					<link rel="manifest" href="/manifest.json" />
-					<meta name="msapplication-TileColor" content="#ffffff" />
-					<meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-					<meta name="theme-color" content="#ffffff" />
+					{this.props.head.link.toComponent()}
+					{process.env.GOOGLE_ANALYTICS_ID && <script type="text/javascript" dangerouslySetInnerHTML={{
+						__html: '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){' +
+							'(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),' +
+							'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)' +
+							'})(window,document,\'script\',\'//www.google-analytics.com/analytics.js\',\'ga\');' +
+							'ga(\'create\', \'' + process.env.GOOGLE_ANALYTICS_ID + '\', \'auto\');'
+					}} />}
 				</head>
 				<body>
 					<div id="react-app" dangerouslySetInnerHTML={{ __html: this.props.markup }} />

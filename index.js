@@ -14,7 +14,6 @@ var svg2png   = require('svg2png');
 var app         = require('./application');
 var opensearch  = require('./opensearch');
 var Logos       = require('./services/Logos');
-var Sources     = require('./services/Sources');
 var Suggestions = require('./services/Suggestions');
 
 var convertLogo = memoize(function(file_path, callback) {
@@ -57,7 +56,6 @@ app.get('/png', function(req, res, next) {
 	});
 });
 app.use('/api/logos', Logos);
-app.use('/api/sources', Sources);
 app.use('/api/suggestions', Suggestions);
 
 app.get('/api/logos.xml', function(req, res, next) {
