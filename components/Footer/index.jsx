@@ -8,22 +8,19 @@ module.exports = connect(createStructuredSelector({
 	sources: createSelector(
 		_.property('logos'),
 		function(logos) {
-			var logos_count_by_source = _.countBy(logos, function(logo) {
-				return logo.data.source.shortname;
-			});
+			var logos_count_by_source = {};
 			return _.chain(logos)
 				.pluck('data')
 				.pluck('source')
-				.uniq(false, 'shortname')
-				.each(function(source) {
-					source.id = source.shortname;
-					source.count = logos_count_by_source[source.shortname];
+				.tap(function(sources) {
+					logos_count_by_source = _.countBy(sources, 'shortname');
 				})
+				.uniq(false, 'shortname')
 				.reject(function(source) {
-					return source.id === 'instantlogosearch';
+					return source.shortname === 'instantlogosearch';
 				})
 				.sortBy(function(source) {
-					return -source.count;
+					return -logos_count_by_source[source.shortname];
 				})
 				.value();
 		}
@@ -41,7 +38,7 @@ module.exports = connect(createStructuredSelector({
 							<span>Contributors: </span>
 							{this.props.sources.map(function(source) {
 								return (
-									<a href={source.url} key={source.id} target="_blank">{source.name || source.shortname}</a>
+									<a href={source.url} key={source.shortname} target="_blank">{source.name || source.shortname}</a>
 								);
 							})}
 						</div>
