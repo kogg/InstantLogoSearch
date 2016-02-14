@@ -4,6 +4,7 @@ var classNames               = require('classnames');
 var createStructuredSelector = require('reselect').createStructuredSelector;
 var React                    = require('react');
 
+var ShareButtons     = require('../ShareButtons');
 var actions = require('../../actions');
 
 module.exports = connect(createStructuredSelector({
@@ -25,17 +26,7 @@ module.exports = connect(createStructuredSelector({
 			})}>
 				<div className="flex-spread">
 					<a href="/" className="logo"></a>
-					<div>
-						<a className="social-action social-action-twitter" href="">
-							<span>tweet</span>
-						</a>
-						<a className="social-action social-action-facebook" href="">
-							<span>share</span>
-						</a>
-						<a className="social-action social-action-github" href="">
-							<span>star</span>
-						</a>
-					</div>
+					<ShareButtons />
 				</div>
 				<div className="header-content">
 					<h1>{process.env.npm_package_title}</h1>

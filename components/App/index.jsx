@@ -26,7 +26,6 @@ module.exports = connect(createStructuredSelector({
 		return (
 			<div>
 				<Popup>
-					hello world
 				</Popup>
 				<Helmet
 					title={process.env.npm_package_title}
