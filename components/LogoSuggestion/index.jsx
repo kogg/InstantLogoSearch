@@ -1,8 +1,14 @@
-var _     = require('underscore');
-var error = require('debug')(process.env.npm_package_name + ':application:error');
-var React = require('react');
+var _          = require('underscore');
+var classNames = require('classnames');
+// var error      = require('debug')(process.env.npm_package_name + ':application:error');
+var React      = require('react');
 
-var actions = require('../../actions');
+// var actions = require('../../actions');
+var Popup   = require('../Popup');
+
+var SUGGESTION_UPLOADING = 1;
+var SUGGESTION_SUCCESS   = 2;
+var SUGGESTION_ERROR     = 3;
 
 module.exports = React.createClass({
 	getInitialState:           _.constant({}),
@@ -17,48 +23,45 @@ module.exports = React.createClass({
 				<div className="brand-logo__image suggestion__image"></div>
 				{this.state.popover && (
 					<div className="suggestion__popover">
-						{!this.state.success && !this.state.failure && (
+						{(this.state.suggestion !== SUGGESTION_ERROR) && (
 							<div>
 								<strong>Suggest or Upload a logo</strong>
 								<p>What logo or logo variation were you wanting?</p>
 								<form className="suggestion__form" onSubmit={function(e) {
 									e.preventDefault();
+									this.setState({ suggestion: SUGGESTION_UPLOADING });
 									this.suggestLogo(this.refs.suggest_name.value, this.refs.suggest_file.files[0]).then(
 										function() {
-											this.setState({ success: true });
+											this.setState({ suggestion: SUGGESTION_SUCCESS });
 										}.bind(this),
-										function(err) {
-											this.setState({ failure: err });
+										function() {
+											this.setState({ suggestion: SUGGESTION_ERROR });
 										}.bind(this)
 									);
 								}.bind(this)}>
 									<input className="suggestion__input" placeholder="i.e: facebook circle" type="text" ref="suggest_name" defaultValue={this.props.value}/>
 									<label className="suggestion__upload-label" htmlFor="file-upload">Upload SVG*</label>
 									<input className="suggestion__upload-input" id="file-upload" type="file" ref="suggest_file" accept=".svg" />
-									<input className="suggestion__submit suggestion__submit_success" type="submit" />
+									<input className={classNames({
+										suggestion__submit:           true,
+										suggestion__submit_success:   true,
+										suggestion__submit_uploading: this.state.suggestion === SUGGESTION_UPLOADING
+									})} type="submit" />
 									<span className="suggestion__footnote">*Optional but appreciated 😇</span>
 								</form>
 							</div>
 						)}
-						{this.state.success && (
-							<div>
-								<strong>Success!</strong>
-								<p>Thank you so much! We will quickly review your request and try to get something up later today!</p>
-								<span className="emoji">😍</span>
-								<a className="suggestion__another-one" onClick={function(e) {
-									e.preventDefault();
-									this.setState({ success: null });
-								}.bind(this)}>submit another one</a>
-							</div>
-						)}
-						{this.state.failure && (
+						{(this.state.suggestion === SUGGESTION_SUCCESS) && <Popup onClose={function() {
+							this.setState({ suggestion: null });
+						}.bind(this)} />}
+						{(this.state.suggestion === SUGGESTION_ERROR) && (
 							<div>
 								<strong>Error! Error!</strong>
-								<p>We're sorry but something went terribly wrong! {this.state.failure.message}</p>
+								<p>We're sorry but something went terribly wrong!</p>
 								<span className="emoji">😓</span>
 								<a className="suggestion__another-one" onClick={function(e) {
 									e.preventDefault();
-									this.setState({ failure: null });
+									this.setState({ suggestion: null });
 								}.bind(this)}>let's try again!</a>
 							</div>
 						)}
@@ -87,8 +90,18 @@ module.exports = React.createClass({
 			this.refs.suggest_name.value = this.props.value;
 		}
 	},
-	suggestLogo: function(name, file) {
+	suggestLogo: function(name/* , file */) {
 		ga('send', 'event', 'Logos', 'Suggest Logo', name);
+		return new Promise(function(resolve, reject) {
+			setTimeout(function() {
+				if (Math.random() < 0.5) {
+					resolve();
+				} else {
+					reject();
+				}
+			}, 2000);
+		});
+		/* FIXME
 		return Promise.resolve(file)
 			.then(function(file) {
 				if (!file) {
@@ -116,5 +129,6 @@ module.exports = React.createClass({
 				ga('send', 'exception', { exDescription: err.message, exFatal: true });
 				throw err;
 			});
+		*/
 	}
 });
