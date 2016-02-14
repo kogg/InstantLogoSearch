@@ -22,21 +22,26 @@
     opacity: .4;
   }
 
-  &-twitter:before {
+  &_twitter:before {
     background-image: url('twitter.svg');
   }
 
-  &-github:before {
+  &_github:before {
     background-image: url('github.svg');
   }
 
-  &-facebook:before {
+  &_facebook:before {
     background-size: 43%;
     background-image: url('facebook.svg');
   }
 
-  &:hover:before {
-    opacity: .6;
+  &:hover {
+    color: rgba(0, 0, 0, 0.6);
+    border-color: rgba(0, 0, 0, 0.3);
+
+    &:before {
+      opacity: .6;
+    }
   }
 
   @media (max-width: 740px) {
@@ -65,9 +70,4 @@
   vertical-align: middle;
   margin-right: 6px;
   opacity: .6;
-}
-
-.social-action:hover {
-  color: rgba(0, 0, 0, 0.6);
-  border-color: rgba(0, 0, 0, 0.3);
 }
