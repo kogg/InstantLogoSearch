@@ -5,7 +5,7 @@ var React         = require('react');
 
 var ShareButtons = require('../ShareButtons');
 
-var HTMLDoc = React.createClass({
+module.exports = React.createClass({
 	componentDidMount: function() {
 		disableScroll.on();
 	},
@@ -54,5 +54,3 @@ var HTMLDoc = React.createClass({
 		disableScroll.off();
 	}
 });
-
-module.exports = HTMLDoc;
