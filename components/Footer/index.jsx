@@ -46,7 +46,7 @@ module.exports = connect(createStructuredSelector({
 							})}
 						</div>
 						<div>
-							<a className="footer__social-icon footer__social-icon_twitter"></a>
+							<a className="footer__social-icon footer__social-icon_twitter" target="_blank" href="https://twitter.com/Instant_Logos"></a>
 							<a className="footer__social-icon footer__social-icon_github"></a>
 						</div>
 					</div>
