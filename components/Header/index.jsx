@@ -25,7 +25,16 @@ module.exports = connect(createStructuredSelector({
 				header_collapsed: this.state.collapsed
 			})}>
 				<div className="flex-spread">
-					<a href="/" className="logo"></a>
+					<a href="/" className="logo" onClick={function(e) {
+						if (!this.state.collapsed) {
+							return;
+						}
+						e.preventDefault();
+						this.setState({ collapsed: false });
+						this.props.dispatch(actions.search(''));
+						this.refs.search.select();
+						ga('send', 'event', 'Search', 'Clear', 'Header Logo');
+					}.bind(this)}></a>
 					<ShareButtons />
 				</div>
 				<div className="header-content">
@@ -35,6 +44,9 @@ module.exports = connect(createStructuredSelector({
 						<form method="GET" onSubmit={_.partial(_.result, _, 'preventDefault')} >
 							<label>
 								<i className="search-icon" onClick={function() {
+									if (!this.state.collapsed) {
+										return;
+									}
 									this.setState({ collapsed: false });
 									this.props.dispatch(actions.search(''));
 									this.refs.search.select();
@@ -54,7 +66,7 @@ module.exports = connect(createStructuredSelector({
 	},
 	componentDidMount: function() {
 		var keydown = function(e) {
-			if (e.keyCode !== 27 && this.refs.search !== '') {
+			if (e.keyCode !== 27 || this.refs.search.value === '') {
 				return;
 			}
 			e.preventDefault();
