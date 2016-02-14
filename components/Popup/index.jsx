@@ -1,21 +1,19 @@
-var fs      = require('fs');
-var path    = require('path');
 var Gateway = require('react-gateway').Gateway;
+var Modal   = require('react-modal2').default;
 var React   = require('react');
 
 var ShareButtons = require('../ShareButtons');
 
 var HTMLDoc = React.createClass({
-	statics: {
-		cacheBuster: function(assetPath) {
-			return assetPath + '?' + fs.statSync(path.join(__dirname, '../dist', assetPath)).mtime.getTime().toString(16);
-		}
-	},
 	render: function() {
 		return (
 			<Gateway into="global">
-				<div className="popup flex">
-					<div className="popup__container">
+				<Modal
+					onClose={function() {
+						console.log('lol');
+					}}
+					backdropClassName="popup__container flex"
+					modalClassName="popup">
 						<div className="popup__messaging">
 							{this.props.children}
 							<div>
@@ -44,8 +42,7 @@ var HTMLDoc = React.createClass({
 								</li>
 							</ul>
 						</div>
-					</div>
-				</div>
+				</Modal>
 			</Gateway>
 		);
 	}

@@ -107,6 +107,7 @@
     "react-dom": "^0.14.3",
     "react-gateway": "^2.0.4",
     "react-helmet": "^2.3.1",
+    "react-modal2": "^3.0.2",
     "react-redux": "^4.0.6",
     "react-router": "^2.0.0",
     "redux": "^3.0.5",
