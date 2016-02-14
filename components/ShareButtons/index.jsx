@@ -16,7 +16,11 @@ module.exports = React.createClass({
 					onClick={function() {
 						ga('send', 'social', 'Twitter', 'Share', process.env.npm_package_homepage);
 					}}>tweet</a>
-				<a className="social-action social-action-facebook">share</a>
+				<a className="social-action social-action-facebook" target="_blank"
+					href={'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(process.env.npm_package_homepage)}
+					onClick={function() {
+						ga('send', 'social', 'Facebook', 'Share', process.env.npm_package_homepage);
+					}}>share</a>
 				<a className="social-action social-action-github">star</a>
 			</div>
 		);
