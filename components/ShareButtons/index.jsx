@@ -4,7 +4,7 @@ module.exports = React.createClass({
 	render: function() {
 		return (
 			<div className="ShareButtons">
-				<a className="social-action social-action-twitter" target="_blank"
+				<a className="social-action social-action_twitter" target="_blank"
 					href={
 						'https://twitter.com/intent/tweet' +
 						'?text=' + encodeURIComponent('I ♥️ Logos!') +
@@ -16,12 +16,16 @@ module.exports = React.createClass({
 					onClick={function() {
 						ga('send', 'social', 'Twitter', 'Share', process.env.npm_package_homepage);
 					}}>tweet</a>
-				<a className="social-action social-action-facebook" target="_blank"
+				<a className="social-action social-action_facebook" target="_blank"
 					href={'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(process.env.npm_package_homepage)}
 					onClick={function() {
 						ga('send', 'social', 'Facebook', 'Share', process.env.npm_package_homepage);
 					}}>share</a>
-				<a className="social-action social-action-github">star</a>
+				<a className="social-action social-action_github" target="_blank"
+					href="https://github.com/kogg/instant-logos/stargazers"
+					onClick={function() {
+						ga('send', 'social', 'GitHub', 'Star', 'https://github.com/kogg/instant-logos/stargazers');
+					}}>star</a>
 			</div>
 		);
 	}
