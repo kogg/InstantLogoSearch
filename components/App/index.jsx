@@ -12,7 +12,6 @@ var app        = require('../../application');
 var Collection = require('../Collection');
 var Footer     = require('../Footer');
 var Header     = require('../Header');
-var Popup     = require('../Popup');
 
 FeathersMixin.setFeathersApp(app);
 FeathersMixin.setFeathersActions(actions);
@@ -28,8 +27,6 @@ module.exports = connect(createStructuredSelector({
 		return (
 			<GatewayProvider>
 				<div>
-					<Popup>
-					</Popup>
 					<Helmet
 						title={process.env.npm_package_title}
 						meta={[

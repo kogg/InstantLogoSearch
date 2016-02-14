@@ -6,14 +6,18 @@ var React                    = require('react');
 
 var actions        = require('../../actions');
 var LogoSuggestion = require('../LogoSuggestion');
+var Popup          = require('../Popup');
 
 module.exports = connect(createStructuredSelector({
 	collection: _.property('collection')
 }))(React.createClass({
-	getInitialState: _.constant({ considering: null }),
+	getInitialState: _.constant({ considering: null, popup: false }),
 	render:          function() {
 		return (
 			<div className="logos">
+				{this.state.popup && <Popup onClose={function() {
+					this.setState({ popup: false });
+				}.bind(this)} />}
 				<div>
 					{this.props.heading && (
 						<div className="logos__title">
@@ -93,6 +97,7 @@ module.exports = connect(createStructuredSelector({
 		);
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Logos', 'Download ' + filetype.toUpperCase(), logo.id, 1);
+		this.setState({ popup: true });
 	},
 	startInfiniteScroll: function() {
 		var listener = _.throttle(function() {

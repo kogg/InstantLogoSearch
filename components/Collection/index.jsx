@@ -9,6 +9,7 @@ var JSZip                    = require('jszip');
 var React                    = require('react');
 
 var actions = require('../../actions');
+var Popup   = require('../Popup');
 
 module.exports = connect(createStructuredSelector({
 	logos: createSelector(
@@ -40,13 +41,17 @@ module.exports = connect(createStructuredSelector({
 	),
 	considering: _.property('considering')
 }))(React.createClass({
-	render: function() {
+	getInitialState: _.constant({ popup: false }),
+	render:          function() {
 		return (
 			<div className={classNames({
 				collection:             true,
 				collection_empty:       _.isEmpty(this.props.logos),
 				collection_untouchable: this.props.considering
 			})}>
+				{this.state.popup && <Popup onClose={function() {
+					this.setState({ popup: false });
+				}.bind(this)} />}
 				<ul className="collection__logos">
 					{this.props.logos.map(function(logo) {
 						return (
@@ -119,7 +124,8 @@ module.exports = connect(createStructuredSelector({
 				.value()
 		).then(function() {
 			saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
-		});
+			this.setState({ popup: true });
+		}.bind(this));
 
 		promise.catch(function(err) {
 			error(err);

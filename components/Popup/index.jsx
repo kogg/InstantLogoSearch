@@ -5,6 +5,10 @@ var React         = require('react');
 
 var ShareButtons = require('../ShareButtons');
 
+Modal.getApplicationElement = function() {
+	return document.getElementById('react-app');
+};
+
 module.exports = React.createClass({
 	componentDidMount: function() {
 		disableScroll.on();
@@ -13,9 +17,7 @@ module.exports = React.createClass({
 		return (
 			<Gateway into="global">
 				<Modal
-					onClose={function() {
-						console.log('lol');
-					}}
+					onClose={this.props.onClose}
 					backdropClassName="popup__container flex"
 					modalClassName="popup">
 						<div className="popup__messaging">
