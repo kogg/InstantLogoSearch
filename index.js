@@ -1,15 +1,16 @@
 require('babel-register');
-var _         = require('underscore');
-var debug     = require('debug')(process.env.npm_package_name + ':application');
-var error     = require('debug')(process.env.npm_package_name + ':application:error');
-var feathers  = require('feathers');
-var fs        = require('fs');
-var logos     = require('instant-logos');
-var memoize   = require('memoizee');
-var os        = require('os');
-var path      = require('path');
-var promisify = require('es6-promisify');
-var svg2png   = require('svg2png');
+var _           = require('underscore');
+var debug       = require('debug')(process.env.npm_package_name + ':application');
+var error       = require('debug')(process.env.npm_package_name + ':application:error');
+var feathers    = require('feathers');
+var fs          = require('fs');
+var levenshtein = require('fast-levenshtein');
+var logos       = require('instant-logos');
+var memoize     = require('memoizee');
+var os          = require('os');
+var path        = require('path');
+var promisify   = require('es6-promisify');
+var svg2png     = require('svg2png');
 
 var app         = require('./application');
 var opensearch  = require('./opensearch');
@@ -74,14 +75,12 @@ app.get('/api/logos.xml', function(req, res, next) {
 				domain,
 				terms,
 				_.chain(results)
-					.groupBy('shortname')
-					.sortBy(function(logos) {
-						return -_.reduce(logos, function(memo, logo) {
-							return memo + logo.downloads;
-						}, 0);
-					})
-					.map(function(logos) {
-						return _.first(logos);
+					.uniq(false, 'shortname')
+					.sortBy(function(logo) {
+						return _.chain(terms)
+							.map(_.partial(levenshtein.get, logo.shortname))
+							.max()
+							.value();
 					})
 					.map(function(logo) {
 						return _.defaults({ url: domain + '/' + logo.shortname }, logo);
@@ -101,21 +100,20 @@ app.get('/api/logo_suggestions', function(req, res, next) {
 	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
 		function(results) {
 			results = _.chain(results)
-				.groupBy('shortname')
-				.sortBy(function(logos) {
-					return -_.reduce(logos, function(memo, logo) {
-						return memo + logo.downloads;
-					}, 0);
-				})
-				.map(function(logos) {
-					return _.first(logos);
+				.uniq(false, 'shortname')
+				.sortBy(function(logo) {
+					return _.chain(terms)
+						.map(_.partial(levenshtein.get, logo.shortname))
+						.max()
+						.value();
 				})
 				.value();
 			var domain = req.protocol + '://' + (req.get('origin') || req.get('host'));
+			var names  = _.pluck(results, 'name');
 			res.json([
 				req.query.q,
-				_.pluck(results, 'name'),
-				_.pluck(results, 'name'),
+				names,
+				names,
 				_.map(results, function(logo) {
 					return domain + '/' + logo.shortname;
 				})
