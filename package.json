@@ -9,9 +9,9 @@
     "url": "git+https://github.com/cameronrohani/InstantLogoSearch.git"
   },
   "author": {
-    "name": "Kogg",
+    "name": "kogg",
     "email": "teamkogg@gmail.com",
-    "url": "http://ko.gg"
+    "url": "http://kogg.co"
   },
   "license": "ISC",
   "main": "index.js",
