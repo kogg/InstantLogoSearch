@@ -4,6 +4,8 @@ var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
 var React                    = require('react');
 
+var Popup = require('../Popup');
+
 module.exports = connect(createStructuredSelector({
 	sources: createSelector(
 		_.property('logos'),
@@ -22,13 +24,18 @@ module.exports = connect(createStructuredSelector({
 				.sortBy(function(source) {
 					return -logos_count_by_source[source.shortname];
 				})
+				.first(3)
 				.value();
 		}
 	)
 }))(React.createClass({
-	render: function() {
+	getInitialState: _.constant({ popup: false }),
+	render:          function() {
 		return (
 			<div className="footer">
+				{this.state.popup && <Popup onClose={function() {
+					this.setState({ popup: false });
+				}.bind(this)} />}
 				<div className="footer__top flex-spread">
 					<div>
 						<h4>{process.env.npm_package_title}</h4>
@@ -41,6 +48,10 @@ module.exports = connect(createStructuredSelector({
 									<a href={source.url} key={source.shortname} target="_blank">{source.name || source.shortname}</a>
 								);
 							})}
+							<a href="https://github.com/kogg/instant-logos" onClick={function(e) {
+								e.preventDefault();
+								this.setState({ popup: true });
+							}.bind(this)}>...</a>
 						</div>
 						<div>
 							<a className="footer__social-icon footer__social-icon_twitter" target="_blank" href="https://twitter.com/Instant_Logos"></a>
