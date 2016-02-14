@@ -41,6 +41,7 @@ module.exports = connect(createStructuredSelector({
 				<Helmet
 					title={name + ' | ' + process.env.npm_package_title}
 					meta={[
+						{ property: 'og:url', content: process.env.npm_package_homepage + '/' + this.props.params.shortname },
 						{ property: 'og:title', content: name },
 						{ name: 'twitter:title', content: name + ' | ' + process.env.npm_package_title },
 						{ name: 'totalResults', content: shortname_logos.length },
