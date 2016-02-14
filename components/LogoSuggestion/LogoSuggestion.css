@@ -95,6 +95,23 @@
         border: 1px solid #02b875;
       }
     }
+
+    &_uploading {
+      background-color: #02b875;
+      color: transparent;
+      border: 1px solid #02b875;
+      background-image: url('loader.gif');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 16px;
+      opacity: 1;
+      cursor: not-allowed;
+
+      &:hover {
+        color: transparent !important;
+        border: 1px solid #02b875;
+      }
+    }
   }
 
   &__upload-input {

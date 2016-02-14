@@ -78,6 +78,7 @@
   justify-content: space-between;
   align-items: center;
   background: #fff;
+  cursor: text;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
 
   & .search-icon {
