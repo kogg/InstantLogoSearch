@@ -81,6 +81,7 @@
     "compression": "^1.6.1",
     "cssnano": "^3.4.0",
     "debug": "^2.2.0",
+    "disable-scroll": "^0.2.6",
     "envify": "^3.4.0",
     "es6-promisify": "^3.0.0",
     "express-react-views": "^0.9.0",

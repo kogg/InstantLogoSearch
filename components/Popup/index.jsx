@@ -1,10 +1,14 @@
-var Gateway = require('react-gateway').Gateway;
-var Modal   = require('react-modal2').default;
-var React   = require('react');
+var disableScroll = process.browser && require('disable-scroll');
+var Gateway       = require('react-gateway').Gateway;
+var Modal         = require('react-modal2').default;
+var React         = require('react');
 
 var ShareButtons = require('../ShareButtons');
 
 var HTMLDoc = React.createClass({
+	componentDidMount: function() {
+		disableScroll.on();
+	},
 	render: function() {
 		return (
 			<Gateway into="global">
@@ -45,6 +49,9 @@ var HTMLDoc = React.createClass({
 				</Modal>
 			</Gateway>
 		);
+	},
+	componentWillUnmount: function() {
+		disableScroll.off();
 	}
 });
 
