@@ -23,7 +23,14 @@ module.exports = connect(createStructuredSelector({
 			<div className={classNames({
 				header:           true,
 				header_collapsed: this.state.collapsed
-			})}>
+			})}
+				onClick={function(e) {
+					if (!this.state.collapsed) {
+						return;
+					}
+					e.preventDefault();
+					this.refs.search.select();
+				}.bind(this)}>
 				<div className="flex-spread">
 					<a href="/" className="logo" onClick={function(e) {
 						if (!this.state.collapsed) {
@@ -53,6 +60,9 @@ module.exports = connect(createStructuredSelector({
 									ga('send', 'event', 'Search', 'Clear', 'Search Icon');
 								}.bind(this)}></i>
 								<input className="search-input" defaultValue={this.props.searching} ref="search" type="text" autoFocus autoComplete="off" placeholder="What logo are you looking for?" name="q"
+									onClick={function(e) {
+										e.stopPropagation();
+									}}
 									onChange={function() {
 										this.setState({ collapsed: true });
 										this.props.dispatch(actions.search(this.refs.search.value));
