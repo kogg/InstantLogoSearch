@@ -2,6 +2,8 @@ var _                        = require('underscore');
 var connect                  = require('react-redux').connect;
 var createStructuredSelector = require('reselect').createStructuredSelector;
 var FeathersMixin            = require('feathers-react-redux').FeathersMixin;
+var GatewayDest              = require('react-gateway').GatewayDest;
+var GatewayProvider          = require('react-gateway').GatewayProvider;
 var Helmet                   = require('react-helmet');
 var React                    = require('react');
 
@@ -24,25 +26,28 @@ module.exports = connect(createStructuredSelector({
 	},
 	render: function() {
 		return (
-			<div>
-				<Popup>
-				</Popup>
-				<Helmet
-					title={process.env.npm_package_title}
-					meta={[
-						{ name: 'description', content: process.env.npm_package_description },
-						{ property: 'og:url', content: process.env.npm_package_homepage },
-						{ property: 'og:site_name', content: process.env.npm_package_title },
-						{ property: 'og:title', content: process.env.npm_package_title },
-						{ property: 'og:description', content: process.env.npm_package_description },
-						{ name: 'twitter:title', content: process.env.npm_package_title },
-						{ name: 'twitter:description', content: process.env.npm_package_description }
-					]} />
-				<Header location={this.props.location} />
-				{this.props.children}
-				<Footer />
-				{this.props.collection && <Collection />}
-			</div>
+			<GatewayProvider>
+				<div>
+					<Popup>
+					</Popup>
+					<Helmet
+						title={process.env.npm_package_title}
+						meta={[
+							{ name: 'description', content: process.env.npm_package_description },
+							{ property: 'og:url', content: process.env.npm_package_homepage },
+							{ property: 'og:site_name', content: process.env.npm_package_title },
+							{ property: 'og:title', content: process.env.npm_package_title },
+							{ property: 'og:description', content: process.env.npm_package_description },
+							{ name: 'twitter:title', content: process.env.npm_package_title },
+							{ name: 'twitter:description', content: process.env.npm_package_description }
+						]} />
+					<GatewayDest name="global" />
+					<Header location={this.props.location} />
+					{this.props.children}
+					<Footer />
+					{this.props.collection && <Collection />}
+				</div>
+			</GatewayProvider>
 		);
 	},
 	componentDidMount: function() {
