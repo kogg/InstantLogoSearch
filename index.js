@@ -34,7 +34,12 @@ _.chain(logos)
 		return logo.svg.path.directory + '///' + logo.source.shortname;
 	})
 	.each(function(logo) {
-		app.use('/svg/' + logo.source.shortname, feathers.static(logo.svg.path.directory, { maxage: '365d' }));
+		app.use('/svg/' + logo.source.shortname, feathers.static(logo.svg.path.directory, {
+			maxage:     '365d',
+			setHeaders: function(res, filepath) {
+				res.setHeader('Content-Disposition', 'attachment; filename="' + path.basename(filepath) + '"');
+			}
+		}));
 	});
 app.get('/png', function(req, res, next) {
 	if (!req.query.id) {
@@ -53,6 +58,7 @@ app.get('/png', function(req, res, next) {
 		}
 		res.set('Cache-Control', 'public, max-age=31536000');
 		res.set('Content-Type', 'image/png');
+		res.set('Content-Disposition', 'attachment; filename="' + logo.id + '.png"');
 		res.send(png);
 	});
 });
