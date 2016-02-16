@@ -46,7 +46,7 @@ module.exports = React.createClass({
 										suggestion__submit:           true,
 										suggestion__submit_success:   true,
 										suggestion__submit_uploading: this.state.suggestion === SUGGESTION_UPLOADING
-									})} type="submit" />
+									})} type="submit" disabled={this.state.suggestion === SUGGESTION_UPLOADING} />
 									<span className="suggestion__footnote">*Optional but appreciated 😇</span>
 								</form>
 							</div>
