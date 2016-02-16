@@ -115,7 +115,7 @@ module.exports = connect(createStructuredSelector({
 								error.response = response;
 								throw error;
 							}
-							return response.text();
+							return response.arrayBuffer();
 						})
 						.then(function(data) {
 							zip.file(logos[i].id + '.' + filetype, data);
