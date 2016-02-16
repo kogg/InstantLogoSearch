@@ -1,7 +1,6 @@
 .footer {
   height: 100px;
   padding: 0 30px;
-  background: white;
 
   &__top {
     padding: 15px 0;
