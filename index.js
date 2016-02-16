@@ -1,19 +1,19 @@
 require('babel-register');
-var _           = require('underscore');
-var debug       = require('debug')(process.env.npm_package_name + ':application');
-var error       = require('debug')(process.env.npm_package_name + ':application:error');
-var feathers    = require('feathers');
-var fs          = require('fs');
-var levenshtein = require('fast-levenshtein');
-var logos       = require('instant-logos');
-var memoize     = require('memoizee');
-var os          = require('os');
-var path        = require('path');
-var promisify   = require('es6-promisify');
-var svg2png     = require('svg2png');
+var _         = require('underscore');
+var debug     = require('debug')(process.env.npm_package_name + ':application');
+var error     = require('debug')(process.env.npm_package_name + ':application:error');
+var feathers  = require('feathers');
+var fs        = require('fs');
+var logos     = require('instant-logos');
+var memoize   = require('memoizee');
+var os        = require('os');
+var path      = require('path');
+var promisify = require('es6-promisify');
+var svg2png   = require('svg2png');
 
 var app         = require('./application');
 var opensearch  = require('./opensearch');
+var search      = require('./search');
 var Logos       = require('./services/Logos');
 var Suggestions = require('./services/Suggestions');
 
@@ -66,22 +66,16 @@ app.get('/api/logos.xml', function(req, res, next) {
 	if (!_.contains(['atom', 'rss'], req.query.format)) {
 		return next();
 	}
-	var terms = (req.query.q || '').trim().replace(/[.\-()]/gi, '').toLowerCase().split(/\s+/);
-	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
+	app.service('/api/logos').find().then(
 		function(results) {
+			var terms = search.terms(req.query.q);
 			res.header('Content-Type', 'application/xml');
 			var domain = req.protocol + '://' + (req.get('origin') || req.get('host'));
 			res.send(opensearch[req.query.format](
 				domain,
 				terms,
-				_.chain(results)
+				_.chain(search(results, terms))
 					.uniq(false, 'shortname')
-					.sortBy(function(logo) {
-						return _.chain(terms)
-							.map(_.partial(levenshtein.get, logo.shortname))
-							.max()
-							.value();
-					})
 					.map(function(logo) {
 						return _.defaults({ url: domain + '/' + logo.shortname }, logo);
 					})
@@ -96,26 +90,16 @@ app.get('/api/logo_suggestions', function(req, res, next) {
 	if (!req.query.q) {
 		return res.send(['', [], [], []]);
 	}
-	var terms = (req.query.q || '').trim().replace(/[.\-()]/gi, '').toLowerCase().split(/\s+/);
-	app.service('/api/logos').find({ query: { shortname: { $in: terms } } }).then(
+	app.service('/api/logos').find().then(
 		function(results) {
-			results = _.chain(results)
-				.uniq(false, 'shortname')
-				.sortBy(function(logo) {
-					return _.chain(terms)
-						.map(_.partial(levenshtein.get, logo.shortname))
-						.max()
-						.value();
-				})
-				.value();
-			var domain = req.protocol + '://' + (req.get('origin') || req.get('host'));
+			results = _.uniq(search(results, req.query.q), false, 'shortname');
 			var names  = _.pluck(results, 'name');
 			res.json([
 				req.query.q,
 				names,
 				names,
 				_.map(results, function(logo) {
-					return domain + '/' + logo.shortname;
+					return req.protocol + '://' + (req.get('origin') || req.get('host')) + '/' + logo.shortname;
 				})
 			]);
 		},
