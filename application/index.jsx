@@ -92,7 +92,7 @@ app.set('page-render', memoize(function(url, domain, redirect) {
 		});
 }, { length: 2 })); // TODO Won't this cache actions performed in serverRender forever?
 
-app.get(/^(?!\/(?:(?:api|svg)\/|png))[^.]*$/, function(req, res, next) {
+app.get(/^(?!\/(?:(?:api|svg)\/|png|zip))[^.]*$/, function(req, res, next) {
 	app.get('page-render')(req.url, req.protocol + '://' + (req.get('origin') || req.get('host')), res.redirect.bind(res)).then(
 		function(render) {
 			if (!render) {

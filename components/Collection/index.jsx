@@ -12,6 +12,7 @@ var actions = require('../../actions');
 var Popup   = require('../Popup');
 
 var FILETYPES = ['svg', 'png'];
+var IS_SAFARI = global.window && /Version\/[\d\.]+.*Safari/.test(global.navigator.userAgent);
 
 module.exports = connect(createStructuredSelector({
 	logos: createSelector(
@@ -86,10 +87,14 @@ module.exports = connect(createStructuredSelector({
 						}
 						return _.map(FILETYPES, function(filetype) {
 							return (
-								<a key={filetype} download="logos.zip" href={'zip?ids[]=' + _.pluck(this.props.logos, 'id').join('&ids[]=')} onClick={function(e) {
+								<a key={filetype} download="logos.zip" href={'zip?filetype=' + filetype + '&ids[]=' + _.pluck(this.props.logos, 'id').join('&ids[]=')} onClick={function(e) {
+									this.setState({ popup: true });
+									if (IS_SAFARI) {
+										return this.downloadedLogos(this.props.logos, 'svg');
+									}
 									e.preventDefault();
-									this.downloadAndZip(this.props.logos, 'svg').then(_.partial(this.downloadedLogos, this.props.logos, 'svg'));
-								}.bind(this)}>Download SVGs</a>
+									this.zipAndDownload(this.props.logos, 'svg').then(_.partial(this.downloadedLogos, this.props.logos, 'svg'));
+								}.bind(this)}>Download {filetype.toUpperCase()}s</a>
 							);
 						}.bind(this));
 					}.bind(this))()}
@@ -97,7 +102,33 @@ module.exports = connect(createStructuredSelector({
 			</div>
 		);
 	},
-	downloadAndZip: function(logos, filetype) {
+	downloadedLogos: function(logos, filetype) {
+		_.each(logos, function(logo) {
+			ga(
+				'ec:addProduct',
+				_.chain(logo)
+					.pick('id', 'name')
+					.extend({ variant: filetype, quantity: 1 })
+					.value()
+			);
+		});
+		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.=+/@#$%^&*_', null)).join('') });
+		ga('send', 'event', 'Collection', 'Download ' + filetype.toUpperCase(), null, logos.length);
+		this.props.dispatch(actions.clearCollection());
+	},
+	uncollectLogo: function(logo) {
+		ga(
+			'ec:addProduct',
+			_.chain(logo)
+				.pick('id', 'name')
+				.extend({ quantity: 1 })
+				.value()
+		);
+		ga('ec:setAction', 'remove');
+		ga('send', 'event', 'Collection', 'Remove from Collection', logo.id);
+		this.props.dispatch(actions.removeFromCollection(logo));
+	},
+	zipAndDownload: function(logos, filetype) {
 		var zip = new JSZip();
 
 		var promise = Promise.all(_.map(logos, function(logo) {
@@ -127,8 +158,7 @@ module.exports = connect(createStructuredSelector({
 				});
 		})).then(function() {
 			saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
-			this.setState({ popup: true });
-		}.bind(this));
+		});
 
 		promise.catch(function(err) {
 			error(err);
@@ -136,31 +166,5 @@ module.exports = connect(createStructuredSelector({
 		});
 
 		return promise;
-	},
-	downloadedLogos: function(logos, filetype) {
-		_.each(logos, function(logo) {
-			ga(
-				'ec:addProduct',
-				_.chain(logo)
-					.pick('id', 'name')
-					.extend({ variant: filetype, quantity: 1 })
-					.value()
-			);
-		});
-		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.=+/@#$%^&*_', null)).join('') });
-		ga('send', 'event', 'Collection', 'Download ' + filetype.toUpperCase(), null, logos.length);
-		this.props.dispatch(actions.clearCollection());
-	},
-	uncollectLogo: function(logo) {
-		ga(
-			'ec:addProduct',
-			_.chain(logo)
-				.pick('id', 'name')
-				.extend({ quantity: 1 })
-				.value()
-		);
-		ga('ec:setAction', 'remove');
-		ga('send', 'event', 'Collection', 'Remove from Collection', logo.id);
-		this.props.dispatch(actions.removeFromCollection(logo));
 	}
 }));

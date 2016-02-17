@@ -5,26 +5,17 @@ var error     = require('debug')(process.env.npm_package_name + ':application:er
 var feathers  = require('feathers');
 var fs        = require('fs');
 var logos     = require('instant-logos');
-var memoize   = require('memoizee');
 var os        = require('os');
 var path      = require('path');
 var promisify = require('es6-promisify');
-var svg2png   = require('svg2png');
+var JSZip     = require('jszip');
 
 var app         = require('./application');
+var convert     = require('./convert');
 var opensearch  = require('./opensearch');
 var search      = require('./search');
 var Logos       = require('./services/Logos');
 var Suggestions = require('./services/Suggestions');
-
-var convertLogo = memoize(function(file_path, callback) {
-	return promisify(fs.readFile)(file_path)
-		.then(_.partial(svg2png, _, { height: 512 }))
-		.then(
-			_.partial(callback, null),
-			callback
-		);
-}, { length: 1, async: true, maxAge: 30 * 60 * 1000, preFetch: true });
 
 _.chain(logos)
 	.reject(function(logo) {
@@ -52,15 +43,52 @@ app.get('/png', function(req, res, next) {
 		return next();
 	}
 
-	convertLogo(path.join(logo.svg.path.directory, logo.svg.path.filename), function(err, png) {
-		if (err) {
-			return next(err);
-		}
-		res.set('Cache-Control', 'public, max-age=31536000');
-		res.set('Content-Type', 'image/png');
-		res.set('Content-Disposition', 'attachment; filename="' + logo.id + '.png"');
-		res.send(png);
+	convert(path.join(logo.svg.path.directory, logo.svg.path.filename)).then(
+		function(data) {
+			res.set('Cache-Control', 'public, max-age=31536000');
+			res.set('Content-Type', 'image/png');
+			res.set('Content-Disposition', 'attachment; filename="' + logo.id + '.png"');
+			res.send(data);
+		},
+		next
+	);
+});
+app.get('/zip', function(req, res, next) {
+	if (!_.contains(['svg', 'png'], req.query.filetype) || !req.query.ids) {
+		return next();
+	}
+
+	var zippable_logos = _.filter(logos, function(logo) {
+		return logo.svg && logo.svg.path && _.contains(req.query.ids, logo.id);
 	});
+
+	if (req.query.ids.length !== zippable_logos.length) {
+		return next();
+	}
+
+	zippable_logos = _.chain(zippable_logos).compact().uniq().value();
+
+	var zip = new JSZip();
+	Promise.all(_.map(zippable_logos, function(logo) {
+		var file_path = path.join(logo.svg.path.directory, logo.svg.path.filename);
+		return (req.query.filetype === 'svg' ? promisify(fs.readFile)(file_path) : convert(file_path)).then(function(data) {
+			var h = 0;
+			var name;
+			do {
+				h++;
+				name = logo.name + (h === 1 ? '' : ' (' + h + ')') + '.' + req.query.filetype;
+			} while (zip.file(name));
+			zip.file(name, data);
+		});
+	})).then(
+		function() {
+			res.set('Cache-Control', 'public, max-age=31536000');
+			res.set('Content-Type', 'application/zip');
+			res.set('Content-Disposition', 'attachment; filename=logos.zip');
+			res.send(zip.generate({ type: 'nodebuffer' }));
+		},
+		next
+	);
 });
 app.use('/api/logos', Logos);
 app.use('/api/suggestions', Suggestions);
