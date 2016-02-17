@@ -64,7 +64,7 @@ module.exports = connect(createStructuredSelector({
 						<span>copyright 2016</span>
 					</div>
 					<div>
-						<span>built by <a href={process.env.npm_package_author_url}>{process.env.npm_package_author_name}</a></span>
+						<span>built by <a href={process.env.npm_package_author_url} target="_blank">{process.env.npm_package_author_name}</a></span>
 					</div>
 				</div>
 			</div>
