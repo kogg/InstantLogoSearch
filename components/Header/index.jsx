@@ -76,6 +76,11 @@ module.exports = connect(createStructuredSelector({
 	},
 	componentDidMount: function() {
 		var keydown = function(e) {
+			if (e.keyCode === 70 && (e.ctrlKey || e.metaKey)) {
+				e.preventDefault();
+				this.refs.search.select();
+				return;
+			}
 			if (e.keyCode !== 27 || this.refs.search.value === '') {
 				return;
 			}
