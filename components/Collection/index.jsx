@@ -11,6 +11,8 @@ var React                    = require('react');
 var actions = require('../../actions');
 var Popup   = require('../Popup');
 
+var FILETYPES = ['svg', 'png'];
+
 module.exports = connect(createStructuredSelector({
 	logos: createSelector(
 		createSelector(
@@ -70,59 +72,60 @@ module.exports = connect(createStructuredSelector({
 						);
 					}.bind(this))}
 				</ul>
-				{Boolean(this.props.logos.length) && ((this.props.logos.length > 1) ?
-					(
-						<div className="collection__ctas">
-							<a href="" download onClick={function(e) {
-								e.preventDefault();
-								this.downloadAndZip(this.props.logos, 'svg').then(_.partial(this.downloadedLogos, this.props.logos, 'svg'));
-							}.bind(this)}>Download SVGs</a>
-							<a href="" download onClick={function(e) {
-								e.preventDefault();
-								this.downloadAndZip(this.props.logos, 'png').then(_.partial(this.downloadedLogos, this.props.logos, 'png'));
-							}.bind(this)}>Download PNGs</a>
-						</div>
-					) : (
-						<div className="collection__ctas">
-							<a href={this.props.logos[0].svg} download={this.props.logos[0].id + '.svg'} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], 'svg')}>Download SVG</a>
-							<a href={this.props.logos[0].png} download={this.props.logos[0].id + '.png'} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], 'png')}>Download PNG</a>
-						</div>
-					))
-				}
+				<div className="collection__ctas">
+					{(function() {
+						if (!this.props.logos.length) {
+							return false;
+						}
+						if (this.props.logos.length === 1) {
+							return _.map(FILETYPES, function(filetype) {
+								return (
+									<a key={filetype} href={this.props.logos[0][filetype]} download={this.props.logos[0].name + '.' + filetype} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], filetype)}>Download {filetype.toUpperCase()}</a>
+								);
+							}.bind(this));
+						}
+						return _.map(FILETYPES, function(filetype) {
+							return (
+								<a key={filetype} download="logos.zip" href={'zip?ids[]=' + _.pluck(this.props.logos, 'id').join('&ids[]=')} onClick={function(e) {
+									e.preventDefault();
+									this.downloadAndZip(this.props.logos, 'svg').then(_.partial(this.downloadedLogos, this.props.logos, 'svg'));
+								}.bind(this)}>Download SVGs</a>
+							);
+						}.bind(this));
+					}.bind(this))()}
+				</div>
 			</div>
 		);
 	},
 	downloadAndZip: function(logos, filetype) {
 		var zip = new JSZip();
 
-		var promise = Promise.all(
-			_.chain(logos)
-				.map(function(logo) {
-					if (!filetype) {
-						return Promise.reject(new Error('No Logo type was provided'));
+		var promise = Promise.all(_.map(logos, function(logo) {
+			if (!filetype) {
+				return Promise.reject(new Error('No Logo type was provided'));
+			}
+			if (!logo[filetype]) {
+				return Promise.reject(new Error('Logo ' + logo.id + ' does not have a ' + filetype));
+			}
+			return fetch(logo[filetype])
+				.then(function(response) {
+					if (response.status < 200 || response.status >= 300) {
+						var error = new Error(response.statusText);
+						error.response = response;
+						throw error;
 					}
-					if (!logo[filetype]) {
-						return Promise.reject(new Error('Logo ' + logo.id + ' does not have a ' + filetype));
-					}
-					return Promise.resolve(logo[filetype]);
+					return response.arrayBuffer();
 				})
-				.map(function(promise, i) {
-					return promise
-						.then(fetch)
-						.then(function(response) {
-							if (response.status < 200 || response.status >= 300) {
-								var error = new Error(response.statusText);
-								error.response = response;
-								throw error;
-							}
-							return response.arrayBuffer();
-						})
-						.then(function(data) {
-							zip.file(logos[i].id + '.' + filetype, data);
-						});
-				})
-				.value()
-		).then(function() {
+				.then(function(data) {
+					var h = 0;
+					var name;
+					do {
+						h++;
+						name = logo.name + (h === 1 ? '' : ' (' + h + ')') + '.' + filetype;
+					} while (zip.file(name));
+					zip.file(name, data);
+				});
+		})).then(function() {
 			saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
 			this.setState({ popup: true });
 		}.bind(this));
