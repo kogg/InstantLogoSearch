@@ -17,8 +17,7 @@ module.exports = {
 	'postcss-import':   { glob: true },
 	'postcss-reporter': { clearMessages: true },
 	'postcss-url':      {
-		url:        'inline',
-		fallback:   'copy',
-		assetsPath: '../assets'
+		url:      'inline',
+		fallback: 'copy'
 	}
 };
