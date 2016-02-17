@@ -6,9 +6,8 @@ if (process.env.npm_package_feathersjs_socket) {
 	app.configure(feathers.socketio(io()));
 	/* global io:false */
 } else {
-	if (!global.fetch) {
-		require('whatwg-fetch');
-	}
+	global.fetch = null;
+	require('whatwg-fetch');
 	app.configure(feathers.fetch(global.fetch));
 }
 

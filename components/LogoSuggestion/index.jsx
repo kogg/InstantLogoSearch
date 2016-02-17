@@ -1,9 +1,9 @@
 var _          = require('underscore');
 var classNames = require('classnames');
-// var error      = require('debug')(process.env.npm_package_name + ':application:error');
+var error      = require('debug')(process.env.npm_package_name + ':application:error');
 var React      = require('react');
 
-// var actions = require('../../actions');
+var actions = require('../../actions');
 var Popup   = require('../Popup');
 
 var SUGGESTION_UPLOADING = 1;
@@ -90,18 +90,8 @@ module.exports = React.createClass({
 			this.refs.suggest_name.value = this.props.value;
 		}
 	},
-	suggestLogo: function(name/* , file */) {
+	suggestLogo: function(name, file) {
 		ga('send', 'event', 'Logos', 'Suggest Logo', name);
-		return new Promise(function(resolve, reject) {
-			setTimeout(function() {
-				if (Math.random() < 0.5) {
-					resolve();
-				} else {
-					reject();
-				}
-			}, 2000);
-		});
-		/* FIXME
 		return Promise.resolve(file)
 			.then(function(file) {
 				if (!file) {
@@ -129,6 +119,5 @@ module.exports = React.createClass({
 				ga('send', 'exception', { exDescription: err.message, exFatal: true });
 				throw err;
 			});
-		*/
 	}
 });
