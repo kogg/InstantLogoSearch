@@ -102,28 +102,28 @@
       width: 12px;
       margin-left: -12px;
     }
-  }
 
-  &__cta {
-    display: block;
-    line-height: 38px;
-    text-align: center;
-    border-radius: 3px;
-    font-size: 15px;
-    text-decoration: none;
-    border-radius: 30px;
+    a {
+      display: block;
+      line-height: 38px;
+      text-align: center;
+      border-radius: 3px;
+      font-size: 15px;
+      text-decoration: none;
+      border-radius: 30px;
 
-    &:first-of-type {
-      color: white;
-      background: #02b875;
-    }
+      &:first-of-type {
+        color: white;
+        background: #02b875;
+      }
 
-    &:last-of-type {
-      margin-top: 4px;
-      color: #02b875 !important;
-      line-height: 36px;
-      color: white;
-      border: 1px solid #02b875;
+      &:last-of-type {
+        margin-top: 4px;
+        color: #02b875 !important;
+        line-height: 36px;
+        color: white;
+        border: 1px solid #02b875;
+      }
     }
   }
 }

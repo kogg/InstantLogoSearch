@@ -11,9 +11,7 @@ var React                    = require('react');
 var actions = require('../../actions');
 var Popup   = require('../Popup');
 
-var FILETYPES = ['svg', 'png'];
-
-var Collection = module.exports = connect(createStructuredSelector({
+module.exports = connect(createStructuredSelector({
 	logos: createSelector(
 		createSelector(
 			_.property('logos'),
@@ -43,24 +41,8 @@ var Collection = module.exports = connect(createStructuredSelector({
 	),
 	considering: _.property('considering')
 }))(React.createClass({
-	statics: {
-		fetches: _.object(FILETYPES, _.map(FILETYPES, function() {
-			return {};
-		}))
-	},
-	getInitialState:           _.constant({ popup: false }),
-	componentWillReceiveProps: function(nextProps) {
-		if (_.isEqual(
-			_.chain(this.props.logos).reject(_.matcher({ considering: 'addition' })).sortBy('id').pluck('id').value(),
-			_.chain(nextProps.logos).reject(_.matcher({ considering: 'addition' })).sortBy('id').pluck('id').value()
-		)) {
-			return;
-		}
-		this.setZips(nextProps.logos);
-	},
-	render: function() {
-		var is_safari = window && /Version\/[\d\.]+.*Safari/.test(window.navigator.userAgent);
-
+	getInitialState: _.constant({ popup: false }),
+	render:          function() {
 		return (
 			<div className={classNames({
 				collection:             true,
@@ -91,45 +73,66 @@ var Collection = module.exports = connect(createStructuredSelector({
 				{Boolean(this.props.logos.length) && ((this.props.logos.length > 1) ?
 					(
 						<div className="collection__ctas">
-							{FILETYPES.map(function(filetype) {
-								var zip = this.state[filetype + '_zip'];
-								return (
-									<a key={filetype} className="collection__cta" download="logos.zip"
-										href={zip && (is_safari ? 'data:application/octet-stream;base64,' + zip.generate({ type: 'base64' }) : 'logos.zip')}
-										onClick={function(e) {
-											if (!zip) {
-												return e.preventDefault();
-											}
-											if (!is_safari) {
-												e.preventDefault();
-												saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
-											}
-											this.setState({ popup: true });
-											this.downloadedLogos(this.props.logos, filetype);
-										}.bind(this)}>Download {filetype.toUpperCase()}s</a>
-								);
-							}.bind(this))}
+							<a href="" download onClick={function(e) {
+								e.preventDefault();
+								this.downloadAndZip(this.props.logos, 'svg').then(_.partial(this.downloadedLogos, this.props.logos, 'svg'));
+							}.bind(this)}>Download SVGs</a>
+							<a href="" download onClick={function(e) {
+								e.preventDefault();
+								this.downloadAndZip(this.props.logos, 'png').then(_.partial(this.downloadedLogos, this.props.logos, 'png'));
+							}.bind(this)}>Download PNGs</a>
 						</div>
 					) : (
 						<div className="collection__ctas">
-							{FILETYPES.map(function(filetype) {
-								return (
-									<a key={filetype} className="collection__cta" download={this.props.logos[0].id + '.' + filetype}
-										href={this.props.logos[0][filetype]}
-										onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], filetype)}>Download {filetype.toUpperCase()}</a>
-								);
-							}.bind(this))}
+							<a href={this.props.logos[0].svg} download={this.props.logos[0].id + '.svg'} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], 'svg')}>Download SVG</a>
+							<a href={this.props.logos[0].png} download={this.props.logos[0].id + '.png'} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], 'png')}>Download PNG</a>
 						</div>
 					))
 				}
 			</div>
 		);
 	},
-	componentDidMount: function() {
-		this.setZips(this.props.logos);
-	},
-	componentWillUnmount: function() {
-		this.promises = null;
+	downloadAndZip: function(logos, filetype) {
+		var zip = new JSZip();
+
+		var promise = Promise.all(
+			_.chain(logos)
+				.map(function(logo) {
+					if (!filetype) {
+						return Promise.reject(new Error('No Logo type was provided'));
+					}
+					if (!logo[filetype]) {
+						return Promise.reject(new Error('Logo ' + logo.id + ' does not have a ' + filetype));
+					}
+					return Promise.resolve(logo[filetype]);
+				})
+				.map(function(promise, i) {
+					return promise
+						.then(fetch)
+						.then(function(response) {
+							if (response.status < 200 || response.status >= 300) {
+								var error = new Error(response.statusText);
+								error.response = response;
+								throw error;
+							}
+							return response.arrayBuffer();
+						})
+						.then(function(data) {
+							zip.file(logos[i].id + '.' + filetype, data);
+						});
+				})
+				.value()
+		).then(function() {
+			saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
+			this.setState({ popup: true });
+		}.bind(this));
+
+		promise.catch(function(err) {
+			error(err);
+			ga('send', 'exception', { exDescription: err.message, exFatal: true });
+		});
+
+		return promise;
 	},
 	downloadedLogos: function(logos, filetype) {
 		_.each(logos, function(logo) {
@@ -144,55 +147,6 @@ var Collection = module.exports = connect(createStructuredSelector({
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Collection', 'Download ' + filetype.toUpperCase(), null, logos.length);
 		this.props.dispatch(actions.clearCollection());
-	},
-	setZips: function(logos) {
-		logos = _.reject(logos, _.matcher({ considering: 'addition' }));
-
-		this.setState(
-			_.chain(FILETYPES)
-				.map(function(filetype) {
-					return filetype + '_zip';
-				})
-				.object(_.map(FILETYPES, _.constant(null)))
-				.value()
-		);
-
-		var promises = this.promises = _.map(FILETYPES, function(filetype) {
-			return Promise.all(_.map(logos, function(logo) {
-				Collection.fetches[filetype][logo.id] = Collection.fetches[filetype][logo.id] || fetch(logo[filetype])
-					.then(function(response) {
-						if (response.status < 200 || response.status >= 300) {
-							var error = new Error(response.statusText);
-							error.response = response;
-							throw error;
-						}
-						return response.arrayBuffer();
-					})
-					.catch(function(err) {
-						error(err);
-						ga('send', 'exception', { exDescription: err.message, exFatal: true });
-						throw err;
-					});
-				return Collection.fetches[filetype][logo.id];
-			})).then(function(results) {
-				if (promises !== this.promises) {
-					return;
-				}
-				var zip = new JSZip();
-				_.each(logos, function(logo, i) {
-					var name;
-					var h = 1;
-					do {
-						name = logo.name + ((h === 1) ? '' : ' (' + h + ')') + '.' + filetype;
-						h++;
-					} while (zip.file(name));
-					zip.file(name, results[i]);
-				});
-				var obj = {};
-				obj[filetype + '_zip'] = zip;
-				this.setState(obj);
-			}.bind(this));
-		}.bind(this));
 	},
 	uncollectLogo: function(logo) {
 		ga(
