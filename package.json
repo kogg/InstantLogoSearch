@@ -26,7 +26,7 @@
     "postinstall": "if [ \"$NODE_ENV\" = 'production' ]; then npm run jsify && npm run postcss; fi",
     "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi",
     "test": "eslint . --ignore-path .gitignore --ext .js,.jsx",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist .tmp",
     "fix": "npm run cssfmt:fix && npm run eslint:fix",
     "node": "node $npm_package_main",
     "nodemon": "nodemon --ignore dist/ -e js,jsx $npm_package_main",
