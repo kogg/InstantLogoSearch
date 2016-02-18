@@ -63,14 +63,12 @@ module.exports = React.createClass({
 						this.setState({ suggestion: null });
 					}.bind(this)} />}
 					{(this.state.suggestion === SUGGESTION_ERROR) && (
-						<div>
-							<strong>Error! Error!</strong>
+						<div className="suggestion_error">
 							<p>We're sorry but something went terribly wrong!</p>
-							<span className="emoji">😓</span>
 							<a className="suggestion__another-one" onClick={function(e) {
 								e.preventDefault();
 								this.setState({ suggestion: null });
-							}.bind(this)}>let's try again!</a>
+							}.bind(this)}>😓 let's try again!</a>
 						</div>
 					)}
 				</div>

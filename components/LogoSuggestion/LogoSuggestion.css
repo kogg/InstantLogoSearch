@@ -17,18 +17,13 @@
     border-top: 1px dashed rgba(0, 0, 0, .14);
 
     p {
-      padding: 6px 0 12px;
       font-size: 15px;
       color: rgba(0, 0, 0, .5);
+      padding-bottom: 12px;
     }
 
     b {
       font-size: 40px;
-    }
-
-    .emoji {
-      font-size: 50px;
-      opacity: 1;
     }
   }
 
@@ -52,7 +47,6 @@
     background: transparent;
   }
 
-  &__another-one,
   &__upload-label,
   &__submit {
     padding: 6px 10px;
@@ -75,20 +69,12 @@
     }
 
     &_uploading {
-      background-color: #02b875;
-      color: transparent;
-      border: 1px solid #02b875;
-      background-image: url('loader.gif');
-      background-position: center;
+      color: #02b875;
+      background-image: url('loader3.gif') !important;
+      background-position: left 12px center;
       background-repeat: no-repeat;
-      background-size: 16px;
-      opacity: 1;
+      opacity: 1 !important;
       cursor: not-allowed;
-
-      &:hover {
-        color: transparent !important;
-        border: 1px solid #02b875;
-      }
     }
   }
 
@@ -147,7 +133,7 @@
     text-decoration: underline;
   }
 
-  &__active,
+  &_active,
   &:hover {
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.04);
@@ -163,6 +149,24 @@
     }
 
     .suggestion__input {
+      color: black;
+    }
+  }
+
+  &_error {
+    text-align: center;
+    padding: 0 12px;
+  }
+
+  &__another-one {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 6px 12px;
+    border-radius: 30px;
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
       color: black;
     }
   }
