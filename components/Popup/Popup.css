@@ -5,14 +5,14 @@
   width: 100%;
   border-radius: 4px;
   overflow: hidden;
+  outline: none;
 
   &__messaging {
-    background: url('desk4.svg');
+    background: url('desk30.svg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     padding: 30px;
-    min-height: 250px;
   }
 
   &__container {
@@ -25,6 +25,16 @@
     background: rgba(0, 0, 0, .7);
     padding: 30px;
     overflow: auto;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background: green;
+    }
   }
 
   &__contributors {
@@ -62,10 +72,15 @@
   strong {
     font-size: 40px;
     font-weight: 900;
+
+    @media (max-width: 680px) {
+    font-size: 7.5vw;
+    }
   }
 
-  span {
-    color: rgba(0, 0, 0, .6);
-    font-size: 20px;
+  .social-action {
+    margin-right: 8px;
+    margin-left: 0;
+    outline: none;
   }
 }
