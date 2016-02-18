@@ -60,14 +60,6 @@
     width: 100%;
     border: none;
 
-    &_success {
-      opacity: .7;
-
-      &:hover {
-        opacity: 1;
-      }
-    }
-
     &_uploading {
       color: #02b875;
       background-image: url('loader3.gif') !important;
@@ -123,7 +115,7 @@
     text-align: center;
   }
 
-  u,
+  &__activate-popover,
   span {
     opacity: .4;
     font-size: 15px;

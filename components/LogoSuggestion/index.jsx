@@ -11,27 +11,26 @@ var SUGGESTION_SUCCESS   = 2;
 var SUGGESTION_ERROR     = 3;
 
 module.exports = React.createClass({
-	getInitialState:           _.constant({}),
-	componentWillReceiveProps: function(nextProps) {
-		if ((this.props.value !== nextProps.value) && this.state.popover) {
-			this.setState({ popover: false });
-		}
-	},
-	render: function() {
+	getInitialState: _.constant({}),
+	render:          function() {
 		return (
 			<li className={classNames({
 				'brand-logo':        true,
 				'suggestion':        true,
-				'suggestion_active': this.props.active
+				'suggestion_active': this.props.active || this.state.filename
 			})}>
 				<div className="flex-center brand-logo__image suggestion__image">
-					<div>
-						<span>Don't see quite what you're looking for? </span>
-						<u className="suggestion__activate-popover">Suggest</u>
-						<span> a logo or </span>
-						<u className="suggestion__activate-popover">upload</u>
-						<span> something yourself!</span>
-					</div>
+					{
+						this.state.filedata ?
+							<img src={this.state.filedata} /> :
+							<div>
+								<span>Don't see quite what you're looking for? </span>
+								<label className="suggestion__activate-popover" htmlFor="suggest-name"><u>Suggest</u></label>
+								<span> a logo or </span>
+								<label className="suggestion__activate-popover" htmlFor="file-upload"><u>upload</u></label>
+								<span> something yourself!</span>
+							</div>
+					}
 				</div>
 				<div className="suggestion__popover">
 					{(this.state.suggestion !== SUGGESTION_ERROR) && (
@@ -48,12 +47,34 @@ module.exports = React.createClass({
 									}.bind(this)
 								);
 							}.bind(this)}>
-								<input className="suggestion__input" placeholder="i.e: facebook circle" type="text" ref="suggest_name" defaultValue={this.props.value}/>
-								<label className="suggestion__upload-label" htmlFor="file-upload">Upload SVG</label>
-								<input className="suggestion__upload-input" id="file-upload" type="file" ref="suggest_file" accept=".svg" />
+								<input className="suggestion__input" id="suggest-name" placeholder="i.e: facebook circle" type="text" ref="suggest_name" defaultValue={this.props.value}/>
+								<label className="suggestion__upload-label" htmlFor="file-upload">{this.state.filename || 'Upload SVG'}</label>
+								<input className="suggestion__upload-input" id="file-upload" type="file" ref="suggest_file" accept=".svg" onChange={function() {
+									var dom = this.refs.suggest_file;
+
+									var path           = dom.value;
+									var last_slash_pos = path.indexOf('\\') >= 0 ? path.lastIndexOf('\\') : path.lastIndexOf('/');
+									var filename       = path.substring(last_slash_pos);
+									if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+										filename = filename.substring(1);
+									}
+									this.setState({ filename: filename });
+
+									if (window.File && window.FileReader && window.FileList) {
+										var files = dom.files;
+										if (files.length) {
+											var reader = new FileReader();
+											reader.onload = function(e) {
+												this.setState({ filedata: e.target.result });
+											}.bind(this);
+											reader.readAsDataURL(files[0]);
+										} else {
+											this.setState({ filedata: null });
+										}
+									}
+								}.bind(this)} />
 								<input className={classNames({
 									suggestion__submit:           true,
-									suggestion__submit_success:   true,
 									suggestion__submit_uploading: this.state.suggestion === SUGGESTION_UPLOADING
 								})} type="submit" value="Suggest Logo" disabled={this.state.suggestion === SUGGESTION_UPLOADING} />
 							</form>

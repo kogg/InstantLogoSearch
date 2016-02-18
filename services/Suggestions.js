@@ -175,6 +175,10 @@ module.exports = {
 						});
 					});
 			})
-			.then(issue_to_suggestion);
+			.then(issue_to_suggestion)
+			.catch(function(err) {
+				console.log(err);
+				throw err;
+			});
 	}
 };
