@@ -95,7 +95,10 @@ module.exports = connect(createStructuredSelector({
 				.extend({ list: this.props.heading, position: i + 1, variant: filetype, quantity: 1 })
 				.value()
 		);
-		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.=+/@#$%^&*_', null)).join('') });
+		ga('ec:setAction', 'purchase', {
+			id:   _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.=+/@#$%^&*_', null)).join(''),
+			list: this.props.heading
+		});
 		ga('send', 'event', 'Logos', 'Download ' + filetype.toUpperCase(), logo.id, 1);
 		this.setState({ popup: true });
 	},
@@ -124,11 +127,11 @@ module.exports = connect(createStructuredSelector({
 				.value()
 		);
 		if (this.props.collection[logo.id]) {
-			ga('ec:setAction', 'remove');
+			ga('ec:setAction', 'remove', { list: this.props.heading });
 			ga('send', 'event', 'Logos', 'Remove from Collection', logo.id);
 			this.props.dispatch(actions.removeFromCollection(logo));
 		} else {
-			ga('ec:setAction', 'add');
+			ga('ec:setAction', 'add', { list: this.props.heading });
 			ga('send', 'event', 'Logos', 'Add to Collection', logo.id);
 			this.props.dispatch(actions.addToCollection(logo));
 		}
