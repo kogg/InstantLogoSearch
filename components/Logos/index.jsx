@@ -56,7 +56,7 @@ module.exports = connect(createStructuredSelector({
 								</li>
 							);
 						}.bind(this))}
-						{this.props.suggest && <LogoSuggestion value={this.props.suggest} dispatch={this.props.dispatch} />}
+						{this.props.suggest && <LogoSuggestion value={this.props.suggest} dispatch={this.props.dispatch} active={!this.props.logos.length} />}
 					</ul>
 					{(this.props.loadmore === 'cta') && (
 						<div className="logos__load-more">

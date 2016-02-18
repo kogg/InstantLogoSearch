@@ -19,7 +19,11 @@ module.exports = React.createClass({
 	},
 	render: function() {
 		return (
-			<li className="brand-logo suggestion">
+			<li className={classNames({
+				'brand-logo':        true,
+				'suggestion':        true,
+				'suggestion_active': this.props.active
+			})}>
 				<div className="flex-center brand-logo__image suggestion__image">
 					<div>
 						<span>Don't see quite what you're looking for? </span>
