@@ -7,7 +7,17 @@ var promisify = require('es6-promisify');
 var Git       = require('nodegit');
 var GitHubApi = require('github');
 
-var github = new GitHubApi({ version: '3.0.0' });
+var STATUS_MESSAGES = _.invert(http.STATUS_CODES);
+var TMP_PATH        = path.join(__dirname, '../.tmp');
+
+var getRepo        = Promise.reject(new Error('Git needs ENV vars GITHUB_USERNAME & GITHUB_PERSONAL_ACCESS_TOKEN'));
+var github         = new GitHubApi({ version: '3.0.0' });
+var gitCredOptions = {
+	callbacks: {
+		certificateCheck: _.constant(1),
+		credentials:      _.constant(Git.Cred.userpassPlaintextNew(process.env.GITHUB_PERSONAL_ACCESS_TOKEN, 'x-oauth-basic'))
+	}
+};
 
 if (process.env.GITHUB_USERNAME && process.env.GITHUB_PERSONAL_ACCESS_TOKEN) {
 	github.authenticate({
@@ -15,25 +25,11 @@ if (process.env.GITHUB_USERNAME && process.env.GITHUB_PERSONAL_ACCESS_TOKEN) {
 		username: process.env.GITHUB_USERNAME,
 		password: process.env.GITHUB_PERSONAL_ACCESS_TOKEN
 	});
-}
 
-var getRepo = Git.Repository.open('.tmp').catch(function() {
-	return Git.Clone('git@github.com:kogg/instant-logos.git', '.tmp', {
-		checkoutBranch: 'develop',
-		fetchOpts:      {
-			callbacks: {
-				certificateCheck: function() {
-					return 1;
-				},
-				credentials: function(url, userName) {
-					return Git.Cred.sshKeyFromAgent(userName);
-				}
-			}
-		}
+	getRepo = Git.Clone('https://github.com/kogg/instant-logos.git', TMP_PATH, { checkoutBranch: 'develop', fetchOpts: gitCredOptions }).catch(function() {
+		return Git.Repository.open(TMP_PATH);
 	});
-});
-
-var STATUS_MESSAGES = _.invert(http.STATUS_CODES);
+}
 
 function issue_to_suggestion(issue) {
 	return {
@@ -45,27 +41,27 @@ function issue_to_suggestion(issue) {
 
 module.exports = {
 	get: memoize(function(id) {
-		return promisify(github.issues.getRepoIssue)({
+		return promisify(_.bind(github.issues.getRepoIssue, github.issues))({
 			number: id,
 			user:   'kogg',
 			repo:   'instant-logos'
 		}).then(
 			function(issue) {
 				if (issue.state !== 'open' || !_.findWhere(issue.labels, { name: 'logo-suggestion' })) {
-					var err = new Error(http.STATUS_CODES[404]);
+					var err = new Error('Not Found');
 					err.status = 404;
-					return Promise.reject(err);
+					throw err;
 				}
 				return issue_to_suggestion(issue);
 			},
 			function(err) {
 				err.status = err.code || STATUS_MESSAGES[err.message] || STATUS_MESSAGES[JSON.parse(err.message).message];
-				return Promise.reject(err);
+				throw err;
 			}
 		);
 	}, { maxAge: 10000, preFetch: true }),
 	find: memoize(function() {
-		return promisify(github.issues.repoIssues)({
+		return promisify(_.bind(github.issues.repoIssues, github.issues))({
 			user:     'kogg',
 			repo:     'instant-logos',
 			labels:   'logo-suggestion',
@@ -78,7 +74,7 @@ module.exports = {
 			},
 			function(err) {
 				err.status = err.code || STATUS_MESSAGES[err.message] || STATUS_MESSAGES[JSON.parse(err.message).message];
-				return Promise.reject(err);
+				throw err;
 			}
 		);
 	}, { maxAge: 5000, preFetch: true }),
@@ -88,96 +84,109 @@ module.exports = {
 			err.status = 400;
 			return Promise.reject(err);
 		}
-		return this.find()
-			.then(function(issues) {
-				if (_.findWhere(issues, _.pick(data, 'name'))) {
-					var err = new Error(http.STATUS_CODES[409]);
-					err.status = 409;
-					return Promise.reject(err);
-				}
-			})
-			.then(function() {
-				return promisify(github.issues.create)({
-					user:   'kogg',
-					repo:   'instant-logos',
-					title:  data.name,
-					labels: ['logo-suggestion']
-				});
-			})
-			.then(function(issue) {
-				if (!data.file) {
-					return issue;
-				}
+		var promise = promisify(_.bind(github.issues.create, github.issues))({
+			user:   'kogg',
+			repo:   'instant-logos',
+			title:  data.name,
+			labels: ['logo-suggestion']
+		});
+		if (data.file) {
+			promise = promise.then(function(issue) {
 				var _getRepo     = getRepo;
 				var randomstring = _.times(10, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._', null)).join('');
 				var branch       = data.name.replace(/[/:]/g, '_') + '-' + randomstring;
 
 				var promise = _getRepo.then(function(repo) {
 					var filename = data.name.replace(/[/:]/g, '_') + ' (' + randomstring + ').svg';
-					return repo.getBranchCommit('develop')
-						.then(_.bind(repo.createBranch, repo, branch))
-						.then(_.bind(repo.checkoutBranch, repo))
+					var promise = Promise.resolve()
 						.then(function() {
-							return promisify(fs.writeFile)(path.join(repo.workdir(), 'logos', filename), data.file);
+							return repo.getBranchCommit('develop')
+								.then(_.bind(repo.createBranch, repo, branch))
+								.then(_.bind(repo.checkoutBranch, repo));
 						})
 						.then(function() {
-							return repo.index();
+							// FIXME Find the proper filename to have here
+							return promisify(_.bind(fs.writeFile, fs))(path.join(TMP_PATH, 'logos', filename), data.file);
 						})
-						.then(function(index) {
-							index.addByPath(path.join('logos', filename));
-							index.write();
-							return index.writeTree();
+						.then(function() {
+							return repo.index()
+								.then(function(index) {
+									var addByPathCode = index.addByPath(path.join('logos', filename));
+									if (addByPathCode) {
+										throw new Error('index#addByPath error code ' + addByPathCode);
+									}
+									var writeCode = index.write();
+									if (writeCode) {
+										throw new Error('index#write error code ' + writeCode);
+									}
+									return index.writeTree();
+								});
 						})
 						.then(function(oid) {
 							return Git.Reference.nameToId(repo, 'HEAD')
 								.then(_.bind(repo.getCommit, repo))
 								.then(function(parent) {
-									var signature = Git.Signature.now('Saiichi Hashimoto', 'saiichihashimoto@gmail.com');
+									var signature = repo.defaultSignature(repo);
 									return repo.createCommit('HEAD', signature, signature, 'Adding logo file ' + filename, oid, [parent]);
 								});
 						})
 						.then(function() {
-							return repo.getRemote('origin');
-						})
-						.then(function(remote) {
-							return remote.push(['refs/heads/' + branch + ':refs/heads/' + branch], {
-								callbacks: {
-									certificateCheck: function() {
-										return 1;
-									},
-									credentials: function(url, userName) {
-										return Git.Cred.sshKeyFromAgent(userName);
+							return promisify(_.bind(repo.getRemote, repo))('origin')
+								.then(function(remote) {
+									return remote.push(['refs/heads/' + branch + ':refs/heads/' + branch], gitCredOptions);
+								})
+								.then(function(code) {
+									if (code) {
+										throw new Error('remote#push error code ' + code);
 									}
-								}
-							});
-						})
-						.then(function() {
-							return repo.getBranch('develop');
-						})
-						.then(_.bind(repo.checkoutBranch, repo));
-				});
+								});
+						});
 
-				getRepo = promise.then(_.constant(_getRepo), _.constant(_getRepo));
+					var cleanupBranch = function() {
+						return _getRepo
+							.then(function(repo) {
+								return repo.getBranch(branch);
+							})
+							.then(_.bind(Git.Branch.delete, Git.Branch));
+					};
+					promise
+						.then(cleanupBranch, cleanupBranch)
+						.catch(function(err) {
+							console.log(err); // TODO #20
+						});
 
-				return promise
-					.then(_.constant(_getRepo))
-					.then(function(repo) {
-						return repo.getBranch(branch);
-					})
-					.then(_.bind(Git.Branch.delete, Git.Branch))
-					.then(function() {
-						return promisify(github.pullRequests.createFromIssue)({
-							user:  'kogg',
-							repo:  'instant-logos',
-							issue: issue.number,
-							base:  'develop',
-							head:  branch
+					var checkoutDevelop = function() {
+						return repo.getBranch('develop').then(_.bind(repo.checkoutBranch, repo));
+					};
+					return promise.then(checkoutDevelop, function(err) {
+						return checkoutDevelop().then(function() {
+							throw err;
 						});
 					});
-			})
+				});
+
+				// getRepo can be used after the previous work is done, regardless of failure
+				getRepo = promise.then(_.constant(_getRepo), _.constant(_getRepo));
+
+				return promise.then(function() {
+					return promisify(_.bind(github.pullRequests.createFromIssue, github.pullRequests))({
+						user:  'kogg',
+						repo:  'instant-logos',
+						issue: issue.number,
+						base:  'develop',
+						head:  branch
+					}).catch(function(err) {
+						console.log(err); // TODO #20
+						// If we weren't able to create a pull request, we still have our initial issue. Good enough
+						return Promise.resolve(issue);
+					});
+				});
+			});
+		}
+		return promise
 			.then(issue_to_suggestion)
 			.catch(function(err) {
-				console.log(err);
+				console.log(err); // TODO #20
 				throw err;
 			});
 	}

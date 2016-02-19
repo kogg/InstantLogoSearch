@@ -46,7 +46,7 @@ var getUniquePurchases = promisify(analytics.data.ga.get)({
 			.value();
 	},
 	function(err) {
-		console.log(err); // TODO
+		console.log(err); // TODO #20
 		throw err;
 	}
 );
