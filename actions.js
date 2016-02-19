@@ -8,10 +8,12 @@ var getApplication = function() {
 
 module.exports = _.extend(
 	{
-		loadCollection:       createAction('LOAD_COLLECTION'),
+		loadLocalStorage:     createAction('LOAD_LOCAL_STORAGE'),
 		clearCollection:      createAction('CLEAR_COLLECTION'),
 		addToCollection:      createAction('ADD_TO_COLLECTION'),
 		removeFromCollection: createAction('REMOVE_FROM_COLLECTION'),
+		downloaded:           createAction('DOWNLOADED'),
+		resetDownloaded:      createAction('RESET_DOWNLOADED'),
 		considerLogo:         createAction('CONSIDER_LOGO'),
 		unconsiderLogo:       createAction('UNCONSIDER_LOGO'),
 		search:               createAction('SEARCH')

@@ -9,7 +9,8 @@ var LogoSuggestion = require('../LogoSuggestion');
 var Popup          = require('../Popup');
 
 module.exports = connect(createStructuredSelector({
-	collection: _.property('collection')
+	collection: _.property('collection'),
+	untilPopup: _.property('untilPopup')
 }))(React.createClass({
 	getInitialState: _.constant({ considering: null, popup: false }),
 	render:          function() {
@@ -100,7 +101,14 @@ module.exports = connect(createStructuredSelector({
 			list: this.props.heading
 		});
 		ga('send', 'event', 'Logos', 'Download ' + filetype.toUpperCase(), logo.id, 1);
-		this.setState({ popup: true });
+		this.props.dispatch(actions.downloaded());
+		setTimeout(function() {
+			if (this.props.untilPopup > 0) {
+				return;
+			}
+			this.setState({ popup: true });
+			this.props.dispatch(actions.resetDownloaded());
+		}.bind(this));
 	},
 	startInfiniteScroll: function() {
 		var listener = _.throttle(function() {

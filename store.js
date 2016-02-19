@@ -25,7 +25,7 @@ module.exports = function(state) {
 		server_actions: serverActionsReducer,
 		logos:          resourcesReducer('logo'),
 		collection:     handleActions({
-			LOAD_COLLECTION: function(state) {
+			LOAD_LOCAL_STORAGE: function(state) {
 				return global.localStorage ? JSON.parse(global.localStorage.getItem('collection')) || state || {} : state;
 			},
 			CLEAR_COLLECTION:  reduceToStorage('collection', _.constant({})),
@@ -52,7 +52,18 @@ module.exports = function(state) {
 			SEARCH: function(state, action) {
 				return action.payload || '';
 			}
-		}, '')
+		}, ''),
+		untilPopup: handleActions({
+			LOAD_LOCAL_STORAGE: function(state) {
+				return global.localStorage ? JSON.parse(global.localStorage.getItem('untilPopup')) || state || 10 : state;
+			},
+			DOWNLOADED: reduceToStorage('untilPopup', function(state, action) {
+				return state - (action.payload || 1);
+			}),
+			RESET_DOWNLOADED: reduceToStorage('untilPopup', function() {
+				return 10;
+			})
+		}, 3)
 	}), state);
 
 	return store;

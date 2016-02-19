@@ -48,6 +48,6 @@ module.exports = connect(createStructuredSelector({
 		);
 	},
 	componentDidMount: function() {
-		this.props.dispatch(actions.loadCollection());
+		this.props.dispatch(actions.loadLocalStorage());
 	}
 }));

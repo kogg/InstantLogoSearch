@@ -88,7 +88,6 @@ module.exports = connect(createStructuredSelector({
 						return _.map(FILETYPES, function(filetype) {
 							return (
 								<a key={filetype} download="logos.zip" href={'zip?filetype=' + filetype + '&ids[]=' + _.pluck(this.props.logos, 'id').join('&ids[]=')} onClick={function(e) {
-									this.setState({ popup: true });
 									if (IS_SAFARI) {
 										return this.downloadedLogos(this.props.logos, 'svg');
 									}
@@ -115,6 +114,11 @@ module.exports = connect(createStructuredSelector({
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Collection', 'Download ' + filetype.toUpperCase(), null, logos.length);
 		this.props.dispatch(actions.clearCollection());
+		if (logos.length === 1) {
+			return this.props.dispatch(actions.downloaded(logos.length));
+		}
+		this.setState({ popup: true });
+		this.props.dispatch(actions.resetDownloaded());
 	},
 	uncollectLogo: function(logo) {
 		ga(
