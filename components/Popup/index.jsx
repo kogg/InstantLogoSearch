@@ -21,11 +21,12 @@ module.exports = React.createClass({
 					backdropClassName="popup__container flex"
 					modalClassName="popup">
 						<div className="popup__messaging">
-							{this.props.children}
-							<div>
-								<strong>Wow! Thank you for using </strong>
-								<strong>{process.env.npm_package_title}</strong>
-							</div>
+							{this.props.children || (
+								<div>
+									<strong>Wow! Thank you for using </strong>
+									<strong>{process.env.npm_package_title}!</strong>
+								</div>
+							)}
 							<h2>You should share us (but like no pressure)</h2>
 							<ShareButtons />
 						</div>

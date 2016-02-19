@@ -80,9 +80,16 @@ module.exports = React.createClass({
 							</form>
 						</div>
 					)}
-					{(this.state.suggestion === SUGGESTION_SUCCESS) && <Popup onClose={function() {
-						this.setState({ suggestion: null });
-					}.bind(this)} />}
+					{(this.state.suggestion === SUGGESTION_SUCCESS) && (
+						<Popup onClose={function() {
+							this.setState({ suggestion: null });
+						}.bind(this)}>
+							<div>
+								<strong>Thank you for improving </strong>
+								<strong>{process.env.npm_package_title}!</strong>
+							</div>
+						</Popup>
+					)}
 					{(this.state.suggestion === SUGGESTION_ERROR) && (
 						<div className="suggestion_error">
 							<p>We're sorry but something went terribly wrong!</p>
