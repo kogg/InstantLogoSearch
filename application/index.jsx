@@ -84,7 +84,7 @@ app.set('page-render', memoize(function(url, domain, redirect) {
 			var store = Store();
 			return serverRender(<Provider store={store}><RouterContext {...response[1]} /></Provider>, store, actions)
 				.then(function(locals) {
-					return promisify(app.render).bind(app)('index', _.extend(locals, { state: store.getState(), domain: domain }));
+					return promisify(app.render.bind(app))('index', _.extend(locals, { state: store.getState(), domain: domain }));
 				})
 				.then(function(html) {
 					return { html: html, date: (new Date()).toUTCString() };

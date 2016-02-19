@@ -55,6 +55,9 @@ module.exports = connect(createStructuredSelector({
 				{this.state.popup && <Popup onClose={function() {
 					this.setState({ popup: false });
 				}.bind(this)} />}
+				{this.state.popup && <Popup onClose={function() {
+					this.setState({ popup: false });
+				}.bind(this)} />}
 				<ul className="collection__logos">
 					{this.props.logos.map(function(logo) {
 						return (

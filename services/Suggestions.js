@@ -41,7 +41,7 @@ function issue_to_suggestion(issue) {
 
 module.exports = {
 	get: memoize(function(id) {
-		return promisify(_.bind(github.issues.getRepoIssue, github.issues))({
+		return promisify(github.issues.getRepoIssue.bind(github.issues))({
 			number: id,
 			user:   'kogg',
 			repo:   'instant-logos'
@@ -61,7 +61,7 @@ module.exports = {
 		);
 	}, { maxAge: 10000, preFetch: true }),
 	find: memoize(function() {
-		return promisify(_.bind(github.issues.repoIssues, github.issues))({
+		return promisify(github.issues.repoIssues.bind(github.issues))({
 			user:     'kogg',
 			repo:     'instant-logos',
 			labels:   'logo-suggestion',
@@ -84,7 +84,7 @@ module.exports = {
 			err.status = 400;
 			return Promise.reject(err);
 		}
-		var promise = promisify(_.bind(github.issues.create, github.issues))({
+		var promise = promisify(github.issues.create.bind(github.issues))({
 			user:   'kogg',
 			repo:   'instant-logos',
 			title:  data.name,
@@ -101,12 +101,12 @@ module.exports = {
 					var promise = Promise.resolve()
 						.then(function() {
 							return repo.getBranchCommit('develop')
-								.then(_.bind(repo.createBranch, repo, branch))
-								.then(_.bind(repo.checkoutBranch, repo));
+								.then(_.partial(repo.createBranch.bind(repo), branch))
+								.then(repo.checkoutBranch.bind(repo));
 						})
 						.then(function() {
 							// FIXME Find the proper filename to have here
-							return promisify(_.bind(fs.writeFile, fs))(path.join(TMP_PATH, 'logos', filename), data.file);
+							return promisify(fs.writeFile.bind(fs))(path.join(TMP_PATH, 'logos', filename), data.file);
 						})
 						.then(function() {
 							return repo.index()
@@ -124,14 +124,14 @@ module.exports = {
 						})
 						.then(function(oid) {
 							return Git.Reference.nameToId(repo, 'HEAD')
-								.then(_.bind(repo.getCommit, repo))
+								.then(repo.getCommit.bind(repo))
 								.then(function(parent) {
 									var signature = repo.defaultSignature(repo);
 									return repo.createCommit('HEAD', signature, signature, 'Adding logo file ' + filename, oid, [parent]);
 								});
 						})
 						.then(function() {
-							return promisify(_.bind(repo.getRemote, repo))('origin')
+							return promisify(repo.getRemote.bind(repo))('origin')
 								.then(function(remote) {
 									return remote.push(['refs/heads/' + branch + ':refs/heads/' + branch], gitCredOptions);
 								})
@@ -147,7 +147,7 @@ module.exports = {
 							.then(function(repo) {
 								return repo.getBranch(branch);
 							})
-							.then(_.bind(Git.Branch.delete, Git.Branch));
+							.then(Git.Branch.delete.bind(Git.Branch));
 					};
 					promise
 						.then(cleanupBranch, cleanupBranch)
@@ -156,7 +156,7 @@ module.exports = {
 						});
 
 					var checkoutDevelop = function() {
-						return repo.getBranch('develop').then(_.bind(repo.checkoutBranch, repo));
+						return repo.getBranch('develop').then(repo.checkoutBranch.bind(repo));
 					};
 					return promise.then(checkoutDevelop, function(err) {
 						return checkoutDevelop().then(function() {
@@ -169,7 +169,7 @@ module.exports = {
 				getRepo = promise.then(_.constant(_getRepo), _.constant(_getRepo));
 
 				return promise.then(function() {
-					return promisify(_.bind(github.pullRequests.createFromIssue, github.pullRequests))({
+					return promisify(github.pullRequests.createFromIssue.bind(github.pullRequests))({
 						user:  'kogg',
 						repo:  'instant-logos',
 						issue: issue.number,
