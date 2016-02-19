@@ -73,7 +73,10 @@ module.exports = connect(createStructuredSelector({
 						);
 					}.bind(this))}
 				</ul>
-				<div className="collection__ctas">
+				<div className={classNames({
+					collection__ctas:             true,
+					collection__ctas_downloading: this.state.downloading
+				})}>
 					{(function() {
 						if (!this.props.logos.length) {
 							return false;
@@ -92,6 +95,7 @@ module.exports = connect(createStructuredSelector({
 										return this.downloadedLogos(this.props.logos, 'svg');
 									}
 									e.preventDefault();
+									this.setState({ downloading: true });
 									this.zipAndDownload(this.props.logos, 'svg').then(_.partial(this.downloadedLogos, this.props.logos, 'svg'));
 								}.bind(this)}>Download {filetype.toUpperCase()}s</a>
 							);
@@ -113,6 +117,7 @@ module.exports = connect(createStructuredSelector({
 		});
 		ga('ec:setAction', 'purchase', { id: _.times(20, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.=+/@#$%^&*_', null)).join('') });
 		ga('send', 'event', 'Collection', 'Download ' + filetype.toUpperCase(), null, logos.length);
+		this.setState({ downloading: null });
 		this.props.dispatch(actions.clearCollection());
 		if (logos.length === 1) {
 			return this.props.dispatch(actions.downloaded(logos.length));
@@ -135,7 +140,7 @@ module.exports = connect(createStructuredSelector({
 	zipAndDownload: function(logos, filetype) {
 		var zip = new JSZip();
 
-		var promise = Promise.all(_.map(logos, function(logo) {
+		return Promise.all(_.map(logos, function(logo) {
 			if (!filetype) {
 				return Promise.reject(new Error('No Logo type was provided'));
 			}
@@ -160,15 +165,14 @@ module.exports = connect(createStructuredSelector({
 					} while (zip.file(name));
 					zip.file(name, data);
 				});
-		})).then(function() {
-			saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
-		});
-
-		promise.catch(function(err) {
-			error(err);
-			ga('send', 'exception', { exDescription: err.message, exFatal: true });
-		});
-
-		return promise;
+		}))
+			.then(function() {
+				saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
+			})
+			.catch(function(err) {
+				error(err);
+				ga('send', 'exception', { exDescription: err.message, exFatal: true });
+				throw err;
+			});
 	}
 }));
