@@ -74,8 +74,10 @@ module.exports = connect(createStructuredSelector({
 					}.bind(this))}
 				</ul>
 				<div className={classNames({
-					collection__ctas:             true,
-					collection__ctas_downloading: this.state.downloading
+					collection__ctas:                 true,
+					collection__ctas_downloading:     this.state.downloading,
+					collection__ctas_downloading_svg: this.state.downloading === 'svg',
+					collection__ctas_downloading_png: this.state.downloading === 'png'
 				})}>
 					{(function() {
 						if (!this.props.logos.length) {
@@ -92,11 +94,11 @@ module.exports = connect(createStructuredSelector({
 							return (
 								<a key={filetype} download="logos.zip" href={'zip?filetype=' + filetype + '&ids[]=' + _.pluck(this.props.logos, 'id').join('&ids[]=')} onClick={function(e) {
 									if (IS_SAFARI) {
-										return this.downloadedLogos(this.props.logos, 'svg');
+										return this.downloadedLogos(this.props.logos, filetype);
 									}
 									e.preventDefault();
-									this.setState({ downloading: true });
-									this.zipAndDownload(this.props.logos, 'svg').then(_.partial(this.downloadedLogos, this.props.logos, 'svg'));
+									this.setState({ downloading: filetype });
+									this.zipAndDownload(this.props.logos, filetype).then(_.partial(this.downloadedLogos, this.props.logos, filetype));
 								}.bind(this)}>Download {filetype.toUpperCase()}s</a>
 							);
 						}.bind(this));
