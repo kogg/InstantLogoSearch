@@ -101,6 +101,7 @@
     "postcss-cli": "^2.3.2",
     "postcss-import": "^7.1.3",
     "postcss-import-url": "^1.0.0",
+    "postcss-mq-keyframes": "^0.2.5",
     "postcss-nested": "^1.0.0",
     "postcss-reporter": "^1.3.0",
     "postcss-url": "^5.0.2",

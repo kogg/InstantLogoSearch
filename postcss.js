@@ -7,6 +7,7 @@ module.exports = {
 			'postcss-import',
 			'postcss-nested',
 			'autoprefixer',
+			'postcss-mq-keyframes',
 			'postcss-url',
 			'postcss-cachebuster'
 		],
