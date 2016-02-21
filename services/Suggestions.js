@@ -15,7 +15,7 @@ var github         = new GitHubApi({ version: '3.0.0' });
 var gitCredOptions = {
 	callbacks: {
 		certificateCheck: _.constant(1),
-		credentials:      _.constant(Git.Cred.userpassPlaintextNew(process.env.GITHUB_PERSONAL_ACCESS_TOKEN, 'x-oauth-basic'))
+		credentials:      _.constant(Git.Cred.userpassPlaintextNew(process.env.GITHUB_PERSONAL_ACCESS_TOKEN || '', 'x-oauth-basic'))
 	}
 };
 
