@@ -6,6 +6,49 @@
   border-radius: 4px;
   overflow: hidden;
   outline: none;
+  opacity: 0;
+  animation: cardEnter 0.75s ease-in-out;
+  animation-delay: .15s;
+  animation-fill-mode: forwards;
+
+  @keyframes cardEnter {
+    0%,
+    20%,
+    40%,
+    60%,
+    80%,
+    100% {
+      -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    0% {
+      opacity: 0;
+      transform: scale3d(0.45, 0.45, 0.45);
+    }
+
+    20% {
+      transform: scale3d(1.06, 1.06, 1.06);
+    }
+
+    40% {
+      transform: scale3d(0.93, 0.93, 0.93);
+    }
+
+    60% {
+      opacity: 1;
+      transform: scale3d(1.02, 1.02, 1.02);
+    }
+
+    80% {
+      transform: scale3d(0.98, 0.98, 0.98);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+    }
+  }
 
   &__messaging {
     background: url('desk30.svg');
@@ -25,6 +68,9 @@
     background: rgba(0, 0, 0, .7);
     padding: 30px;
     overflow: auto;
+    opacity: 0;
+    animation: fadein .3s ease-in-out;
+    animation-fill-mode: forwards;
 
     &:after {
       content: "";
@@ -33,7 +79,21 @@
       right: 10px;
       width: 30px;
       height: 30px;
-      background: green;
+      background: url('x-button.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100%;
+      cursor: pointer;
+    }
+
+    @keyframes fadein {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
     }
   }
 
