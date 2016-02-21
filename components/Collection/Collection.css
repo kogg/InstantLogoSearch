@@ -119,10 +119,46 @@
 
       &:last-of-type {
         margin-top: 4px;
-        color: #02b875 !important;
+        color: #02b875;
         line-height: 36px;
-        color: white;
         border: 1px solid #02b875;
+      }
+    }
+
+    &_downloading {
+      a:first-of-type,
+      a:last-of-type {
+        color: transparent;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 18px;
+      }
+
+      &_svg a:first-of-type {
+        background-image: url('svg-download.gif');
+      }
+
+      &_png a:last-of-type {
+        background-image: url('png-download.gif');
+      }
+
+      &_svg {
+        a:last-of-type {
+          color: rgba(0, 0, 0, .44);
+          border: 1px solid rgba(0, 0, 0, .15);
+          cursor: disabled;
+          pointer-events: none;
+        }
+      }
+
+      &_png {
+        a:first-of-type {
+          color: rgba(0, 0, 0, .44);
+          border: 1px solid rgba(0, 0, 0, .15);
+          background: white;
+          cursor: disabled;
+          pointer-events: none;
+        }
       }
     }
   }
