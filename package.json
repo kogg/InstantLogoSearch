@@ -65,9 +65,6 @@
     "eslint-plugin-react": "^3.16.1",
     "nodemon": "^1.8.1",
     "pre-commit": "^1.1.2",
-    "redux-devtools": "^3.0.0",
-    "redux-devtools-dock-monitor": "^1.0.1",
-    "redux-devtools-log-monitor": "^1.0.1",
     "watchify": "^3.6.1"
   },
   "dependencies": {
