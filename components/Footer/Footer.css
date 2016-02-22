@@ -64,4 +64,21 @@
   span {
     color: rgba(0, 0, 0, .6);
   }
+
+  .kogg-website {
+    color: rgba(0, 0, 0, .6);
+
+    &:hover {
+      color: black;
+    }
+  }
+
+  .terms-page {
+    color: rgba(0, 0, 0, .6);
+    text-decoration: none;
+
+    &:hover {
+      color: black;
+    }
+  }
 }
