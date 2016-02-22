@@ -35,15 +35,20 @@ module.exports = connect(createStructuredSelector({
 	render: function() {
 		var shortname_logos = _.where(this.props.logos, { shortname: this.props.params.shortname });
 		var name            = (_.first(shortname_logos) || {}).name;
+		var title           = name + ' Logos | ' + process.env.npm_package_title;
+		var description     = 'Instantly download the ' + name + ' logo as a svg vector, high quality png, white or black, circle & even more.';
 
 		return (
 			<div>
 				<Helmet
-					title={name + ' | ' + process.env.npm_package_title}
+					title={title}
 					meta={[
+						{ name: 'description', content: description },
 						{ property: 'og:url', content: process.env.npm_package_homepage + '/' + this.props.params.shortname },
-						{ property: 'og:title', content: name },
-						{ name: 'twitter:title', content: name + ' | ' + process.env.npm_package_title },
+						{ property: 'og:title', content: title },
+						{ property: 'og:description', content: description },
+						{ name: 'twitter:title', content: title },
+						{ name: 'twitter:description', content: description },
 						{ name: 'totalResults', content: shortname_logos.length },
 						{ name: 'startIndex', content: 0 },
 						{ name: 'itemsPerPage', content: Math.min(shortname_logos.length, 5) }
