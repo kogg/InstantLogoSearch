@@ -32,7 +32,7 @@ var analytics = google.analytics({
 
 var getUniquePurchases = promisify(analytics.data.ga.get)({
 	'ids':        'ga:' + process.env.GOOGLE_ANALYTICS_VIEW_ID,
-	'start-date': '31daysAgo',
+	'start-date': '4daysAgo',
 	'end-date':   'today',
 	'metrics':    'ga:uniquePurchases',
 	'dimensions': 'ga:productSku'
