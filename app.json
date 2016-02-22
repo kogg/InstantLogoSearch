@@ -1,0 +1,9 @@
+{
+	"name": "InstantLogoSearch",
+	"description": "Search and download thousands of logos svg or png",
+	"repository": "cameronrohani/InstantLogoSearch",
+	"success_url": "/",
+	"addons": [
+		"papertrail"
+	]
+}

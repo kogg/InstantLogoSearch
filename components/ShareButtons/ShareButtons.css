@@ -1,0 +1,73 @@
+.social-action {
+  line-height: 32px;
+  border: 1px solid rgba(0, 0, 0, .15);
+  color: rgba(0, 0, 0, 0.44);
+  padding: 0 16px 0 32px;
+  margin-left: 10px;
+  display: inline-block;
+  border-radius: 33px;
+  text-decoration: none;
+  position: relative;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 4px;
+    height: 32px;
+    width: 32px;
+    background-size: 46%;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: .4;
+  }
+
+  &_twitter:before {
+    background-image: url('twitter.svg');
+  }
+
+  &_github:before {
+    background-image: url('github.svg');
+  }
+
+  &_facebook:before {
+    background-size: 43%;
+    background-image: url('facebook.svg');
+  }
+
+  &:hover {
+    color: rgba(0, 0, 0, 0.6);
+    border-color: rgba(0, 0, 0, 0.3);
+
+    &:before {
+      opacity: .6;
+    }
+  }
+
+  @media (max-width: 740px) {
+    & span {
+      display: none;
+    }
+
+    & {
+      height: 36px;
+      width: 36px;
+      padding: 0;
+    }
+
+    &:before {
+      left: 0;
+      top: 0;
+      width: 34px;
+      height: 34px;
+    }
+  }
+}
+
+.social-action-icon {
+  display: inline-block;
+  height: 15px;
+  vertical-align: middle;
+  margin-right: 6px;
+  opacity: .6;
+}

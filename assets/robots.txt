@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /api/
+Disallow: /css/
+Disallow: /js/
+Disallow: /svg/
+
+Sitemap: http://instantlogosearch.com/sitemap.xml

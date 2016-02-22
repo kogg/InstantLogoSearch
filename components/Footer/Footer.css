@@ -1,0 +1,84 @@
+.footer {
+  height: 100px;
+  padding: 0 30px;
+
+  &__top {
+    padding: 15px 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+  }
+
+  &__contributors {
+    margin-right: 12px;
+
+    a,
+    span {
+      font-size: 14px;
+    }
+
+    a {
+      font-weight: 600;
+      margin-right: 4px;
+      color: rgba(0, 0, 0, .6);
+      text-decoration: none;
+
+      &:hover {
+        color: black;
+      }
+    }
+
+    @media (max-width: 700px) {
+    display: none;
+    }
+  }
+
+  &__social-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    opacity: .6;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &_twitter {
+      background-image: url('twitter.svg');
+      margin-right: 12px;
+    }
+
+    &_github {
+      background-image: url('github.svg');
+    }
+  }
+
+  h4 {
+    font-weight: 900;
+  }
+
+  span {
+    color: rgba(0, 0, 0, .6);
+  }
+
+  .kogg-website {
+    color: rgba(0, 0, 0, .6);
+
+    &:hover {
+      color: black;
+    }
+  }
+
+  .terms-page {
+    color: rgba(0, 0, 0, .6);
+    text-decoration: none;
+
+    &:hover {
+      color: black;
+    }
+  }
+}

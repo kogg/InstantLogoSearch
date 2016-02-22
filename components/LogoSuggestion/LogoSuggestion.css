@@ -1,0 +1,165 @@
+.suggestion {
+  height: 245px;
+  position: relative;
+  border: 1px dashed rgba(0, 0, 0, .14);
+
+  &__image {
+    background: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  &__popover {
+    overflow: hidden;
+    z-index: 2;
+    padding: 11px 0 8px 0;
+    border-radius: 4px;
+    border-top: 1px dashed rgba(0, 0, 0, .14);
+
+    p {
+      font-size: 15px;
+      color: rgba(0, 0, 0, .5);
+      padding-bottom: 12px;
+    }
+
+    b {
+      font-size: 40px;
+    }
+  }
+
+  &__form {
+    border-radius: 0 0 3px 3px;
+    font-family: 'Lato', sans-serif;
+  }
+
+  &__input {
+    border: 0;
+    outline: 0;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    width: 100%;
+    padding: 0 11px;
+    height: 19px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.44);
+    background: transparent;
+  }
+
+  &__upload-label,
+  &__submit {
+    padding: 6px 10px;
+    background: transparent;
+    color: black;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Lato', sans-serif;
+    display: inline-block;
+    width: 100%;
+    border: none;
+
+    &_uploading {
+      color: #02b875;
+      background-image: url('loader3.gif') !important;
+      background-position: left 12px center;
+      background-repeat: no-repeat;
+      opacity: 1 !important;
+      cursor: not-allowed;
+    }
+  }
+
+  &__upload-label {
+    background: url('upload.svg');
+    background-size: 19px;
+    background-position: left 12px center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    opacity: .5;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__submit {
+    background: url('check.svg');
+    background-size: 19px;
+    background-position: left 12px center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    opacity: .5;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__upload-input {
+    display: none;
+  }
+
+  &__footnote {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  &__activate-popover {
+    cursor: pointer;
+  }
+
+  .flex-center {
+    padding: 11px;
+    text-align: center;
+  }
+
+  &__activate-popover,
+  span {
+    opacity: .4;
+    font-size: 15px;
+  }
+
+  b {
+    text-decoration: underline;
+  }
+
+  &_active,
+  &:hover {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+
+    .brand-logo__image {
+      background: #f2f2f2;
+    }
+
+    .suggestion__popover {
+      border-top: none;
+      padding: 12px 0 8px 0;
+    }
+
+    .suggestion__input {
+      color: black;
+    }
+  }
+
+  &_error {
+    text-align: center;
+    padding: 0 12px;
+  }
+
+  &__another-one {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 6px 12px;
+    border-radius: 30px;
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+      color: black;
+    }
+  }
+}
