@@ -1,17 +1,10 @@
 .header {
   background-color: #fff;
-  background-image: url('desk3005.svg');
-  background-size: cover;
-  background-position: center;
   padding: 30px;
   text-align: center;
   position: relative;
   overflow: hidden;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
-
-  @media (max-width: 680px) {
-  background-position: center right;
-  }
 }
 
 .logo {
@@ -21,6 +14,28 @@
   background-size: 90%;
   opacity: .75;
   background-repeat: no-repeat;
+}
+
+.producthunt-launch {
+  font-size: 14px;
+  color: rgba(0, 0, 0, .44);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: rgba(0, 0, 0, .6);
+    border-bottom: 1px solid rgba(0, 0, 0, 6);
+  }
+
+  @media (max-width: 640px) {
+    & {
+      border-bottom: 1px solid rgba(0, 0, 0, .44);
+    }
+
+    & .emoji-fun {
+      display: none;
+    }
+  }
 }
 
 .header-content {
@@ -104,6 +119,7 @@
     padding: 0px;
   }
 
+  & .producthunt-launch,
   & .logo,
   & h1,
   & h2 {
