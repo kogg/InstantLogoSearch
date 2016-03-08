@@ -51,10 +51,6 @@
   }
 
   &__messaging {
-    background: url('desk30.svg');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     padding: 30px;
   }
 
