@@ -45,6 +45,11 @@ module.exports = connect(createStructuredSelector({
 					<ShareButtons />
 				</div>
 				<div className="header-content">
+					<a href="https://www.producthunt.com/" className="producthunt-launch">
+						<span className="emoji-fun">(ノ◕‿◕)ノ*:･ﾟ✧ &nbsp; </span>
+						<span>Launching On Product Hunt</span>
+						<span className="emoji-fun"> &nbsp; *:･ﾟ✧ヽ(◕‿◕ヽ)</span>
+					</a>
 					<h1>{process.env.npm_package_title}</h1>
 					<h2>{process.env.npm_package_description}</h2>
 					<div className="search-container">

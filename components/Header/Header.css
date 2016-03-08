@@ -16,6 +16,28 @@
   background-repeat: no-repeat;
 }
 
+.producthunt-launch {
+  font-size: 14px;
+  color: rgba(0, 0, 0, .44);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: rgba(0, 0, 0, .6);
+    border-bottom: 1px solid rgba(0, 0, 0, 6);
+  }
+
+  @media (max-width: 640px) {
+    & {
+      border-bottom: 1px solid rgba(0, 0, 0, .44);
+    }
+
+    & .emoji-fun {
+      display: none;
+    }
+  }
+}
+
 .header-content {
   padding: 5% 0 7%;
   position: relative;
