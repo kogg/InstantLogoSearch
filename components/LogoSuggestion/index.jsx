@@ -26,12 +26,9 @@ module.exports = React.createClass({
 							<div>
 								<span>Don't see quite what you're looking for? </span>
 								<label className="suggestion__activate-popover" htmlFor="suggest-name"><u>Suggest</u></label>
-								<span> a logo yourself!</span>
-								{/*
 								<span> a logo or </span>
 								<label className="suggestion__activate-popover" htmlFor="file-upload"><u>upload</u></label>
 								<span> something yourself!</span>
-								*/}
 							</div>
 					}
 				</div>
@@ -51,7 +48,6 @@ module.exports = React.createClass({
 								);
 							}.bind(this)}>
 								<input className="suggestion__input" id="suggest-name" placeholder="i.e: facebook circle" type="text" ref="suggest_name" defaultValue={this.props.value}/>
-								{/*
 								<label className="suggestion__upload-label" htmlFor="file-upload">{this.state.filename || 'Upload SVG'}</label>
 								<input className="suggestion__upload-input" id="file-upload" type="file" ref="suggest_file" accept=".svg" onChange={function() {
 									var dom = this.refs.suggest_file;
@@ -77,7 +73,6 @@ module.exports = React.createClass({
 										}
 									}
 								}.bind(this)} />
-								*/}
 								<input className={classNames({
 									suggestion__submit:           true,
 									suggestion__submit_uploading: this.state.suggestion === SUGGESTION_UPLOADING
