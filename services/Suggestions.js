@@ -100,7 +100,7 @@ module.exports = {
 			promise = promise.then(function(issue) {
 				var _getRepo     = getRepo;
 				var randomstring = _.times(10, _.partial(_.sample, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._', null)).join('');
-				var branch       = data.name.replace(/[/:]/g, '_') + '-' + randomstring;
+				var branch       = data.name.replace(/[^a-zA-Z0-9]+/g, '_') + '-' + randomstring;
 
 				var promise = _getRepo.then(function(repo) {
 					var filename = data.name.replace(/[/:]/g, '_') + ' (' + randomstring + ').svg';
