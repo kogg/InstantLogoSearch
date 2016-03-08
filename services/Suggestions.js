@@ -10,14 +10,8 @@ var GitHubApi = require('github');
 var STATUS_MESSAGES = _.invert(http.STATUS_CODES);
 var TMP_PATH        = path.join(__dirname, '../.tmp');
 
-var getRepo        = Promise.reject(new Error('Git needs ENV vars GITHUB_USERNAME & GITHUB_PERSONAL_ACCESS_TOKEN'));
-var github         = new GitHubApi({ version: '3.0.0' });
-var gitCredOptions = {
-	callbacks: {
-		certificateCheck: _.constant(1),
-		credentials:      _.constant(Git.Cred.userpassPlaintextNew(process.env.GITHUB_PERSONAL_ACCESS_TOKEN || '', 'x-oauth-basic'))
-	}
-};
+var getRepo = Promise.reject(new Error('Git needs ENV vars GITHUB_USERNAME & GITHUB_PERSONAL_ACCESS_TOKEN'));
+var github  = new GitHubApi({ version: '3.0.0' });
 
 if (process.env.GITHUB_USERNAME && process.env.GITHUB_PERSONAL_ACCESS_TOKEN) {
 	github.authenticate({
@@ -26,7 +20,19 @@ if (process.env.GITHUB_USERNAME && process.env.GITHUB_PERSONAL_ACCESS_TOKEN) {
 		password: process.env.GITHUB_PERSONAL_ACCESS_TOKEN
 	});
 
-	getRepo = Git.Clone('https://github.com/kogg/instant-logos.git', TMP_PATH, { checkoutBranch: 'develop', fetchOpts: gitCredOptions }).catch(function() {
+	getRepo = Git.Clone('https://github.com/kogg/instant-logos.git', TMP_PATH, {
+		checkoutBranch: 'develop',
+		fetchOpts:      {
+			callbacks: {
+				certificateCheck: function() {
+					return 1;
+				},
+				credentials: function() {
+					return Git.Cred.userpassPlaintextNew(process.env.GITHUB_PERSONAL_ACCESS_TOKEN || '', 'x-oauth-basic');
+				}
+			}
+		}
+	}).catch(function() {
 		return Git.Repository.open(TMP_PATH);
 	});
 }
@@ -133,7 +139,16 @@ module.exports = {
 						.then(function() {
 							return promisify(repo.getRemote.bind(repo))('origin')
 								.then(function(remote) {
-									return remote.push(['refs/heads/' + branch + ':refs/heads/' + branch], gitCredOptions);
+									return remote.push(['refs/heads/' + branch + ':refs/heads/' + branch], {
+										callbacks: {
+											certificateCheck: function() {
+												return 1;
+											},
+											credentials: function() {
+												return Git.Cred.userpassPlaintextNew(process.env.GITHUB_PERSONAL_ACCESS_TOKEN || '', 'x-oauth-basic');
+											}
+										}
+									});
 								})
 								.then(function(code) {
 									if (code) {
