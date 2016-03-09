@@ -45,7 +45,7 @@ module.exports = connect(createStructuredSelector({
 					<ShareButtons />
 				</div>
 				<div className="header-content">
-					<a href="https://www.producthunt.com/" className="producthunt-launch" target="_blank">
+					<a href="https://www.producthunt.com/tech/instant-logo-search" className="producthunt-launch" target="_blank">
 						<span className="emoji-fun">(ノ◕‿◕)ノ*:･ﾟ✧ &nbsp; </span>
 						<span>Launching On Product Hunt</span>
 						<span className="emoji-fun"> &nbsp; *:･ﾟ✧ヽ(◕‿◕ヽ)</span>
