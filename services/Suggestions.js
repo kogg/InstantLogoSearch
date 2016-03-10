@@ -22,11 +22,12 @@ module.exports = {
 		return requestPromise({
 			url:     'https://content.dropboxapi.com/2/files/upload',
 			method:  'POST',
+			body:    data.file || '',
 			headers: {
 				'Authorization':   'Bearer ' + process.env.DROPBOX_ACCESS_TOKEN,
 				'Content-Type':    'application/octet-stream',
 				'Dropbox-API-Arg': JSON.stringify({
-					path:       '/' + data.name.replace(/\//g, '-') + '.txt',
+					path:       '/instantlogosearch/' + data.name.replace(/\//g, '-') + (data.file ? '.svg' : '.txt'),
 					mode:       'add',
 					autorename: true,
 					mute:       false
