@@ -30,7 +30,7 @@ module.exports = {
 					path:       '/instantlogosearch/' + data.name.replace(/\//g, '-') + (data.file ? '.svg' : '.txt'),
 					mode:       'add',
 					autorename: true,
-					mute:       false
+					mute:       true
 				})
 			}
 		}).then(function(response) {
