@@ -4,7 +4,6 @@ var compression   = require('compression');
 var feathers      = require('feathers');
 var helmet        = require('helmet');
 var match         = require('react-router').match;
-var memoize       = require('memoizee');
 var path          = require('path');
 var promisify     = require('es6-promisify');
 var serverRender  = require('feathers-react-redux/serverRender');
@@ -70,40 +69,34 @@ app.get('/opensearchdescription.xml', function(req, res) {
 	res.send(opensearch.description(req.protocol + '://' + (req.get('origin') || req.get('host'))));
 });
 
-app.set('page-render', memoize(function(url, domain, redirect) {
-	return promisify(match)({ routes: routes, location: url })
+app.get(/^(?!\/(?:(?:api|svg)\/|png|zip))[^.]*$/, function(req, res, next) {
+	return promisify(match)({ routes: routes, location: req.url })
 		.then(function(response) { // Correlates with redirectLocation, renderProps
 			if (response[0]) {
-				redirect(302, response[0].pathname + response[0].search);
-				return Promise.resolve();
+				return res.redirect(302, response[0].pathname + response[0].search);
 			}
 			if (!response[1]) {
-				return Promise.reject();
+				return res.status(404).send('Not Found');
 			}
 
 			var store = Store();
 			return serverRender(<Provider store={store}><RouterContext {...response[1]} /></Provider>, store, actions)
 				.then(function(locals) {
-					return promisify(app.render.bind(app))('index', _.extend(locals, { state: store.getState(), domain: domain }));
+					return promisify(app.render.bind(app))('index', _.extend(locals, {
+						state:  store.getState(),
+						domain: req.protocol + '://' + (req.get('origin') || req.get('host'))
+					}));
 				})
 				.then(function(html) {
-					return { html: html, date: (new Date()).toUTCString() };
+					if (!html) {
+						return res.status(404).send('Not Found');
+					}
+					res.set('Cache-Control', 'public, max-age=' + (24 * 60 * 60));
+					res.set('Last-Modified', (new Date()).toUTCString());
+					res.send(html);
 				});
-		});
-}, { length: 2 })); // TODO Won't this cache actions performed in serverRender forever?
-
-app.get(/^(?!\/(?:(?:api|svg)\/|png|zip))[^.]*$/, function(req, res, next) {
-	app.get('page-render')(req.url, req.protocol + '://' + (req.get('origin') || req.get('host')), res.redirect.bind(res)).then(
-		function(render) {
-			if (!render) {
-				return;
-			}
-			res.set('Cache-Control', 'public, max-age=' + (24 * 60 * 60));
-			res.set('Last-Modified', render.date);
-			res.send(render.html);
-		},
-		next
-	);
+		})
+		.catch(next);
 });
 
 module.exports = app;
