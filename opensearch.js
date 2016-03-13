@@ -2,7 +2,7 @@ var _   = require('underscore');
 var xml = require('xml');
 
 module.exports = {
-	description: _.memoize(function(domain) {
+	description: function(domain) {
 		return xml({
 			OpenSearchDescription: [
 				{ _attr: { xmlns: 'http://a9.com/-/spec/opensearch/1.1/' } },
@@ -18,30 +18,33 @@ module.exports = {
 				{ Query: { _attr: { role: 'example', searchTerms: 'facebook' } } }
 			]
 		}, { declaration: true });
-	}),
+	},
 	atom: function(domain, terms, results) {
 		return xml({
-			feed: _.chain([
-				{ _attr: {
-					'xmlns':            'http://www.w3.org/2005/Atom',
-					'xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/'
-				} },
-				{ title: _.first(results).name + ' | ' + process.env.npm_package_title },
-				{ link: { _attr: { href: domain + '/?q=' + terms.join('+') } } },
-				{ 'opensearch:totalResults': results.length },
-				{ 'opensearch:Query': { _attr: { role: 'request', searchTerms: terms.join(' '), startPage: 1 } } },
-				{ link: { _attr: {
-					rel:   'search',
-					type:  'application/opensearchdescription+xml',
-					href:  domain + '/opensearchdescription.xml',
-					title: 'Seach ' + process.env.npm_package_title
-				} } }
-			]).union(_.map(results, function(result) {
-				return { entry: [
-					{ title: result.name },
-					{ link: result.url }
-				] };
-			})).value()
+			feed: _.union(
+				[
+					{ _attr: {
+						'xmlns':            'http://www.w3.org/2005/Atom',
+						'xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/'
+					} },
+					{ title: _.first(results).name + ' | ' + process.env.npm_package_title },
+					{ link: { _attr: { href: domain + '/?q=' + terms.join('+') } } },
+					{ 'opensearch:totalResults': results.length },
+					{ 'opensearch:Query': { _attr: { role: 'request', searchTerms: terms.join(' '), startPage: 1 } } },
+					{ link: { _attr: {
+						rel:   'search',
+						type:  'application/opensearchdescription+xml',
+						href:  domain + '/opensearchdescription.xml',
+						title: 'Seach ' + process.env.npm_package_title
+					} } }
+				],
+				_.map(results, function(result) {
+					return { entry: [
+						{ title: result.name },
+						{ link: result.url }
+					] };
+				})
+			)
 		}, { declaration: true });
 	},
 	rss: function(domain, terms, results) {
@@ -52,23 +55,28 @@ module.exports = {
 					'xmlns:atom':       'http://www.w3.org/2005/Atom',
 					'xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/'
 				} },
-				{ channel: _.chain([
-					{ title: (results.length ? _.first(results).name + ' | ' : '') + process.env.npm_package_title },
-					{ link: { _attr: { href: domain + '/?q=' + terms.join('+') } } },
-					{ 'opensearch:totalResults': results.length },
-					{ 'opensearch:Query': { _attr: { role: 'request', searchTerms: terms.join(' '), startPage: 1 } } },
-					{ 'atom:link': { _attr: {
-						rel:   'search',
-						type:  'application/opensearchdescription+xml',
-						href:  domain + '/opensearchdescription.xml',
-						title: 'Seach ' + process.env.npm_package_title
-					} } }
-				]).union(_.map(results, function(result) {
-					return { item: [
-						{ title: result.name },
-						{ link: result.url }
-					] };
-				})).value() }
+				{
+					channel: _.union(
+						[
+							{ title: (results.length ? _.first(results).name + ' | ' : '') + process.env.npm_package_title },
+							{ link: { _attr: { href: domain + '/?q=' + terms.join('+') } } },
+							{ 'opensearch:totalResults': results.length },
+							{ 'opensearch:Query': { _attr: { role: 'request', searchTerms: terms.join(' '), startPage: 1 } } },
+							{ 'atom:link': { _attr: {
+								rel:   'search',
+								type:  'application/opensearchdescription+xml',
+								href:  domain + '/opensearchdescription.xml',
+								title: 'Seach ' + process.env.npm_package_title
+							} } }
+						],
+						_.map(results, function(result) {
+							return { item: [
+								{ title: result.name },
+								{ link: result.url }
+							] };
+						})
+					)
+				}
 			]
 		}, { declaration: true });
 	}

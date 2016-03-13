@@ -1,7 +1,6 @@
 var _         = require('underscore');
 var google    = require('googleapis');
 var logos     = require('instant-logos');
-var memoize   = require('memoizee');
 var path      = require('path');
 var promisify = require('es6-promisify');
 
@@ -31,7 +30,7 @@ var analytics = google.analytics({
 	)
 });
 
-var getUniquePurchases = memoize(function() {
+function getUniquePurchases() {
 	return promisify(analytics.data.ga.get)({
 		'ids':        'ga:' + process.env.GOOGLE_ANALYTICS_VIEW_ID,
 		'start-date': '4daysAgo',
@@ -52,11 +51,16 @@ var getUniquePurchases = memoize(function() {
 			throw err;
 		}
 	);
-}, { maxAge: 10000, preFetch: true });
+}
+var uniquePurchases = getUniquePurchases();
+setInterval(function() {
+	var newUniquePurchases = getUniquePurchases();
+	uniquePurchases = newUniquePurchases;
+}, 60 * 60 * 1000);
 
 module.exports = {
 	find: function() {
-		return getUniquePurchases().then(
+		return uniquePurchases.then(
 			function(uniquePurchases) {
 				return _.chain(logos)
 					.map(function(logo) {
