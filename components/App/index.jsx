@@ -31,7 +31,7 @@ module.exports = connect(createStructuredSelector({
 						title={process.env.npm_package_title}
 						meta={[
 							{ name: 'description', content: process.env.npm_package_description },
-							{ property: 'og:image', content: process.env.npm_package_homepage + '/facebeef.png' },
+							{ property: 'og:image', content: (process.env.CDN_URL || process.env.npm_package_homepage) + '/facebeef.png' },
 							{ property: 'og:url', content: process.env.npm_package_homepage },
 							{ property: 'og:site_name', content: process.env.npm_package_title },
 							{ property: 'og:title', content: process.env.npm_package_title },
