@@ -23,7 +23,7 @@ var HTMLDoc = React.createClass({
 					<meta name="msapplication-TileImage" content={CDN + '/ms-icon-144x144.png'} />
 					<meta name="theme-color" content="#ffffff" />
 					{this.props.head.meta.toComponent()}
-					<link rel="stylesheet" type="text/css" href={CDN + '/' + HTMLDoc.cacheBuster('css/main.css')} />
+					<link rel="stylesheet" type="text/css" href={'/' + HTMLDoc.cacheBuster('css/main.css')} />
 					<link rel="search" type="application/opensearchdescription+xml" href={(process.env.CDN_URL || this.props.domain) + '/opensearchdescription.xml'} title={'Seach ' + process.env.npm_package_title} />
 					<link rel="apple-touch-icon" sizes="57x57" href={CDN + '/apple-icon-57x57.png'} />
 					<link rel="apple-touch-icon" sizes="60x60" href={CDN + '/apple-icon-60x60.png'} />
@@ -52,7 +52,7 @@ var HTMLDoc = React.createClass({
 					<div id="react-app" dangerouslySetInnerHTML={{ __html: this.props.markup }} />
 					<script id="react-state" type="text/json" dangerouslySetInnerHTML={{ __html: JSON.stringify(this.props.state) }} />
 					{process.env.npm_package_feathersjs_socket && <script type="text/javascript" src="/socket.io/socket.io.js" />}
-					<script type="text/javascript" src={CDN + '/' + HTMLDoc.cacheBuster('js/main.js')} async />
+					<script type="text/javascript" src={'/' + HTMLDoc.cacheBuster('js/main.js')} async />
 					{this.props.head.script.toComponent()}
 				</body>
 			</html>
