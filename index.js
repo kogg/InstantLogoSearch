@@ -1,7 +1,4 @@
 require('babel-register');
-if (process.env.CACHE_LOG) {
-	require('memoizee/profile');
-}
 var _         = require('underscore');
 var debug     = require('debug')(process.env.npm_package_name + ':application');
 var error     = require('debug')(process.env.npm_package_name + ':application:error');
