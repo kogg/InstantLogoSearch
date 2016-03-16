@@ -34,7 +34,7 @@ module.exports = {
 					{ link: { _attr: {
 						rel:   'search',
 						type:  'application/opensearchdescription+xml',
-						href:  domain + '/opensearchdescription.xml',
+						href:  (process.env.CDN_URL || domain) + '/opensearchdescription.xml',
 						title: 'Seach ' + process.env.npm_package_title
 					} } }
 				],
@@ -65,7 +65,7 @@ module.exports = {
 							{ 'atom:link': { _attr: {
 								rel:   'search',
 								type:  'application/opensearchdescription+xml',
-								href:  domain + '/opensearchdescription.xml',
+								href:  (process.env.CDN_URL || domain) + '/opensearchdescription.xml',
 								title: 'Seach ' + process.env.npm_package_title
 							} } }
 						],

@@ -88,6 +88,7 @@ module.exports = React.createClass({
 								<strong>Thank you for improving </strong>
 								<strong>{process.env.npm_package_title}!</strong>
 							</div>
+							<h2>Your suggestion is being reviewed.</h2>
 						</Popup>
 					)}
 					{(this.state.suggestion === SUGGESTION_ERROR) && (

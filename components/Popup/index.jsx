@@ -27,7 +27,7 @@ module.exports = React.createClass({
 									<strong>{process.env.npm_package_title}!</strong>
 								</div>
 							)}
-							<h2>You should share us (but like no pressure)</h2>
+							<h2>You should share us (but like, no pressure).</h2>
 							<ShareButtons />
 						</div>
 						<div className="popup__contributors-container">

@@ -5,9 +5,10 @@ var createStructuredSelector = require('reselect').createStructuredSelector;
 var React                    = require('react');
 
 var actions        = require('../../actions');
-var CarbonAd       = require('../CarbonAd');
 var LogoSuggestion = require('../LogoSuggestion');
 var Popup          = require('../Popup');
+
+var CDN = process.env.CDN_URL || '';
 
 module.exports = connect(createStructuredSelector({
 	collection: _.property('collection'),
@@ -27,7 +28,6 @@ module.exports = connect(createStructuredSelector({
 						</div>
 					)}
 					<ul>
-						<CarbonAd />
 						{_.map(this.props.logos, function(logo, i) {
 							return (
 								<li className={classNames({
@@ -36,13 +36,13 @@ module.exports = connect(createStructuredSelector({
 									'brand-logo_considering': _.isEmpty(this.props.collection) && (this.state.considering === logo.id)
 								})} key={logo.id}>
 									<div className="brand-logo__image flex-center">
-										<img src={logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
+										<img src={CDN + logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
 									</div>
 									<div className="brand-logo__ctas">
 										<strong>{logo.name}</strong>
 										<div className="brand-logo__download-ctas">
-											<a href={logo.svg} download={logo.name + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
-											<a href={logo.png} download={logo.name + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
+											<a href={CDN + logo.svg} download={logo.name + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
+											<a href={CDN + logo.png} download={logo.name + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
 										</div>
 										{this.props.collection && (
 											<a className="brand-logo__collection-ctas" href={'/' + logo.shortname}

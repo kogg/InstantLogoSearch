@@ -11,6 +11,7 @@ var React                    = require('react');
 var actions = require('../../actions');
 var Popup   = require('../Popup');
 
+var CDN       = process.env.CDN_URL || '';
 var FILETYPES = ['svg', 'png'];
 var IS_SAFARI = global.window && /Version\/[\d\.]+.*Safari/.test(global.navigator.userAgent);
 
@@ -63,7 +64,7 @@ module.exports = connect(createStructuredSelector({
 								collection__logo_considering_addition: logo.considering === 'addition',
 								collection__logo_considering_removal:  logo.considering === 'removal'
 							})}>
-								<img src={logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
+								<img src={CDN + logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
 								<div className="collection__delete-logo"
 									onClick={function(e) {
 										e.preventDefault();
@@ -86,13 +87,13 @@ module.exports = connect(createStructuredSelector({
 						if (this.props.logos.length === 1) {
 							return _.map(FILETYPES, function(filetype) {
 								return (
-									<a key={filetype} href={this.props.logos[0][filetype]} download={this.props.logos[0].name + '.' + filetype} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], filetype)}>Download {filetype.toUpperCase()}</a>
+									<a key={filetype} href={CDN + this.props.logos[0][filetype]} download={this.props.logos[0].name + '.' + filetype} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], filetype)}>Download {filetype.toUpperCase()}</a>
 								);
 							}.bind(this));
 						}
 						return _.map(FILETYPES, function(filetype) {
 							return (
-								<a key={filetype} download="logos.zip" href={'zip?filetype=' + filetype + '&ids[]=' + _.pluck(this.props.logos, 'id').join('&ids[]=')} onClick={function(e) {
+								<a key={filetype} download="logos.zip" href={CDN + '/zip?filetype=' + filetype + '&ids[]=' + _.pluck(this.props.logos, 'id').join('&ids[]=')} onClick={function(e) {
 									if (IS_SAFARI) {
 										return this.downloadedLogos(this.props.logos, filetype);
 									}
@@ -149,7 +150,7 @@ module.exports = connect(createStructuredSelector({
 			if (!logo[filetype]) {
 				return Promise.reject(new Error('Logo ' + logo.id + ' does not have a ' + filetype));
 			}
-			return fetch(logo[filetype])
+			return fetch(CDN + logo[filetype])
 				.then(function(response) {
 					if (response.status < 200 || response.status >= 300) {
 						var error = new Error(response.statusText);
