@@ -5,6 +5,12 @@
   position: relative;
   overflow: hidden;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+
+  @media (min-width: 1280px) {
+    .flex-spread {
+      padding: 0 10px;
+    }
+  }
 }
 
 .logo {
@@ -67,12 +73,15 @@
 /*header_collapsed*/
 .header_collapsed {
   padding: 10px 30px 10px 15px;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  align-items: center;
   background: #fff;
   cursor: text;
+
+  & .content-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+  }
 
   & .search-icon {
     background: url('logo.svg');

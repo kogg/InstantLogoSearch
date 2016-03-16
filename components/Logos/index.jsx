@@ -18,57 +18,59 @@ module.exports = connect(createStructuredSelector({
 	render:          function() {
 		return (
 			<div className="logos">
-				{this.state.popup && <Popup onClose={function() {
-					this.setState({ popup: false });
-				}.bind(this)} />}
-				<div>
-					{this.props.heading && (
-						<div className="logos__title">
-							<h3>{this.props.heading}</h3>
-						</div>
-					)}
-					<ul>
-						{_.map(this.props.logos, function(logo, i) {
-							return (
-								<li className={classNames({
-									'brand-logo':             true,
-									'brand-logo_collected':   this.props.collection && this.props.collection[logo.id],
-									'brand-logo_considering': _.isEmpty(this.props.collection) && (this.state.considering === logo.id)
-								})} key={logo.id}>
-									<div className="brand-logo__image flex-center">
-										<img src={CDN + logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
-									</div>
-									<div className="brand-logo__ctas">
-										<strong>{logo.name}</strong>
-										<div className="brand-logo__download-ctas">
-											<a href={CDN + logo.svg} download={logo.name + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
-											<a href={CDN + logo.png} download={logo.name + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
+				<div className="content-container">
+					{this.state.popup && <Popup onClose={function() {
+						this.setState({ popup: false });
+					}.bind(this)} />}
+					<div>
+						{this.props.heading && (
+							<div className="logos__title">
+								<h3>{this.props.heading}</h3>
+							</div>
+						)}
+						<ul>
+							{_.map(this.props.logos, function(logo, i) {
+								return (
+									<li className={classNames({
+										'brand-logo':             true,
+										'brand-logo_collected':   this.props.collection && this.props.collection[logo.id],
+										'brand-logo_considering': _.isEmpty(this.props.collection) && (this.state.considering === logo.id)
+									})} key={logo.id}>
+										<div className="brand-logo__image flex-center">
+											<img src={CDN + logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
 										</div>
-										{this.props.collection && (
-											<a className="brand-logo__collection-ctas" href={'/' + logo.shortname}
-												onClick={function(e) {
-													e.preventDefault();
-													this.toggleCollected(logo, i);
-												}.bind(this)}
-												onMouseMove={_.partial(this.toggleConsiderLogo, logo, true)}
-												onMouseLeave={_.partial(this.toggleConsiderLogo, logo, false)}>
-												{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Bucket
-											</a>
-										)}
-									</div>
-								</li>
-							);
-						}.bind(this))}
-						{this.props.suggest && <LogoSuggestion value={this.props.suggest} dispatch={this.props.dispatch} active={!this.props.logos.length} />}
-					</ul>
-					{(this.props.loadmore === 'cta') && (
-						<div className="logos__load-more">
-							<a href="" className="logos__load-more-cta" onClick={function(e) {
-								e.preventDefault();
-								this.props.onLoadMore('CTA');
-							}.bind(this)}>Show More</a>
-						</div>
-					)}
+										<div className="brand-logo__ctas">
+											<strong>{logo.name}</strong>
+											<div className="brand-logo__download-ctas">
+												<a href={CDN + logo.svg} download={logo.name + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
+												<a href={CDN + logo.png} download={logo.name + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
+											</div>
+											{this.props.collection && (
+												<a className="brand-logo__collection-ctas" href={'/' + logo.shortname}
+													onClick={function(e) {
+														e.preventDefault();
+														this.toggleCollected(logo, i);
+													}.bind(this)}
+													onMouseMove={_.partial(this.toggleConsiderLogo, logo, true)}
+													onMouseLeave={_.partial(this.toggleConsiderLogo, logo, false)}>
+													{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Bucket
+												</a>
+											)}
+										</div>
+									</li>
+								);
+							}.bind(this))}
+							{this.props.suggest && <LogoSuggestion value={this.props.suggest} dispatch={this.props.dispatch} active={!this.props.logos.length} />}
+						</ul>
+						{(this.props.loadmore === 'cta') && (
+							<div className="logos__load-more">
+								<a href="" className="logos__load-more-cta" onClick={function(e) {
+									e.preventDefault();
+									this.props.onLoadMore('CTA');
+								}.bind(this)}>Show More</a>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		);
