@@ -5,7 +5,6 @@ var createStructuredSelector = require('reselect').createStructuredSelector;
 var React                    = require('react');
 
 var actions        = require('../../actions');
-var CarbonAd       = require('../CarbonAd');
 var LogoSuggestion = require('../LogoSuggestion');
 var Popup          = require('../Popup');
 
@@ -30,7 +29,6 @@ module.exports = connect(createStructuredSelector({
 							</div>
 						)}
 						<ul>
-							<CarbonAd />
 							{_.map(this.props.logos, function(logo, i) {
 								return (
 									<li className={classNames({
