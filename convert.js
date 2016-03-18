@@ -1,5 +1,4 @@
 var fs        = require('fs');
-var memoize   = require('memoizee');
 var promisify = require('es6-promisify');
 var redis     = require('redis');
 var svg2png   = require('svg2png');
@@ -26,7 +25,3 @@ module.exports = function(file_path) {
 		})
 		;
 };
-
-if (!process.env.DONT_CACHE_PNGS) {
-	module.exports = memoize(module.exports, { maxAge: 10 * 60 * 1000, preFetch: true });
-}

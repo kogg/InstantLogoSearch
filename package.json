@@ -91,7 +91,6 @@
     "helmet": "^1.1.0",
     "instant-logos": "kogg/instant-logos#develop",
     "jszip": "^2.5.0",
-    "memoizee": "^0.3.9",
     "postcss-cachebuster": "^0.1.2",
     "postcss-cli": "^2.3.2",
     "postcss-import": "^7.1.3",
