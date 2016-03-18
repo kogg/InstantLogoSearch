@@ -28,7 +28,7 @@
     "test": "eslint . --ignore-path .gitignore --ext .js,.jsx",
     "clean": "rm -rf dist dump.rdb",
     "fix": "npm run cssfmt:fix && npm run eslint:fix",
-    "node": "if [ \"$EXPOSE_GC\" = '1' ]; then node $npm_package_main --expose-gc; else node $npm_package_main; fi",
+    "node": "if [ -z \"$EXPOSE_GC\" ]; then node $npm_package_main --expose-gc; else node $npm_package_main; fi",
     "nodemon": "nodemon --ignore dist/ -e js,jsx $npm_package_main",
     "jsify": "mkdir -p dist/js && browserify $npm_package_browser_main --verbose --extension=.jsx | uglifyjs -c drop_console,warnings=false -o dist/js/main.js",
     "watchify": "mkdir -p dist/js && watchify $npm_package_browser_main --debug --verbose --extension=.jsx -o dist/js/main.js",
