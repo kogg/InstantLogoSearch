@@ -1,16 +1,27 @@
 var fs        = require('fs');
-var memoize   = require('memoizee');
 var promisify = require('es6-promisify');
+var redis     = require('redis');
 var svg2png   = require('svg2png');
 
-module.exports = function(file_path) {
-	return promisify(fs.readFile)(file_path).then(function(data) {
-		return svg2png(data, { height: 512 }).catch(function() {
-			return svg2png(data, { height: 512, width: 1024 });
-		});
-	});
-};
+var redis_client = redis.createClient({ url: process.env.REDISCLOUD_URL, return_buffers: true });
 
-if (!process.env.DONT_CACHE_PNGS) {
-	module.exports = memoize(module.exports, { maxAge: 10 * 60 * 1000, preFetch: true });
-}
+module.exports = function(file_path) {
+	return promisify(redis_client.get.bind(redis_client))(file_path)
+		.catch(function() {
+			return Promise.resolve();
+		})
+		.then(function(data) {
+			return data || promisify(fs.readFile)(file_path)
+				.then(function(data) {
+					return svg2png(data, { height: 512 }).catch(function() {
+						return svg2png(data, { height: 512, width: 1024 });
+					});
+				})
+				.then(function(data) {
+					redis_client.setex(file_path, 60 * 60, data);
+					return data;
+				})
+				;
+		})
+		;
+};
