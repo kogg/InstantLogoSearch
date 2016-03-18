@@ -9,7 +9,9 @@ var CarbonAd       = require('../CarbonAd');
 var LogoSuggestion = require('../LogoSuggestion');
 var Popup          = require('../Popup');
 
-var CDN = process.env.CDN_URL || '';
+var CDN      = process.env.CDN_URL || '';
+var SUGGEST  = 1;
+var CARBONAD = 2;
 
 module.exports = connect(createStructuredSelector({
 	collection: _.property('collection'),
@@ -17,6 +19,14 @@ module.exports = connect(createStructuredSelector({
 }))(React.createClass({
 	getInitialState: _.constant({ considering: null, popup: false }),
 	render:          function() {
+		var logosChain = _.chain(this.props.logos).clone();
+		if (this.props.suggest) {
+			logosChain.push(SUGGEST);
+		}
+		if (this.props.carbonad) {
+			logosChain.splice(3 + ((this.props.suggest && this.props.logos.length === 3) ? 1 : 0), 0, CARBONAD);
+		}
+
 		return (
 			<div className="logos">
 				<div className="content-container">
@@ -30,8 +40,13 @@ module.exports = connect(createStructuredSelector({
 							</div>
 						)}
 						<ul>
-							<CarbonAd />
-							{_.map(this.props.logos, function(logo, i) {
+							{logosChain.map(function(logo, i) {
+								if (logo === CARBONAD) {
+									return <CarbonAd key="carbonad" />;
+								}
+								if (logo === SUGGEST) {
+									return <LogoSuggestion value={this.props.suggest} dispatch={this.props.dispatch} active={!this.props.logos.length} key="suggest" />;
+								}
 								return (
 									<li className={classNames({
 										'brand-logo':             true,
@@ -61,8 +76,7 @@ module.exports = connect(createStructuredSelector({
 										</div>
 									</li>
 								);
-							}.bind(this))}
-							{this.props.suggest && <LogoSuggestion value={this.props.suggest} dispatch={this.props.dispatch} active={!this.props.logos.length} />}
+							}.bind(this)).value()}
 						</ul>
 						{(this.props.loadmore === 'cta') && (
 							<div className="logos__load-more">
