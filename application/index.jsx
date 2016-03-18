@@ -70,6 +70,7 @@ app.get('/opensearchdescription.xml', function(req, res) {
 });
 
 app.get(/^(?!\/(?:(?:api|svg)\/|png|zip))[^.]*$/, function(req, res, next) {
+	var before = process.env.TIME_PAGE && performance.now();
 	return promisify(match)({ routes: routes, location: req.url })
 		.then(function(response) { // Correlates with redirectLocation, renderProps
 			if (response[0]) {
@@ -88,6 +89,9 @@ app.get(/^(?!\/(?:(?:api|svg)\/|png|zip))[^.]*$/, function(req, res, next) {
 					}));
 				})
 				.then(function(html) {
+					if (process.env.TIME_PAGE) {
+						console.log('total', performance.now() - before);
+					}
 					if (!html) {
 						return res.status(404).send('Not Found');
 					}
