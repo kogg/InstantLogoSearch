@@ -53,7 +53,7 @@ module.exports = connect(createStructuredSelector({
 						{ name: 'startIndex', content: 0 },
 						{ name: 'itemsPerPage', content: Math.min(shortname_logos.length, 5) }
 					]} />
-				<Logos heading={name} logos={shortname_logos} />
+				<Logos heading={name} logos={shortname_logos} carbonad={true} />
 				<Logos heading="Popular Logos"
 					logos={_.first(this.props.logos, 5)}
 					loadmore="cta"

@@ -53,57 +53,59 @@ module.exports = connect(createStructuredSelector({
 				collection_empty:       _.isEmpty(this.props.logos),
 				collection_untouchable: this.props.considering
 			})}>
-				{this.state.popup && <Popup onClose={function() {
-					this.setState({ popup: false });
-				}.bind(this)} />}
-				<ul className="collection__logos">
-					{this.props.logos.map(function(logo) {
-						return (
-							<li key={logo.id} className={classNames({
-								collection__logo:                      true,
-								collection__logo_considering_addition: logo.considering === 'addition',
-								collection__logo_considering_removal:  logo.considering === 'removal'
-							})}>
-								<img src={CDN + logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
-								<div className="collection__delete-logo"
-									onClick={function(e) {
-										e.preventDefault();
-										this.uncollectLogo(logo);
-									}.bind(this)}></div>
-							</li>
-						);
-					}.bind(this))}
-				</ul>
-				<div className={classNames({
-					collection__ctas:                 true,
-					collection__ctas_downloading:     this.state.downloading,
-					collection__ctas_downloading_svg: this.state.downloading === 'svg',
-					collection__ctas_downloading_png: this.state.downloading === 'png'
-				})}>
-					{(function() {
-						if (!this.props.logos.length) {
-							return false;
-						}
-						if (this.props.logos.length === 1) {
+				<div className="content-container">
+					{this.state.popup && <Popup onClose={function() {
+						this.setState({ popup: false });
+					}.bind(this)} />}
+					<ul className="collection__logos">
+						{this.props.logos.map(function(logo) {
+							return (
+								<li key={logo.id} className={classNames({
+									collection__logo:                      true,
+									collection__logo_considering_addition: logo.considering === 'addition',
+									collection__logo_considering_removal:  logo.considering === 'removal'
+								})}>
+									<img src={CDN + logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
+									<div className="collection__delete-logo"
+										onClick={function(e) {
+											e.preventDefault();
+											this.uncollectLogo(logo);
+										}.bind(this)}></div>
+								</li>
+							);
+						}.bind(this))}
+					</ul>
+					<div className={classNames({
+						collection__ctas:                 true,
+						collection__ctas_downloading:     this.state.downloading,
+						collection__ctas_downloading_svg: this.state.downloading === 'svg',
+						collection__ctas_downloading_png: this.state.downloading === 'png'
+					})}>
+						{(function() {
+							if (!this.props.logos.length) {
+								return false;
+							}
+							if (this.props.logos.length === 1) {
+								return _.map(FILETYPES, function(filetype) {
+									return (
+										<a key={filetype} href={CDN + this.props.logos[0][filetype]} download={this.props.logos[0].name + '.' + filetype} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], filetype)}>Download {filetype.toUpperCase()}</a>
+									);
+								}.bind(this));
+							}
 							return _.map(FILETYPES, function(filetype) {
 								return (
-									<a key={filetype} href={CDN + this.props.logos[0][filetype]} download={this.props.logos[0].name + '.' + filetype} onClick={_.partial(this.downloadedLogos, [this.props.logos[0]], filetype)}>Download {filetype.toUpperCase()}</a>
+									<a key={filetype} download="logos.zip" href={CDN + '/zip?filetype=' + filetype + '&ids[]=' + _.pluck(this.props.logos, 'id').join('&ids[]=')} onClick={function(e) {
+										if (IS_SAFARI) {
+											return this.downloadedLogos(this.props.logos, filetype);
+										}
+										e.preventDefault();
+										this.setState({ downloading: filetype });
+										this.zipAndDownload(this.props.logos, filetype).then(_.partial(this.downloadedLogos, this.props.logos, filetype));
+									}.bind(this)}>Download {filetype.toUpperCase()}s</a>
 								);
 							}.bind(this));
-						}
-						return _.map(FILETYPES, function(filetype) {
-							return (
-								<a key={filetype} download="logos.zip" href={CDN + '/zip?filetype=' + filetype + '&ids[]=' + _.pluck(this.props.logos, 'id').join('&ids[]=')} onClick={function(e) {
-									if (IS_SAFARI) {
-										return this.downloadedLogos(this.props.logos, filetype);
-									}
-									e.preventDefault();
-									this.setState({ downloading: filetype });
-									this.zipAndDownload(this.props.logos, filetype).then(_.partial(this.downloadedLogos, this.props.logos, filetype));
-								}.bind(this)}>Download {filetype.toUpperCase()}s</a>
-							);
-						}.bind(this));
-					}.bind(this))()}
+						}.bind(this))()}
+					</div>
 				</div>
 			</div>
 		);

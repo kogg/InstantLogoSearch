@@ -1,3 +1,44 @@
-.nothing {
-  color: blue;
+.ad {
+  height: 245px;
+  text-align: center;
+
+  span {
+    display: block;
+  }
+
+  .carbon-img:hover + .carbon-text,
+  .carbon-text:hover {
+    color: black;
+  }
+
+  .carbon-img {
+    padding: 12px;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .carbon-text {
+    text-align: center;
+    display: block;
+    padding: 12px 12px 4px;
+    font-size: 15px;
+    color: rgba(0, 0, 0, .5);
+    text-decoration: none;
+  }
+
+  .carbon-poweredby {
+    color: rgba(0, 0, 0, .5);
+    font-size: 13px;
+    text-transform: capitalize;
+  }
+
+  .carbon-poweredby:hover {
+    color: black;
+  }
+
+  .carbon-poweredby + img {
+    position: absolute;
+  }
 }

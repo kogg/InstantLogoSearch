@@ -31,49 +31,46 @@ module.exports = connect(createStructuredSelector({
 					e.preventDefault();
 					this.refs.search.select();
 				}.bind(this)}>
-				<div className="flex-spread">
-					<a href="/" className="logo" onClick={function(e) {
-						if (!this.state.collapsed) {
-							return;
-						}
-						e.preventDefault();
-						this.setState({ collapsed: false });
-						this.props.dispatch(actions.search(''));
-						this.refs.search.select();
-						ga('send', 'event', 'Search', 'Clear', 'Header Logo');
-					}.bind(this)}></a>
-					<ShareButtons />
-				</div>
-				<div className="header-content">
-					<a href="https://www.producthunt.com/tech/instant-logo-search" className="producthunt-launch" target="_blank">
-						<span className="emoji-fun">(ノ◕‿◕)ノ*:･ﾟ✧ &nbsp; </span>
-						<span>Launching On Product Hunt</span>
-						<span className="emoji-fun"> &nbsp; *:･ﾟ✧ヽ(◕‿◕ヽ)</span>
-					</a>
-					<h1>{process.env.npm_package_title}</h1>
-					<h2>{process.env.npm_package_description}</h2>
-					<div className="search-container">
-						<form method="GET" onSubmit={_.partial(_.result, _, 'preventDefault')} >
-							<label>
-								<i className="search-icon" onClick={function() {
-									if (!this.state.collapsed) {
-										return;
-									}
-									this.setState({ collapsed: false });
-									this.props.dispatch(actions.search(''));
-									this.refs.search.select();
-									ga('send', 'event', 'Search', 'Clear', 'Search Icon');
-								}.bind(this)}></i>
-								<input className="search-input" defaultValue={this.props.searching} ref="search" type="text" autoFocus autoComplete="off" placeholder="What logo are you looking for?" name="q"
-									onClick={function(e) {
-										e.stopPropagation();
-									}}
-									onChange={function() {
-										this.setState({ collapsed: true });
-										this.props.dispatch(actions.search(this.refs.search.value));
-									}.bind(this)} />
-							</label>
-						</form>
+				<div className="content-container">
+					<div className="flex-spread">
+						<a href="/" className="logo" onClick={function(e) {
+							if (!this.state.collapsed) {
+								return;
+							}
+							e.preventDefault();
+							this.setState({ collapsed: false });
+							this.props.dispatch(actions.search(''));
+							this.refs.search.select();
+							ga('send', 'event', 'Search', 'Clear', 'Header Logo');
+						}.bind(this)}></a>
+						<ShareButtons />
+					</div>
+					<div className="header-content">
+						<h1>{process.env.npm_package_title}</h1>
+						<h2>{process.env.npm_package_description}</h2>
+						<div className="search-container">
+							<form method="GET" onSubmit={_.partial(_.result, _, 'preventDefault')} >
+								<label>
+									<i className="search-icon" onClick={function() {
+										if (!this.state.collapsed) {
+											return;
+										}
+										this.setState({ collapsed: false });
+										this.props.dispatch(actions.search(''));
+										this.refs.search.select();
+										ga('send', 'event', 'Search', 'Clear', 'Search Icon');
+									}.bind(this)}></i>
+									<input className="search-input" defaultValue={this.props.searching} ref="search" type="text" autoFocus autoComplete="off" placeholder="What logo are you looking for?" name="q"
+										onClick={function(e) {
+											e.stopPropagation();
+										}}
+										onChange={function() {
+											this.setState({ collapsed: true });
+											this.props.dispatch(actions.search(this.refs.search.value));
+										}.bind(this)} />
+								</label>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>

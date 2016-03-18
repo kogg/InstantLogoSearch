@@ -5,6 +5,12 @@
   position: relative;
   overflow: hidden;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+
+  @media (min-width: 1280px) {
+    .flex-spread {
+      padding: 0 10px;
+    }
+  }
 }
 
 .logo {
@@ -16,30 +22,8 @@
   background-repeat: no-repeat;
 }
 
-.producthunt-launch {
-  font-size: 14px;
-  color: rgba(0, 0, 0, .44);
-  text-decoration: none;
-  cursor: pointer;
-
-  &:hover {
-    color: rgba(0, 0, 0, .6);
-    border-bottom: 1px solid rgba(0, 0, 0, 6);
-  }
-
-  @media (max-width: 640px) {
-    & {
-      border-bottom: 1px solid rgba(0, 0, 0, .44);
-    }
-
-    & .emoji-fun {
-      display: none;
-    }
-  }
-}
-
 .header-content {
-  padding: 5% 0 7%;
+  padding: 4% 0 6%;
   position: relative;
 }
 
@@ -89,12 +73,15 @@
 /*header_collapsed*/
 .header_collapsed {
   padding: 10px 30px 10px 15px;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  align-items: center;
   background: #fff;
   cursor: text;
+
+  & .content-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+  }
 
   & .search-icon {
     background: url('logo.svg');

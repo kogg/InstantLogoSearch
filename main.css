@@ -50,6 +50,12 @@ form {
   flex-wrap: wrap;
 }
 
+.content-container {
+  max-width: 1280px;
+  position: relative;
+  margin: auto;
+}
+
 .flex-center {
   display: flex;
   justify-content: center;

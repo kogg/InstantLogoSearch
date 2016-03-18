@@ -5,10 +5,13 @@ var createStructuredSelector = require('reselect').createStructuredSelector;
 var React                    = require('react');
 
 var actions        = require('../../actions');
+var CarbonAd       = require('../CarbonAd');
 var LogoSuggestion = require('../LogoSuggestion');
 var Popup          = require('../Popup');
 
-var CDN = process.env.CDN_URL || '';
+var CDN      = process.env.CDN_URL || '';
+var SUGGEST  = 1;
+var CARBONAD = 2;
 
 module.exports = connect(createStructuredSelector({
 	collection: _.property('collection'),
@@ -16,59 +19,74 @@ module.exports = connect(createStructuredSelector({
 }))(React.createClass({
 	getInitialState: _.constant({ considering: null, popup: false }),
 	render:          function() {
+		var logosChain = _.chain(this.props.logos).clone();
+		if (this.props.suggest) {
+			logosChain.push(SUGGEST);
+		}
+		if (this.props.carbonad) {
+			logosChain.splice(3 + ((this.props.suggest && this.props.logos.length === 3) ? 1 : 0), 0, CARBONAD);
+		}
+
 		return (
 			<div className="logos">
-				{this.state.popup && <Popup onClose={function() {
-					this.setState({ popup: false });
-				}.bind(this)} />}
-				<div>
-					{this.props.heading && (
-						<div className="logos__title">
-							<h3>{this.props.heading}</h3>
-						</div>
-					)}
-					<ul>
-						{_.map(this.props.logos, function(logo, i) {
-							return (
-								<li className={classNames({
-									'brand-logo':             true,
-									'brand-logo_collected':   this.props.collection && this.props.collection[logo.id],
-									'brand-logo_considering': _.isEmpty(this.props.collection) && (this.state.considering === logo.id)
-								})} key={logo.id}>
-									<div className="brand-logo__image flex-center">
-										<img src={CDN + logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
-									</div>
-									<div className="brand-logo__ctas">
-										<strong>{logo.name}</strong>
-										<div className="brand-logo__download-ctas">
-											<a href={CDN + logo.svg} download={logo.name + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
-											<a href={CDN + logo.png} download={logo.name + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
+				<div className="content-container">
+					{this.state.popup && <Popup onClose={function() {
+						this.setState({ popup: false });
+					}.bind(this)} />}
+					<div>
+						{this.props.heading && (
+							<div className="logos__title">
+								<h3>{this.props.heading}</h3>
+							</div>
+						)}
+						<ul>
+							{logosChain.map(function(logo, i) {
+								if (logo === CARBONAD) {
+									return <CarbonAd key="carbonad" />;
+								}
+								if (logo === SUGGEST) {
+									return <LogoSuggestion value={this.props.suggest} dispatch={this.props.dispatch} active={!this.props.logos.length} key="suggest" />;
+								}
+								return (
+									<li className={classNames({
+										'brand-logo':             true,
+										'brand-logo_collected':   this.props.collection && this.props.collection[logo.id],
+										'brand-logo_considering': _.isEmpty(this.props.collection) && (this.state.considering === logo.id)
+									})} key={logo.id}>
+										<div className="brand-logo__image flex-center">
+											<img src={CDN + logo.svg} alt={logo.name + ' (' + logo.id + ')'} />
 										</div>
-										{this.props.collection && (
-											<a className="brand-logo__collection-ctas" href={'/' + logo.shortname}
-												onClick={function(e) {
-													e.preventDefault();
-													this.toggleCollected(logo, i);
-												}.bind(this)}
-												onMouseMove={_.partial(this.toggleConsiderLogo, logo, true)}
-												onMouseLeave={_.partial(this.toggleConsiderLogo, logo, false)}>
-												{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Bucket
-											</a>
-										)}
-									</div>
-								</li>
-							);
-						}.bind(this))}
-						{this.props.suggest && <LogoSuggestion value={this.props.suggest} dispatch={this.props.dispatch} active={!this.props.logos.length} />}
-					</ul>
-					{(this.props.loadmore === 'cta') && (
-						<div className="logos__load-more">
-							<a href="" className="logos__load-more-cta" onClick={function(e) {
-								e.preventDefault();
-								this.props.onLoadMore('CTA');
-							}.bind(this)}>Show More</a>
-						</div>
-					)}
+										<div className="brand-logo__ctas">
+											<strong>{logo.name}</strong>
+											<div className="brand-logo__download-ctas">
+												<a href={CDN + logo.svg} download={logo.name + '.svg'} onClick={_.partial(this.downloadedLogo, logo, i, 'svg')}>SVG</a>
+												<a href={CDN + logo.png} download={logo.name + '.png'} onClick={_.partial(this.downloadedLogo, logo, i, 'png')}>PNG</a>
+											</div>
+											{this.props.collection && (
+												<a className="brand-logo__collection-ctas" href={'/' + logo.shortname}
+													onClick={function(e) {
+														e.preventDefault();
+														this.toggleCollected(logo, i);
+													}.bind(this)}
+													onMouseMove={_.partial(this.toggleConsiderLogo, logo, true)}
+													onMouseLeave={_.partial(this.toggleConsiderLogo, logo, false)}>
+													{this.props.collection[logo.id] ? 'Remove from' : 'Add to'} Bucket
+												</a>
+											)}
+										</div>
+									</li>
+								);
+							}.bind(this)).value()}
+						</ul>
+						{(this.props.loadmore === 'cta') && (
+							<div className="logos__load-more">
+								<a href="" className="logos__load-more-cta" onClick={function(e) {
+									e.preventDefault();
+									this.props.onLoadMore('CTA');
+								}.bind(this)}>Show More</a>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		);
