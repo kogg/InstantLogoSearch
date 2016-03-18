@@ -28,7 +28,7 @@ if (process.env.WATCHMEM) {
 		console.log(process.memoryUsage());
 	}, 1000);
 }
-if (global.gc) {
+if (process.env.EXPOSE_GC) {
 	setInterval(function() {
 		console.log('run gc');
 		global.gc();
