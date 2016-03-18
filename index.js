@@ -23,6 +23,17 @@ if (process.env.MEMWATCH) {
 		});
 	});
 }
+if (process.env.WATCHMEM) {
+	setInterval(function() {
+		console.log(process.memoryUsage());
+	}, 1000);
+}
+if (global.gc) {
+	setInterval(function() {
+		console.log('run gc');
+		global.gc();
+	}, 5 * 1000);
+}
 
 var app         = require('./application');
 var convert     = require('./convert');
