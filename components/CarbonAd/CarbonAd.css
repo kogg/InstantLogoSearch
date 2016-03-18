@@ -6,6 +6,10 @@
     display: block;
   }
 
+  .carbon-wrap {
+    min-height: 208px;
+  }
+
   .carbon-img:hover + .carbon-text,
   .carbon-text:hover {
     color: black;
@@ -23,7 +27,7 @@
     text-align: center;
     display: block;
     padding: 12px 12px 4px;
-    font-size: 15px;
+    font-size: 13px;
     color: rgba(0, 0, 0, .5);
     text-decoration: none;
   }
