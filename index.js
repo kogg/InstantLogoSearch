@@ -12,11 +12,12 @@ var JSZip     = require('jszip');
 if (process.env.MEMWATCH) {
 	var heapdump = require('heapdump');
 	var memwatch = require('memwatch-next');
+	console.log('memory leak handling right?');
 	memwatch.on('leak', function(info) {
 		console.log('Memory leak detected: ', info);
-		heapdump.writeSnapshot(path.join(__dirname, 'assets', 'dump' + Math.random() + '.heapsnapshot'), function(err, filename) {
+		heapdump.writeSnapshot(function(err, filename) {
 			if (err) {
-				return console.log(err);
+				return console.log('heap error', err);
 			}
 			console.log('dump written to', filename);
 		});
