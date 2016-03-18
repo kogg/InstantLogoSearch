@@ -57,7 +57,7 @@ app.get('/zip', function(req, res, next) {
 	if (req.query.randomlogos === 'loaderio-ac72b9b54887459b638947a317ceacce') {
 		req.query.filetype = _.sample(['svg', 'png']);
 		req.query.ids = _.chain(logos)
-			.sample(3)
+			.sample(1 + Math.floor(3 * Math.random()))
 			.pluck('id')
 			.value();
 	}
