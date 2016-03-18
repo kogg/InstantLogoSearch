@@ -9,30 +9,13 @@ var os        = require('os');
 var path      = require('path');
 var promisify = require('es6-promisify');
 var JSZip     = require('jszip');
-if (process.env.MEMWATCH) {
-	var heapdump = require('heapdump');
-	var memwatch = require('memwatch-next');
-	console.log('memory leak handling right?');
-	memwatch.on('leak', function(info) {
-		console.log('Memory leak detected: ', info);
-		heapdump.writeSnapshot(function(err, filename) {
-			if (err) {
-				return console.log('heap error', err);
-			}
-			console.log('dump written to', filename);
-		});
-	});
-}
-if (process.env.WATCHMEM) {
+if (process.env.PERIODIC_GC) {
 	setInterval(function() {
 		console.log(process.memoryUsage());
-	}, 1000);
-}
-if (process.env.EXPOSE_GC) {
-	setInterval(function() {
 		console.log('run gc');
+		console.log(process.memoryUsage());
 		global.gc();
-	}, 5 * 1000);
+	}, 60 * 1000);
 }
 
 var app         = require('./application');
