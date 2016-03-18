@@ -107,6 +107,7 @@
     "react-modal2": "^3.0.2",
     "react-redux": "^4.0.6",
     "react-router": "^2.0.0",
+    "redis": "^2.5.2",
     "redux": "^3.0.5",
     "redux-actions": "^0.9.1",
     "redux-thunk": "^1.0.3",

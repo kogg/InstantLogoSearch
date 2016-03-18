@@ -1,3 +1,4 @@
 web:      npm run nodemon
 watchify: npm run watchify
 postcss:  npm run postcss:watch
+redis:    redis-server
