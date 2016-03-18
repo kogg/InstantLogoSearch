@@ -9,6 +9,19 @@ var os        = require('os');
 var path      = require('path');
 var promisify = require('es6-promisify');
 var JSZip     = require('jszip');
+if (process.env.MEMWATCH) {
+	var heapdump = require('heapdump');
+	var memwatch = require('memwatch-next');
+	memwatch.on('leak', function(info) {
+		console.error('Memory leak detected: ', info);
+		heapdump.writeSnapshot(path.join(__dirname, 'assets', 'dump' + Math.random() + '.heapsnapshot'), function(err, filename) {
+			if (err) {
+				return console.error(err);
+			}
+			console.error('dump written to', filename);
+		});
+	});
+}
 
 var app         = require('./application');
 var convert     = require('./convert');
