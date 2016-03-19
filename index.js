@@ -10,7 +10,9 @@ var rollbar   = require('rollbar');
 var JSZip     = require('jszip');
 
 rollbar.init(process.env.ROLLBAR_ACCESS_TOKEN, {
-	environment: process.env.ROLLBAR_ENV || 'production'
+	environment: process.env.ROLLBAR_ENV || 'production',
+	verbose:     !process.env.NODE_ENV,
+	enabled:     !process.env.NODE_ENV
 });
 rollbar.handleUncaughtExceptions(process.env.ROLLBAR_ACCESS_TOKEN, {});
 

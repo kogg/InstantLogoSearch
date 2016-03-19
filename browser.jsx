@@ -11,7 +11,8 @@ rollbar.init({
 	accessToken:     process.env.ROLLBAR_CLIENT_ACCESS_TOKEN,
 	captureUncaught: true,
 	payload:         { environment: process.env.ROLLBAR_ENV || 'production' },
-	verbose:         !process.env.NODE_ENV
+	verbose:         !process.env.NODE_ENV,
+	enabled:         !process.env.NODE_ENV
 });
 
 var routes = require('./components/routes');
