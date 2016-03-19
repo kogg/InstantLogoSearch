@@ -3,7 +3,6 @@ if (process.env.DEBUG) {
 }
 var _              = require('underscore');
 var browserHistory = require('react-router').browserHistory;
-var debug          = require('debug')(process.env.npm_package_name + ':application');
 var rollbar        = require('rollbar');
 var Provider       = require('react-redux').Provider;
 var React          = require('react');
@@ -31,6 +30,6 @@ ReactDOM.render(
 	</Provider>,
 	document.getElementById('react-app'),
 	function() {
-		debug('DOM rendered with state', state);
+		console.log('DOM rendered with state', state);
 	}
 );

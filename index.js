@@ -1,7 +1,5 @@
 require('babel-register');
 var _         = require('underscore');
-var debug     = require('debug')(process.env.npm_package_name + ':application');
-var error     = require('debug')(process.env.npm_package_name + ':application:error');
 var feathers  = require('feathers');
 var fs        = require('fs');
 var logos     = require('instant-logos');
@@ -173,7 +171,6 @@ app.all('*', function(req, res) {
 app.use(rollbar.errorHandler(process.env.ROLLBAR_ACCESS_TOKEN));
 
 app.use(function(err, req, res, next) {
-	error('error on url ' + req.url, err.stack);
 	if (res.headersSent) {
 		return next(err);
 	}
@@ -181,5 +178,5 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(app.get('port'), function() {
-	debug('Server running', 'http://' + os.hostname() + ':' + app.get('port'));
+	console.log('Server running', 'http://' + os.hostname() + ':' + app.get('port'));
 });
