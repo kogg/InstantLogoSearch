@@ -3,6 +3,7 @@ var google    = require('googleapis');
 var logos     = require('instant-logos');
 var path      = require('path');
 var promisify = require('es6-promisify');
+var rollbar   = require('rollbar');
 
 logos = _.chain(logos)
 	.map(function(logo) {
@@ -31,7 +32,7 @@ var analytics = google.analytics({
 });
 
 function getUniquePurchases() {
-	return promisify(analytics.data.ga.get)({
+	var promise = promisify(analytics.data.ga.get)({
 		'ids':        'ga:' + process.env.GOOGLE_ANALYTICS_VIEW_ID,
 		'start-date': '4daysAgo',
 		'end-date':   'today',
@@ -45,17 +46,16 @@ function getUniquePurchases() {
 				.object()
 				.mapObject(Number)
 				.value();
-		},
-		function(err) {
-			console.log(err); // TODO #20
-			throw err;
 		}
 	);
+	promise.catch(rollbar.handleError);
+	return promise.catch(function() {
+		return Promise.resolve({});
+	});
 }
 var uniquePurchases = getUniquePurchases();
 setInterval(function() {
-	var newUniquePurchases = getUniquePurchases();
-	uniquePurchases = newUniquePurchases;
+	uniquePurchases = getUniquePurchases();
 }, 60 * 60 * 1000);
 
 module.exports = {
