@@ -8,7 +8,11 @@ var logos     = require('instant-logos');
 var os        = require('os');
 var path      = require('path');
 var promisify = require('es6-promisify');
+var rollbar   = require('rollbar');
 var JSZip     = require('jszip');
+
+rollbar.init(process.env.ROLLBAR_ACCESS_TOKEN);
+
 if (process.env.PERIODIC_GC) {
 	setInterval(function() {
 		console.log(process.memoryUsage());
