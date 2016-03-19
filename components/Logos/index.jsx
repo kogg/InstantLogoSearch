@@ -24,7 +24,7 @@ module.exports = connect(createStructuredSelector({
 			logosChain.push(SUGGEST);
 		}
 		if (this.props.carbonad) {
-			logosChain.splice(3 + ((this.props.suggest && this.props.logos.length === 3) ? 1 : 0), 0, CARBONAD);
+			logosChain.splice(3, 0, CARBONAD);
 		}
 
 		return (
