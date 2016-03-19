@@ -13,6 +13,9 @@ rollbar.init({
 	payload:         { environment: process.env.ROLLBAR_ENV || 'production' },
 	verbose:         !process.env.NODE_ENV
 });
+if (!process.env.NODE_ENV) {
+	rollbar.configure({ enabled: false });
+}
 
 var routes = require('./components/routes');
 var Store  = require('./store');
