@@ -1,6 +1,6 @@
 var _          = require('underscore');
 var classNames = require('classnames');
-var error      = require('debug')(process.env.npm_package_name + ':application:error');
+var rollbar    = require('rollbar');
 var React      = require('react');
 
 var actions = require('../../actions');
@@ -134,7 +134,7 @@ module.exports = React.createClass({
 				return this.props.dispatch(actions.createSuggestion({ name: name, file: data }, {}));
 			}.bind(this))
 			.catch(function(err) {
-				error(err);
+				(rollbar.handleError || rollbar.error)(err);
 				ga('send', 'exception', { exDescription: err.message, exFatal: true });
 				throw err;
 			});
