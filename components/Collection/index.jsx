@@ -3,7 +3,7 @@ var classNames               = require('classnames');
 var connect                  = require('react-redux').connect;
 var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
-var error                    = require('debug')(process.env.npm_package_name + ':application:error');
+var rollbar                  = require('rollbar');
 var saveAs                   = process.browser && require('filesaverjs').saveAs;
 var JSZip                    = require('jszip');
 var React                    = require('react');
@@ -175,7 +175,7 @@ module.exports = connect(createStructuredSelector({
 				saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
 			})
 			.catch(function(err) {
-				error(err);
+				(rollbar.handleError || rollbar.error)(err);
 				ga('send', 'exception', { exDescription: err.message, exFatal: true });
 				throw err;
 			});
