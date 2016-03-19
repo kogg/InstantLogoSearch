@@ -11,7 +11,10 @@ var promisify = require('es6-promisify');
 var rollbar   = require('rollbar');
 var JSZip     = require('jszip');
 
-rollbar.init(process.env.ROLLBAR_ACCESS_TOKEN);
+rollbar.init(process.env.ROLLBAR_ACCESS_TOKEN, {
+	environment: process.env.ROLLBAR_ENV || 'production'
+});
+rollbar.handleUncaughtExceptions(process.env.ROLLBAR_ACCESS_TOKEN, {});
 
 if (process.env.PERIODIC_GC) {
 	setInterval(function() {
@@ -57,6 +60,9 @@ app.get('/png', function(req, res, next) {
 
 	convert(path.join(logo.svg.path.directory, logo.svg.path.filename)).then(
 		function(data) {
+			if (!data) {
+				return next();
+			}
 			res.set('Cache-Control', 'public, max-age=31536000');
 			res.set('Content-Type', 'image/png');
 			res.set('Content-Disposition', 'attachment; filename="' + logo.id + '.png"');
@@ -163,6 +169,8 @@ app.get('/api/logo_suggestions', function(req, res, next) {
 app.all('*', function(req, res) {
 	res.status(404).send('Not Found');
 });
+
+app.use(rollbar.errorHandler(process.env.ROLLBAR_ACCESS_TOKEN));
 
 app.use(function(err, req, res, next) {
 	error('error on url ' + req.url, err.stack);

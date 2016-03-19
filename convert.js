@@ -1,6 +1,7 @@
 var fs        = require('fs');
 var promisify = require('es6-promisify');
 var redis     = require('redis');
+var rollbar   = require('rollbar');
 var svg2png   = require('svg2png');
 
 var redis_client = redis.createClient({ url: process.env.REDISCLOUD_URL, return_buffers: true });
@@ -13,15 +14,14 @@ module.exports = function(file_path) {
 		.then(function(data) {
 			return data || promisify(fs.readFile)(file_path)
 				.then(function(data) {
-					return svg2png(data, { height: 512 }).catch(function() {
+					return svg2png(data, { height: 512 }).catch(function(e) {
+						rollbar.handleErrorWithPayloadData(e, { level: 'warning' });
 						return svg2png(data, { height: 512, width: 1024 });
 					});
 				})
 				.then(function(data) {
 					redis_client.setex(file_path, 60 * 60, data);
 					return data;
-				})
-				;
-		})
-		;
+				});
+		});
 };
