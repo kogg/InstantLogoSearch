@@ -14,8 +14,12 @@ module.exports = function(file_path) {
 		.then(function(data) {
 			return data || promisify(fs.readFile)(file_path)
 				.then(function(data) {
-					return svg2png(data, { height: 512 }).catch(function(e) {
-						rollbar.handleErrorWithPayloadData(e, { level: 'warning' });
+					return svg2png(data, { height: 512 }).catch(function(err) {
+						if (err.message !== 'Width or height could not be determined from either the source file or the supplied dimensions') {
+							throw err;
+						}
+						err.message = 'Width or height could not be determined from "' + file_path + '"';
+						rollbar.handleErrorWithPayloadData(err, { level: 'warning' });
 						return svg2png(data, { height: 512, width: 1024 });
 					});
 				})
