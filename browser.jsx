@@ -1,6 +1,3 @@
-if (process.env.DEBUG) {
-	localStorage.debug = process.env.DEBUG;
-}
 var _              = require('underscore');
 var browserHistory = require('react-router').browserHistory;
 var rollbar        = require('rollbar');
