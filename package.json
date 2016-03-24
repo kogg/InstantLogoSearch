@@ -24,20 +24,22 @@
     "node": "4.1.2"
   },
   "scripts": {
-    "postinstall": "if [ \"$NODE_ENV\" = 'production' ]; then npm run jsify && npm run postcss; fi",
     "start": "if [ \"$NODE_ENV\" = 'production' ]; then foreman start; else foreman start -f Procfile.dev; fi",
     "test": "eslint . --ignore-path .gitignore --ext .js,.jsx",
     "clean": "rm -rf dist dump.rdb",
     "fix": "npm run cssfmt:fix && npm run eslint:fix",
+    "postinstall": "if [ \"$NODE_ENV\" = 'production' ]; then npm run browserify && npm run uglify && npm run sorcery && npm run postcss; fi",
+    "browserify": "mkdir -p dist/js && browserify $npm_package_browser_main --debug --verbose --extension=.jsx | exorcist dist/js/main.compiled.js.map > dist/js/main.compiled.js",
+    "cssfmt:fix": "( git diff --staged --name-only | grep \".s\\?css$\" | xargs -I '{}' -n 1 cssfmt {} ) && ( git diff --staged --name-only | grep \".s\\?css$\" | xargs git add )",
+    "discify": "NODE_ENV=production browserify $npm_package_browser_main --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O",
+    "eslint:fix": "( git diff --staged --name-only | grep \".jsx\\?$\" | xargs eslint --fix ) && ( git diff --staged --name-only | grep \".jsx\\?$\" | xargs git add )",
     "node": "node --expose-gc $npm_package_main",
     "nodemon": "nodemon --ignore dist/ -e js,jsx $npm_package_main",
-    "jsify": "mkdir -p dist/js && browserify $npm_package_browser_main --verbose --extension=.jsx | uglifyjs -c drop_console,warnings=false -o dist/js/main.js",
-    "watchify": "mkdir -p dist/js && watchify $npm_package_browser_main --debug --verbose --extension=.jsx -o dist/js/main.js",
     "postcss": "mkdir -p dist/css && postcss -c postcss.js -o dist/css/main.css main.css",
     "postcss:watch": "npm run postcss -- -w",
-    "eslint:fix": "( git diff --staged --name-only | grep \".jsx\\?$\" | xargs eslint --fix ) && ( git diff --staged --name-only | grep \".jsx\\?$\" | xargs git add )",
-    "cssfmt:fix": "( git diff --staged --name-only | grep \".s\\?css$\" | xargs -I '{}' -n 1 cssfmt {} ) && ( git diff --staged --name-only | grep \".s\\?css$\" | xargs git add )",
-    "discify": "NODE_ENV=production browserify $npm_package_browser_main --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O"
+    "sorcery": "sorcery -i dist/js/main.minified.js -o dist/js/main.js && rm dist/js/main.*.js*",
+    "uglify": "uglifyjs dist/js/main.compiled.js -o dist/js/main.minified.js --in-source-map dist/js/main.compiled.js.map --source-map dist/js/main.minified.js.map --source-map-root ../.. -p relative -c drop_console,warnings=false --stats",
+    "watchify": "mkdir -p dist/js && watchify $npm_package_browser_main -o dist/js/main.js --debug --verbose --extension=.jsx"
   },
   "browserify": {
     "extension": [
@@ -81,6 +83,7 @@
     "disable-scroll": "^0.2.6",
     "envify": "^3.4.0",
     "es6-promisify": "^3.0.0",
+    "exorcist": "^0.4.0",
     "express-react-views": "^0.9.0",
     "fast-levenshtein": "^1.1.3",
     "feathers": "^1.3.0",
@@ -116,6 +119,7 @@
     "rollbar-browser": "^1.8.4",
     "sitemap": "^1.5.0",
     "socket.io": "^1.4.0",
+    "sorcery": "^0.9.2",
     "svg2png": "^3.0.0",
     "uglify-js": "^2.6.1",
     "uglifyify": "^3.0.1",
