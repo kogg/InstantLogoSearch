@@ -3,12 +3,12 @@ var classNames               = require('classnames');
 var connect                  = require('react-redux').connect;
 var createSelector           = require('reselect').createSelector;
 var createStructuredSelector = require('reselect').createStructuredSelector;
-var rollbar                  = require('rollbar');
 var saveAs                   = process.browser && require('filesaverjs').saveAs;
 var JSZip                    = require('jszip');
 var React                    = require('react');
 
 var actions = require('../../actions');
+var rollbar = require('../../rollbar');
 var Popup   = require('../Popup');
 
 var CDN       = process.env.CDN_URL || '';

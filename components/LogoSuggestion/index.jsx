@@ -1,9 +1,9 @@
 var _          = require('underscore');
 var classNames = require('classnames');
-var rollbar    = require('rollbar');
 var React      = require('react');
 
 var actions = require('../../actions');
+var rollbar = require('../../rollbar');
 var Popup   = require('../Popup');
 
 var SUGGESTION_UPLOADING = 1;

@@ -3,7 +3,8 @@ var google    = require('googleapis');
 var logos     = require('instant-logos');
 var path      = require('path');
 var promisify = require('es6-promisify');
-var rollbar   = require('rollbar');
+
+var rollbar = require('../rollbar');
 
 logos = _.chain(logos)
 	.map(function(logo) {

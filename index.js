@@ -6,15 +6,7 @@ var logos     = require('instant-logos');
 var os        = require('os');
 var path      = require('path');
 var promisify = require('es6-promisify');
-var rollbar   = require('rollbar');
 var JSZip     = require('jszip');
-
-rollbar.init(process.env.ROLLBAR_ACCESS_TOKEN, {
-	environment: process.env.ROLLBAR_ENV || 'production',
-	verbose:     !process.env.NODE_ENV,
-	enabled:     !process.env.NODE_ENV
-});
-rollbar.handleUncaughtExceptions(process.env.ROLLBAR_ACCESS_TOKEN, {});
 
 if (process.env.PERIODIC_GC) {
 	setInterval(function() {
@@ -28,6 +20,7 @@ if (process.env.PERIODIC_GC) {
 var app         = require('./application');
 var convert     = require('./convert');
 var opensearch  = require('./opensearch');
+var rollbar     = require('./rollbar');
 var search      = require('./search');
 var Logos       = require('./services/Logos');
 var Suggestions = require('./services/Suggestions');
@@ -170,7 +163,13 @@ app.all('*', function(req, res) {
 	res.status(404).send('Not Found');
 });
 
-app.use(rollbar.errorHandler(process.env.ROLLBAR_ACCESS_TOKEN));
+app.use((process.env.NODE_ENV && process.env.ROLLBAR_ACCESS_TOKEN) ?
+	rollbar.errorHandler(process.env.ROLLBAR_ACCESS_TOKEN || ' ', rollbar.config) :
+	function(err, req, res, next) {
+		console.error(err);
+		console.error(err.stack);
+		next(err);
+	});
 
 app.use(function(err, req, res, next) {
 	if (res.headersSent) {
