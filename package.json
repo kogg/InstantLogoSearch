@@ -14,9 +14,9 @@
     "url": "http://ko.gg"
   },
   "license": "ISC",
-  "main": "index.js",
+  "main": "./index",
   "browser": {
-    "main": "browser.jsx",
+    "main": "./browser",
     "./application": "./application/browser",
     "./rollbar": "./rollbar/client"
   },
