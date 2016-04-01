@@ -30,7 +30,6 @@ var CarbonAd = module.exports = React.createClass({
 				return;
 			}
 			this.reloading = setTimeout(function() {
-				console.log('listener fire');
 				if (!global._carbonads) {
 					return;
 				}
