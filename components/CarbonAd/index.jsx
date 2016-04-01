@@ -1,8 +1,12 @@
+var _     = require('underscore');
 var React = require('react');
 
 var CarbonAd = module.exports = React.createClass({
 	statics: {
-		carbonadsDom: null
+		loaded: 0
+	},
+	contextTypes: {
+		router: React.PropTypes.object.isRequired
 	},
 	render: function() {
 		return (
@@ -12,12 +16,30 @@ var CarbonAd = module.exports = React.createClass({
 		);
 	},
 	componentDidMount: function() {
-		if (CarbonAd.carbonadsDom) {
-			this.refs.carbonadsjs.parentNode.insertBefore(CarbonAd.carbonadsDom, this.refs.carbonadsjs.nextSibling);
-			CarbonAd.carbonadsDom = null;
-		}
+		this.unregisterRouteListener = this.context.router.listen(function() {
+			CarbonAd.loaded++;
+			if (CarbonAd.loaded === 1) {
+				global._carbonads_go = _.wrap(global._carbonads_go, function(_carbonads_go, b) {
+					global._carbonads.remove(document.getElementById('carbonads'));
+					// Double check there's no stray carbonads, they do that sometimes
+					for (var i = 2; i < 10; i++) {
+						global._carbonads.remove(document.getElementById('carbonads_' + i));
+					}
+					_carbonads_go(b);
+				});
+				return;
+			}
+			this.reloading = setTimeout(function() {
+				console.log('listener fire');
+				if (!global._carbonads) {
+					return;
+				}
+				global._carbonads.reload();
+			});
+		}.bind(this));
 	},
 	componentWillUnmount: function() {
-		CarbonAd.carbonadsDom = document.getElementById('carbonads');
+		clearTimeout(this.reloading);
+		this.unregisterRouteListener();
 	}
 });
