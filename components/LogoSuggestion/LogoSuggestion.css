@@ -60,13 +60,16 @@
     width: 100%;
     border: none;
 
+    &_disabled {
+      cursor: not-allowed;
+    }
+
     &_uploading {
       color: #02b875;
       background-image: url('loader3.gif') !important;
       background-position: left 12px center;
       background-repeat: no-repeat;
       opacity: 1 !important;
-      cursor: not-allowed;
     }
   }
 
