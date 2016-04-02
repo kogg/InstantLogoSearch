@@ -14,7 +14,7 @@ function requestPromise(options) {
 
 module.exports = {
 	create: function(data) {
-		if (!_.result(data, 'name')) {
+		if (!_.result(data, 'name') || !_.result(data, 'file')) {
 			var err = new Error(http.STATUS_CODES[400]);
 			err.status = 400;
 			return Promise.reject(err);
@@ -22,12 +22,12 @@ module.exports = {
 		return requestPromise({
 			url:     'https://content.dropboxapi.com/2/files/upload',
 			method:  'POST',
-			body:    data.file || '',
+			body:    data.file,
 			headers: {
 				'Authorization':   'Bearer ' + process.env.DROPBOX_ACCESS_TOKEN,
 				'Content-Type':    'application/octet-stream',
 				'Dropbox-API-Arg': JSON.stringify({
-					path:       '/instantlogosearch/' + data.name.replace(/\//g, '-') + (data.file ? '.svg' : '.txt'),
+					path:       '/instantlogosearch/' + data.name.replace(/\//g, '-') + '.svg',
 					mode:       'add',
 					autorename: true,
 					mute:       true

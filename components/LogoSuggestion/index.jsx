@@ -17,7 +17,7 @@ module.exports = React.createClass({
 			<li className={classNames({
 				'brand-logo':        true,
 				'suggestion':        true,
-				'suggestion_active': this.props.active || this.state.filename
+				'suggestion_active': this.props.active || this.state.filedata
 			})}>
 				<div className="flex-center brand-logo__image suggestion__image">
 					{
@@ -25,10 +25,8 @@ module.exports = React.createClass({
 							<img src={this.state.filedata} /> :
 							<div>
 								<span>Don't see quite what you're looking for? </span>
-								<label className="suggestion__activate-popover" htmlFor="suggest-name"><u>Suggest</u></label>
-								<span> a logo or </span>
-								<label className="suggestion__activate-popover" htmlFor="file-upload"><u>upload</u></label>
-								<span> something yourself!</span>
+								<label className="suggestion__activate-popover" htmlFor="file-upload"><u>Upload</u></label>
+								<span> a logo!</span>
 							</div>
 					}
 				</div>
@@ -37,10 +35,13 @@ module.exports = React.createClass({
 						<div>
 							<form className="suggestion__form" onSubmit={function(e) {
 								e.preventDefault();
+								if (!this.refs.suggest_file.files.length || this.state.suggestion === SUGGESTION_UPLOADING) {
+									return;
+								}
 								this.setState({ suggestion: SUGGESTION_UPLOADING });
 								this.suggestLogo(this.refs.suggest_name.value, this.refs.suggest_file.files[0]).then(
 									function() {
-										this.setState({ suggestion: SUGGESTION_SUCCESS });
+										this.setState({ suggestion: SUGGESTION_SUCCESS, filedata: null, filename: null });
 									}.bind(this),
 									function() {
 										this.setState({ suggestion: SUGGESTION_ERROR });
@@ -50,33 +51,30 @@ module.exports = React.createClass({
 								<input className="suggestion__input" id="suggest-name" placeholder="i.e: facebook circle" type="text" ref="suggest_name" defaultValue={this.props.value}/>
 								<label className="suggestion__upload-label" htmlFor="file-upload">{this.state.filename || 'Upload SVG'}</label>
 								<input className="suggestion__upload-input" id="file-upload" type="file" ref="suggest_file" accept=".svg" onChange={function() {
-									var dom = this.refs.suggest_file;
-
-									var path           = dom.value;
-									var last_slash_pos = path.indexOf('\\') >= 0 ? path.lastIndexOf('\\') : path.lastIndexOf('/');
-									var filename       = path.substring(last_slash_pos);
-									if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
-										filename = filename.substring(1);
+									var files = this.refs.suggest_file.files;
+									if (!files || !files.length) {
+										return this.setState({ filedata: null, filename: null });
 									}
-									this.setState({ filename: filename });
 
 									if (window.File && window.FileReader && window.FileList) {
-										var files = dom.files;
-										if (files.length) {
-											var reader = new FileReader();
-											reader.onload = function(e) {
-												this.setState({ filedata: e.target.result });
-											}.bind(this);
-											reader.readAsDataURL(files[0]);
-										} else {
-											this.setState({ filedata: null });
-										}
+										var reader = new FileReader();
+										reader.onload = function(e) {
+											var path           = this.refs.suggest_file.value;
+											var last_slash_pos = path.indexOf('\\') >= 0 ? path.lastIndexOf('\\') : path.lastIndexOf('/');
+											var filename       = path.substring(last_slash_pos);
+											if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+												filename = filename.substring(1);
+											}
+											this.setState({ filedata: e.target.result, filename: filename });
+										}.bind(this);
+										reader.readAsDataURL(files[0]);
 									}
 								}.bind(this)} />
 								<input className={classNames({
 									suggestion__submit:           true,
+									suggestion__submit_disabled:  !this.state.filedata || this.state.suggestion === SUGGESTION_UPLOADING,
 									suggestion__submit_uploading: this.state.suggestion === SUGGESTION_UPLOADING
-								})} type="submit" value="Suggest Logo" disabled={this.state.suggestion === SUGGESTION_UPLOADING} />
+								})} type="submit" value="Suggest Logo" disabled={!this.state.filedata || this.state.suggestion === SUGGESTION_UPLOADING} />
 							</form>
 						</div>
 					)}
@@ -85,10 +83,10 @@ module.exports = React.createClass({
 							this.setState({ suggestion: null });
 						}.bind(this)}>
 							<div>
-								<strong>Thank you for improving </strong>
-								<strong>{process.env.npm_package_title}!</strong>
+								<strong>Your Logo was uploaded </strong>
+								<strong>successfully!</strong>
 							</div>
-							<h2>Your suggestion is being reviewed.</h2>
+							<h2>Thanks! All logos are reviewed before appearing on {process.env.npm_package_title}. You should share us (but like, no pressure).</h2>
 						</Popup>
 					)}
 					{(this.state.suggestion === SUGGESTION_ERROR) && (
@@ -113,9 +111,6 @@ module.exports = React.createClass({
 		ga('send', 'event', 'Logos', 'Suggest Logo', name);
 		return Promise.resolve(file)
 			.then(function(file) {
-				if (!file) {
-					return null;
-				}
 				return new Promise(function(resolve, reject) {
 					var reader = new FileReader();
 
