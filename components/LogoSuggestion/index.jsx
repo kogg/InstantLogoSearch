@@ -41,7 +41,7 @@ module.exports = React.createClass({
 								this.setState({ suggestion: SUGGESTION_UPLOADING });
 								this.suggestLogo(this.refs.suggest_name.value, this.refs.suggest_file.files[0]).then(
 									function() {
-										this.setState({ suggestion: SUGGESTION_SUCCESS });
+										this.setState({ suggestion: SUGGESTION_SUCCESS, filedata: null, filename: null });
 									}.bind(this),
 									function() {
 										this.setState({ suggestion: SUGGESTION_ERROR });
@@ -83,10 +83,10 @@ module.exports = React.createClass({
 							this.setState({ suggestion: null });
 						}.bind(this)}>
 							<div>
-								<strong>Thank you for improving </strong>
-								<strong>{process.env.npm_package_title}!</strong>
+								<strong>Your Logo was uploaded </strong>
+								<strong>successfully!</strong>
 							</div>
-							<h2>Your suggestion is being reviewed.</h2>
+							<h2>Thanks! All logos are reviewed before appearing on {process.env.npm_package_title}. You should share us (but like, no pressure).</h2>
 						</Popup>
 					)}
 					{(this.state.suggestion === SUGGESTION_ERROR) && (
