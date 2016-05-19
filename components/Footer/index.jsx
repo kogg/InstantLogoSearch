@@ -44,6 +44,7 @@ module.exports = connect(createStructuredSelector({
 						<div className="flex">
 							<div className="footer__contributors">
 								<span>Contributors: </span>
+								<a href="https://www.maxcdn.com/" target="_blank">MaxCDN</a>
 								{this.props.sources.map(function(source) {
 									return (
 										<a href={source.url} key={source.shortname} target="_blank">{source.name || source.shortname}</a>

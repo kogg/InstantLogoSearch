@@ -34,6 +34,9 @@ module.exports = React.createClass({
 							<h4>A big thank you to all our contributors</h4>
 							<ul className="popup__contributors">
 								<li>
+									<a href="https://www.maxcdn.com/" target="_blank">MaxCDN</a>
+								</li>
+								<li>
 									<a href="http://svgporn.com/" target="_blank">SVG Porn</a>
 								</li>
 								<li>
