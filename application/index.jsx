@@ -6,6 +6,7 @@ var helmet        = require('helmet');
 var match         = require('react-router').match;
 var path          = require('path');
 var promisify     = require('es6-promisify');
+var rest          = require('feathers-rest');
 var serverRender  = require('feathers-react-redux/serverRender');
 var sm            = require('sitemap');
 var Provider      = require('react-redux').Provider;
@@ -28,10 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(feathers.static(path.join(__dirname, '../assets'), { maxage: '365d' }));
 app.use(feathers.static(path.join(__dirname, '../dist'), { maxage: '365d' }));
-app.configure(feathers.rest());
-if (process.env.npm_package_feathersjs_socket) {
-	app.configure(feathers.socketio());
-}
+app.configure(rest());
 
 app.set('view engine', 'jsx');
 app.set('views', path.join(__dirname, '../components'));
