@@ -28,7 +28,7 @@
     "test": "eslint . --ignore-path .gitignore --ext .js,.jsx",
     "clean": "rm -rf dist dump.rdb",
     "fix": "npm run cssfmt:fix && npm run eslint:fix",
-    "postinstall": "if [ \"$NODE_ENV\" = 'production' ]; then npm run browserify && npm run uglify && npm run sorcery && npm run postcss; fi",
+    "postinstall": "npm install instant-logos && if [ \"$NODE_ENV\" = 'production' ]; then npm run browserify && npm run uglify && npm run sorcery && npm run postcss; fi",
     "browserify": "mkdir -p dist/js && browserify $npm_package_browser_main --debug --verbose --extension=.jsx | exorcist dist/js/main.compiled.js.map > dist/js/main.compiled.js",
     "cssfmt:fix": "( git diff --staged --name-only | grep \".s\\?css$\" | xargs -I '{}' -n 1 cssfmt {} ) && ( git diff --staged --name-only | grep \".s\\?css$\" | xargs git add )",
     "discify": "NODE_ENV=production browserify $npm_package_browser_main --full-paths --extension=.jsx | uglifyjs -c drop_console,warnings=false | discify -O",
