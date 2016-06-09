@@ -72,7 +72,7 @@ app.get(/^(?!\/(?:(?:api|svg)\/|png|zip))[^.]*$/, function(req, res, next) {
 	if (process.env.TIME_PAGE) {
 		console.time('time_' + i);
 	}
-	return promisify(match)({ routes: routes, location: req.url })
+	return promisify(match, { multiArgs: true })({ routes: routes, location: req.url })
 		.then(function(response) { // Correlates with redirectLocation, renderProps
 			if (response[0]) {
 				return res.redirect(302, response[0].pathname + response[0].search);

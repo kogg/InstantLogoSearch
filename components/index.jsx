@@ -11,6 +11,7 @@ var HTMLDoc = React.createClass({
 		}
 	},
 	render: function() {
+		/* eslint-disable react/no-danger */
 		return (
 			<html>
 				{/* Once https://github.com/facebook/react/issues/6029 is resolved, we can get rid of is="head" */}
@@ -56,6 +57,7 @@ var HTMLDoc = React.createClass({
 				</body>
 			</html>
 		);
+		/* eslint-enable react/no-danger */
 	}
 });
 

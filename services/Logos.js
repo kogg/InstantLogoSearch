@@ -33,7 +33,7 @@ var analytics = google.analytics({
 });
 
 function getUniquePurchases() {
-	var promise = promisify(analytics.data.ga.get)({
+	var promise = promisify(analytics.data.ga.get, { multiArgs: true })({
 		'ids':        'ga:' + process.env.GOOGLE_ANALYTICS_VIEW_ID,
 		'start-date': '4daysAgo',
 		'end-date':   'today',

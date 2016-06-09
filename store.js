@@ -5,7 +5,7 @@ var createStore          = require('redux').createStore;
 var handleActions        = require('redux-actions').handleActions;
 var resourcesReducer     = require('feathers-react-redux').resourcesReducer;
 var serverActionsReducer = require('feathers-react-redux').serverActionsReducer;
-var thunkMiddlware       = require('redux-thunk');
+var thunkMiddlware       = require('redux-thunk').default;
 
 if (global.window && global.window.devToolsExtension) {
 	createStore = global.window.devToolsExtension()(createStore);
