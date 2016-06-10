@@ -1,7 +1,6 @@
 var fs        = require('fs');
 var promisify = require('es6-promisify');
 var redis     = require('redis');
-var rollbar   = require('rollbar');
 var svg2png   = require('svg2png');
 
 var redis_client = redis.createClient({ url: process.env.REDISCLOUD_URL, return_buffers: true });
@@ -18,8 +17,6 @@ module.exports = function(file_path) {
 						if (err.message !== 'Width or height could not be determined from either the source file or the supplied dimensions') {
 							throw err;
 						}
-						err.message = 'Width or height could not be determined from "' + file_path + '"';
-						rollbar.handleErrorWithPayloadData(err, { level: 'warning' });
 						return svg2png(data, { height: 512, width: 1024 });
 					});
 				})
