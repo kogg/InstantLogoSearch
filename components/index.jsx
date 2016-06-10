@@ -11,6 +11,7 @@ var HTMLDoc = React.createClass({
 		}
 	},
 	render: function() {
+		/* eslint-disable react/no-danger */
 		return (
 			<html>
 				{/* Once https://github.com/facebook/react/issues/6029 is resolved, we can get rid of is="head" */}
@@ -51,12 +52,12 @@ var HTMLDoc = React.createClass({
 				<body>
 					<div id="react-app" dangerouslySetInnerHTML={{ __html: this.props.markup }} />
 					<script id="react-state" type="text/json" dangerouslySetInnerHTML={{ __html: JSON.stringify(this.props.state) }} />
-					{process.env.npm_package_feathersjs_socket && <script type="text/javascript" src="/socket.io/socket.io.js" />}
 					<script type="text/javascript" src={'/' + HTMLDoc.cacheBuster('js/main.js')} async />
 					{this.props.head.script.toComponent()}
 				</body>
 			</html>
 		);
+		/* eslint-enable react/no-danger */
 	}
 });
 

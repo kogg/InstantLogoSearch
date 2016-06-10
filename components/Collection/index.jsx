@@ -172,7 +172,10 @@ module.exports = connect(createStructuredSelector({
 				});
 		}))
 			.then(function() {
-				saveAs(zip.generate({ type: 'blob' }), 'logos.zip');
+				return zip.generateAsync({ type: 'blob' });
+			})
+			.then(function(zipContent) {
+				saveAs(zipContent, 'logos.zip');
 			})
 			.catch(function(err) {
 				(rollbar.handleError || rollbar.error)(err);
