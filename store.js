@@ -18,6 +18,12 @@ function reduceToStorage(key, reducer) {
 		try {
 			global.localStorage.setItem(key, JSON.stringify(val));
 		} catch (err) {
+			switch (err.name) {
+				case 'QuotaExceededError':
+					break;
+				default:
+					throw err;
+			}
 		}
 		return val;
 	};
@@ -32,7 +38,13 @@ module.exports = function(state) {
 				try {
 					return global.localStorage ? JSON.parse(global.localStorage.getItem('collection')) || state || {} : state;
 				} catch (err) {
-					return state || {};
+					switch (err.name) {
+						case 'QuotaExceededError':
+						case 'SyntaxError':
+							return state || {};
+						default:
+							throw err;
+					}
 				}
 			},
 			CLEAR_COLLECTION:  reduceToStorage('collection', _.constant({})),
@@ -65,7 +77,13 @@ module.exports = function(state) {
 				try {
 					return global.localStorage ? JSON.parse(global.localStorage.getItem('untilPopup')) || state || {} : state;
 				} catch (err) {
-					return state || {};
+					switch (err.name) {
+						case 'QuotaExceededError':
+						case 'SyntaxError':
+							return state || {};
+						default:
+							throw err;
+					}
 				}
 			},
 			DOWNLOADED: reduceToStorage('untilPopup', function(state, action) {
