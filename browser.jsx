@@ -8,7 +8,18 @@ var Router         = require('react-router').Router;
 var routes = require('./components/routes');
 var Store  = require('./store');
 
-var state = JSON.parse(document.getElementById('react-state').innerHTML);
+var state;
+try {
+	state = JSON.parse(document.getElementById('react-state').innerHTML);
+} catch (err) {
+	switch (err.name) {
+		case 'SyntaxError':
+			global.location.reload(true);
+			break;
+		default:
+			throw err;
+	}
+}
 
 global.ga = global.ga || _.noop;
 ga('require', 'ec');
