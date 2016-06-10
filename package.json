@@ -94,7 +94,7 @@
     "googleapis": "^2.1.7",
     "helmet": "^2.1.0",
     "instant-logos": "kogg/instant-logos#develop",
-    "jszip": "^2.5.0",
+    "jszip": "^3.0.0",
     "postcss-cachebuster": "^0.1.2",
     "postcss-cli": "^2.5.2",
     "postcss-import": "^7.1.3",

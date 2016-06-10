@@ -98,15 +98,17 @@ app.get('/zip', function(req, res, next) {
 			} while (zip.file(name));
 			zip.file(name, data);
 		});
-	})).then(
-		function() {
+	}))
+		.then(function() {
+			return zip.generateAsync({ type: 'nodebuffer' });
+		})
+		.then(function(zipContent) {
 			res.set('Cache-Control', 'public, max-age=31536000');
 			res.set('Content-Type', 'application/zip');
 			res.set('Content-Disposition', 'attachment; filename=logos.zip');
-			res.send(zip.generate({ type: 'nodebuffer' }));
-		},
-		next
-	);
+			res.send(zipContent);
+		})
+		.catch(next);
 });
 app.use('/api/logos', Logos);
 app.use('/api/suggestions', Suggestions);
