@@ -15,7 +15,10 @@ createStore = applyMiddleware(thunkMiddlware)(createStore);
 function reduceToStorage(key, reducer) {
 	return function(state, action) {
 		var val = reducer(state, action);
-		global.localStorage.setItem(key, JSON.stringify(val));
+		try {
+			global.localStorage.setItem(key, JSON.stringify(val));
+		} catch (err) {
+		}
 		return val;
 	};
 }
@@ -26,7 +29,11 @@ module.exports = function(state) {
 		logos:          resourcesReducer('logo'),
 		collection:     handleActions({
 			LOAD_LOCAL_STORAGE: function(state) {
-				return global.localStorage ? JSON.parse(global.localStorage.getItem('collection')) || state || {} : state;
+				try {
+					return global.localStorage ? JSON.parse(global.localStorage.getItem('collection')) || state || {} : state;
+				} catch (err) {
+					return state || {};
+				}
 			},
 			CLEAR_COLLECTION:  reduceToStorage('collection', _.constant({})),
 			ADD_TO_COLLECTION: reduceToStorage('collection', function(state, action) {
@@ -55,7 +62,11 @@ module.exports = function(state) {
 		}, ''),
 		untilPopup: handleActions({
 			LOAD_LOCAL_STORAGE: function(state) {
-				return global.localStorage ? JSON.parse(global.localStorage.getItem('untilPopup')) || state || 10 : state;
+				try {
+					return global.localStorage ? JSON.parse(global.localStorage.getItem('untilPopup')) || state || {} : state;
+				} catch (err) {
+					return state || {};
+				}
 			},
 			DOWNLOADED: reduceToStorage('untilPopup', function(state, action) {
 				return state - (action.payload || 1);
