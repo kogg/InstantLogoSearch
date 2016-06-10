@@ -1,6 +1,6 @@
 var _         = require('underscore');
 var promisify = require('es6-promisify');
-var request   = promisify(require('request'));
+var request   = promisify(require('request'), { multiArgs: true });
 
 function requestPromise(options) {
 	return request(options).then(function(results) {
