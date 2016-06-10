@@ -14,6 +14,7 @@ module.exports = React.createClass({
 		disableScroll.on();
 	},
 	render: function() {
+		// FIXME Broken until https://github.com/cloudflare/react-gateway/pull/9
 		return (
 			<Gateway into="global">
 				<Modal
