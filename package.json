@@ -91,7 +91,7 @@
     "feathers-react-redux": "^0.5.0",
     "feathers-rest": "^1.4.2",
     "filesaverjs": "^0.2.1",
-    "googleapis": "^2.1.7",
+    "googleapis": "^8.0.0",
     "helmet": "^2.1.0",
     "instant-logos": "kogg/instant-logos#develop",
     "jszip": "^3.0.0",
