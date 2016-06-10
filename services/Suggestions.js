@@ -1,5 +1,4 @@
 var _         = require('underscore');
-var http      = require('http');
 var promisify = require('es6-promisify');
 var request   = promisify(require('request'));
 
@@ -14,8 +13,15 @@ function requestPromise(options) {
 
 module.exports = {
 	create: function(data) {
-		if (!_.result(data, 'name') || !_.result(data, 'file')) {
-			var err = new Error(http.STATUS_CODES[400]);
+		var err;
+
+		if (!_.result(data, 'name')) {
+			err = new Error('\'name\' not specified');
+			err.status = 400;
+			return Promise.reject(err);
+		}
+		if (!_.result(data, 'file')) {
+			err = new Error('\'file\' not specified');
 			err.status = 400;
 			return Promise.reject(err);
 		}
