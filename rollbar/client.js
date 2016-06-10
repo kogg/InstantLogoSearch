@@ -9,10 +9,10 @@ module.exports = Rollbar.init({
 				guess_uncaught_frames: true
 			}
 		},
-		environment: process.env.ROLLBAR_ENV || process.env.NODE_ENV
+		environment: process.env.HEROKU_APP_NAME || process.env.ROLLBAR_ENV || process.env.NODE_ENV
 	},
 	accessToken:     process.env.ROLLBAR_CLIENT_ACCESS_TOKEN,
 	captureUncaught: true,
-	enabled:         process.env.NODE_ENV && process.env.ROLLBAR_CLIENT_ACCESS_TOKEN,
-	verbose:         !process.env.NODE_ENV
+	enabled:         process.env.ROLLBAR_CLIENT_ACCESS_TOKEN,
+	verbose:         !process.env.ROLLBAR_CLIENT_ACCESS_TOKEN
 });
