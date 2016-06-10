@@ -1,76 +1,48 @@
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+.ad {
+  height: 245px;
+  text-align: center;
 
-body {
-  font-family: 'Lato', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  background: #fafafa;
-}
-
-h1 {
-  font-weight: 900;
-  font-size: 3.5rem;
-
-  @media (max-width: 680px) {
-    font-size: 8.5vw;
-  }
-}
-
-h2 {
-  font-weight: 400;
-  font-size: 1.5rem;
-  line-height: 1.75;
-
-  @media (max-width: 680px) {
-    font-size: 4vw;
+  span {
+    display: block;
   }
 
-  @media (max-width: 480px) {
-    font-size: 3.7vw;
-    margin-top: 6px;
+  .carbon-wrap {
+    min-height: 208px;
+  }
+
+  .carbon-img:hover + .carbon-text,
+  .carbon-text:hover {
+    color: black;
+  }
+
+  .carbon-img {
+    padding: 12px;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .carbon-text {
+    text-align: center;
+    display: block;
+    padding: 12px 12px 4px;
+    font-size: 13px;
+    color: rgba(0, 0, 0, .5);
+    text-decoration: none;
+  }
+
+  .carbon-poweredby {
+    color: rgba(0, 0, 0, .5);
+    font-size: 13px;
+    text-transform: capitalize;
+  }
+
+  .carbon-poweredby:hover {
+    color: black;
+  }
+
+  .carbon-poweredby + img {
+    position: absolute;
   }
 }
-
-h3 {
-  font-weight: 900;
-  color: #555;
-}
-
-form {
-  display: block;
-}
-
-.flex {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.content-container {
-  max-width: 1280px;
-  position: relative;
-  margin: auto;
-}
-
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.flex-spread {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-ul,
-li {
-  list-style: none;
-}
-@import "components/**/*.css";
-@import "https://fonts.googleapis.com/css?family=Lato:400,900,300,700";
