@@ -2,6 +2,7 @@ require('babel-register');
 var _         = require('underscore');
 var feathers  = require('feathers');
 var fs        = require('fs');
+var http      = require('http');
 var logos     = require('instant-logos');
 var os        = require('os');
 var path      = require('path');
@@ -24,6 +25,14 @@ var rollbar     = require('./rollbar');
 var search      = require('./search');
 var Logos       = require('./services/Logos');
 var Suggestions = require('./services/Suggestions');
+
+var rollbarErrorHandler = (process.env.NODE_ENV && process.env.ROLLBAR_ACCESS_TOKEN) ?
+	rollbar.errorHandler(process.env.ROLLBAR_ACCESS_TOKEN || ' ', rollbar.config) :
+	function(err, req, res, next) {
+		console.error(err);
+		console.error(err.stack);
+		next(err);
+	};
 
 _.chain(logos)
 	.reject(function(logo) {
@@ -161,23 +170,26 @@ app.get('/api/logo_suggestions', function(req, res, next) {
 	);
 });
 
-app.all('*', function(req, res) {
-	res.status(404).send('Not Found');
+app.all('*', function(req, res, next) {
+	var err = new Error();
+	err.status = 404;
+	next(err);
 });
 
-app.use((process.env.NODE_ENV && process.env.ROLLBAR_ACCESS_TOKEN) ?
-	rollbar.errorHandler(process.env.ROLLBAR_ACCESS_TOKEN || ' ', rollbar.config) :
-	function(err, req, res, next) {
-		console.error(err);
-		console.error(err.stack);
-		next(err);
-	});
+app.use(function(err, req, res, next) {
+	var status = err.status || err.code || 500;
+	if (status >= 400 && status < 500) {
+		return next(err);
+	}
+	rollbarErrorHandler(err, req, res, next);
+});
 
 app.use(function(err, req, res, next) {
 	if (res.headersSent) {
 		return next(err);
 	}
-	res.status(500).send(err.message);
+	var status = err.status || err.code || 500;
+	res.status(status).send(err.message || http.STATUS_CODES[status]);
 });
 
 app.listen(app.get('port'), function() {
