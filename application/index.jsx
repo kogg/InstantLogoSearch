@@ -78,7 +78,9 @@ app.get(/^(?!\/(?:(?:api|svg)\/|png|zip))[^.]*$/, function(req, res, next) {
 				return res.redirect(302, response[0].pathname + response[0].search);
 			}
 			if (!response[1]) {
-				return res.status(404).send('Not Found');
+				var err = new Error();
+				err.status = 404;
+				return next(err);
 			}
 
 			var store = Store();
@@ -94,7 +96,9 @@ app.get(/^(?!\/(?:(?:api|svg)\/|png|zip))[^.]*$/, function(req, res, next) {
 						console.timeEnd('time_' + i);
 					}
 					if (!html) {
-						return res.status(404).send('Not Found');
+						var err = new Error();
+						err.status = 404;
+						return next(err);
 					}
 					res.set('Cache-Control', 'public, max-age=' + (24 * 60 * 60));
 					res.set('Last-Modified', (new Date()).toUTCString());
