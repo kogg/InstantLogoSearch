@@ -35,7 +35,7 @@ module.exports = connect(createStructuredSelector({
 		}
 	},
 	render: function() {
-		var numlogos = this.state.pages * PAGE_SIZE - 1;
+		var numlogos = (this.state.pages * PAGE_SIZE) - 1;
 		var loadmore = (numlogos < this.props.logos.length) && ((this.state.pages === 1) ? 'cta' : 'infinite');
 
 		return (
