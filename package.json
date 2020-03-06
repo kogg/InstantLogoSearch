@@ -81,7 +81,7 @@
     "classnames": "^2.2.5",
     "compression": "^1.6.2",
     "cssnano": "^3.7.1",
-    "disable-scroll": "^0.2.6",
+    "disable-scroll": "^0.5.1",
     "envify": "^3.4.1",
     "es6-promisify": "^4.1.0",
     "exorcist": "^0.4.0",
