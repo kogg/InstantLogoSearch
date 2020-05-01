@@ -40,7 +40,9 @@
     "postcss:watch": "npm run postcss -- -w",
     "sorcery": "sorcery -i dist/js/main.minified.js -o dist/js/main.js && rm dist/js/main.*.js*",
     "uglify": "uglifyjs dist/js/main.compiled.js -o dist/js/main.minified.js --in-source-map dist/js/main.compiled.js.map --source-map dist/js/main.minified.js.map --source-map-root ../.. -p relative -c drop_console,warnings=false --stats",
-    "watchify": "mkdir -p dist/js && watchify $npm_package_browser_main -o dist/js/main.js --debug --verbose --extension=.jsx"
+    "watchify": "mkdir -p dist/js && watchify $npm_package_browser_main -o dist/js/main.js --debug --verbose --extension=.jsx",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "browserify": {
     "extension": [
@@ -127,6 +129,8 @@
     "uglifyify": "^3.0.2",
     "underscore": "^1.8.3",
     "whatwg-fetch": "^1.0.0",
-    "xml": "^1.0.1"
-  }
+    "xml": "^1.0.1",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
